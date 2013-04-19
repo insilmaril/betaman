@@ -5,18 +5,18 @@ describe "StaticPages" do
   let(:base_title) { "Betaman" } 
   describe "Home page" do
     it "should have the content 'Beta Program'" do
-      visit '/static_pages/home'
+      visit root_path
       page.should have_content('Beta Program')
     end
 
     it "should have the base title" do
-      visit '/static_pages/home'
+      visit root_path
       page.should have_selector('title',
                                 :text => "#{base_title}")
     end
 
     it "should not have a custom title" do
-      visit '/static_pages/home'
+      visit root_path
       page.should_not have_selector('title',
                                 :text => "| Home " )
     end
