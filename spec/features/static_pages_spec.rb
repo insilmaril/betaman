@@ -9,9 +9,7 @@ describe "StaticPages" do
   describe "Home page" do
     before { visit root_path }
     it { should have_content('Beta Program') } 
-
     it { should have_selector('title', :text => "#{base_title}") }
-
     it { should_not have_selector('title', :text => "| Home " ) }
 
   end
