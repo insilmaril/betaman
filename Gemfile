@@ -8,10 +8,6 @@ gem 'bootstrap-sass', '2.1'
 
 
 
-group :test do 
-  gem 'capybara', '1.1.2'
-end
-
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -26,8 +22,17 @@ end
 
 group :development, :test do
   gem 'rspec-rails'
+  gem 'guard-rspec', '1.2.1'
+  gem 'rb-inotify', '~> 0.9'
 end
   
+group :test do 
+  gem 'capybara', '1.1.2'
+  gem 'growl', '1.0.3'
+  gem 'factory_girl'
+  gem 'factory_girl_rails'
+end
+
 gem 'jquery-rails'
 gem 'haml-rails'
 gem 'sqlite3'
