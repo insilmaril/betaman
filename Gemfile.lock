@@ -75,6 +75,7 @@ GEM
       activesupport (>= 3.1, < 4.1)
       haml (>= 3.1, < 4.1)
       railties (>= 3.1, < 4.1)
+    hashie (1.2.0)
     hike (1.2.2)
     i18n (0.6.4)
     journey (1.0.4)
@@ -92,6 +93,12 @@ GEM
     mime-types (1.23)
     multi_json (1.7.2)
     nokogiri (1.5.9)
+    omniauth (1.1.1)
+      hashie (~> 1.2)
+      rack
+    omniauth-openid (1.0.1)
+      omniauth (~> 1.0)
+      rack-openid (~> 1.3.1)
     pg (0.12.2)
     polyglot (0.3.3)
     pry (0.9.12.1)
@@ -101,6 +108,9 @@ GEM
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
+    rack-openid (1.3.1)
+      rack (>= 1.1.0)
+      ruby-openid (>= 2.1.8)
     rack-ssl (1.3.3)
       rack
     rack-test (0.6.2)
@@ -136,6 +146,7 @@ GEM
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
       rspec-mocks (~> 2.13.0)
+    ruby-openid (2.2.3)
     rubyzip (0.9.9)
     sass (3.2.8)
     sass-rails (3.2.6)
@@ -180,6 +191,8 @@ DEPENDENCIES
   guard-rspec (= 1.2.1)
   haml-rails
   jquery-rails
+  omniauth
+  omniauth-openid
   pg (= 0.12.2)
   rails (= 3.2.12)
   rb-inotify (~> 0.9)

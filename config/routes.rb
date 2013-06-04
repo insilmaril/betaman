@@ -1,11 +1,16 @@
 Betaman::Application.routes.draw do
   resources :users
 
-
   root to: 'static_pages#home'
   match '/help', to: 'static_pages#help'
   get "static_pages/help"
 
+  #Copied from hackweek:
+  match '/auth/:provider/callback', :to => 'account#callback'
+  match '/auth/failure', :to => 'account#failure'
+
+  match ':controller/:action' => ":controller#:action"
+  #
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
