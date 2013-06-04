@@ -4,11 +4,10 @@
       = link_to "Logo", root_path, id: "logo" 
       %nav
       %ul.nav.pull-right
-        %li= link_to "Home",    root_path
         %li= link_to "Help",    help_path
         - unless @current_user
-          %li Sign in
+          %li= link_to "Login xxx", '#' 
         - if @current_user
-          %li Ok!
-        %li= link_to "Login", '#' 
+          %li
+            = link_to "Logout", '#'
 
