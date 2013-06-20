@@ -1,0 +1,29 @@
+%h1 Listing users
+
+%table
+  %tr
+    %th First name
+    %th Last name
+    %th Email
+    %th Admin
+    %th uid
+    %th
+    %th
+    %th
+
+
+  - @users.each do |user|
+    %tr
+      %td= user.first_name
+      %td= user.last_name
+      %td= user.email
+      %td= user.admin
+      %td= user.uid
+      %td= link_to 'Show', user
+      %td= link_to 'Edit', edit_user_path(user)
+      %td= link_to 'Delete', user, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+%i.icon-remove
+
+= link_to 'Add new user', new_user_path

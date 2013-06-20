@@ -1,0 +1,35 @@
+%h1 Beta tests
+
+%table
+  %tr
+    %th Name
+    %th Begin
+    %th End
+    %th
+    %th
+    %th
+
+  - @betas.each do |beta|
+    %tr
+      %td= beta.name
+      %td= beta.begin
+      %td= beta.end
+      %td
+        = link_to(beta, :title => 'Info') do
+          %i.icon-info-sign.icon-4x
+      - if @current_user.admin?
+        %td
+          = link_to(beta_path(beta), :title => 'Edit') do
+            %i.icon-pencil.icon-2x 
+        %td
+          = link_to(beta, :title => 'Delete', :method => :delete, :data => { :confirm => 'Are you sure?' }) do
+            %i.icon-trash.icon-2x
+      - else
+        %td
+        %td
+
+%br
+
+= link_to(new_beta_path) do
+  %i.icon-plus.icon-4x
+  Add new beta test

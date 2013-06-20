@@ -1,0 +1,13 @@
+.row
+  .span12.sticky
+    %span.scratch
+    .paper
+      %h2 Log In
+
+      %p
+        You will be able to log in to Betaman with your SCC login.
+        For now just use OpenID or Google to log in.
+
+      = link_to "Log in with OpenID", "/auth/open_id"
+      %br
+      = link_to "Log in with Google", "/auth/google"
