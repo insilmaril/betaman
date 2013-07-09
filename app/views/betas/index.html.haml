@@ -16,14 +16,14 @@
       %td= beta.end
       %td
         = link_to(beta, :title => 'Info') do
-          %i.icon-info-sign.icon-4x
+          %i.icon-info-sign
       - if @current_user.admin?
         %td
           = link_to(beta_path(beta), :title => 'Edit') do
-            %i.icon-pencil.icon-2x 
+            %i{:class => ['icon-red', 'icon-pencil']}
         %td
           = link_to(beta, :title => 'Delete', :method => :delete, :data => { :confirm => 'Are you sure?' }) do
-            %i.icon-trash.icon-2x
+            %i.icon-trash
       - else
         %td
         %td
@@ -31,5 +31,5 @@
 %br
 
 = link_to(new_beta_path) do
-  %i.icon-plus.icon-4x
+  %i.icon-plus
   Add new beta test
