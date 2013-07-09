@@ -16,16 +16,22 @@ class AccountController < ApplicationController
     uid = auth_hash[:uid]
     name = auth_hash[:info][:name]
     email = auth_hash[:info][:email]
+    provider = auth_hash[:provider]
+
+
+    #raise request.env["omniauth.auth"].to_yaml
 
     user = User.find_by_uid uid
 
     logger.info("*   uid: #{uid}")
     logger.info("*  name: #{name}")
     logger.info("* email: #{email}")
+    logger.info("*  prov: #{provider}")
 
     if user.nil?
       logger.info("* Couldn't find user, creating new")
       user = User.new(:uid => uid)
+      user.name = name
     end
 
     user.name = name unless name.blank?
@@ -35,9 +41,9 @@ class AccountController < ApplicationController
 
     session[:user_id] = user.id
 
-    flash[:success] = "Servus"
-    
-    redirect_back_or_default :controller => "users", :action => "me"
+    flash[:success] = "You are signed in."
+
+    redirect_to root_path
   end
 
   def current_user

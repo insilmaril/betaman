@@ -5,9 +5,8 @@
       %h2 Log In
 
       %p
-        You will be able to log in to Betaman with your SCC login.
-        For now just use OpenID or Google to log in.
+        Please use one of the following providers to login:
 
-      = link_to "Log in with OpenID", "/auth/open_id"
+      = link_to(image_tag('/images/openid_64.png') + "OpenID", '/auth/open_id')
       %br
-      = link_to "Log in with Google", "/auth/google"
+      = link_to image_tag('/images/google_64.png') + "Google", '/auth/google'

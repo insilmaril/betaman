@@ -1,0 +1,13 @@
+%html{:xmlns => "http://www.w3.org/1999/html"}
+  %head
+    %title= full_title(yield(:title)) 
+    = stylesheet_link_tag    "application", media:  "all" 
+    = javascript_include_tag "application" 
+    = csrf_meta_tags 
+
+  %body
+    = render 'layouts/header' 
+    .container.content
+      - if flash
+        = render partial: "layouts/alert", flash: flash
+      = yield
