@@ -10,6 +10,7 @@ class AccountController < ApplicationController
 
   def logout
     clear_login
+    redirect_to root_path
   end
   
   def callback
@@ -17,7 +18,6 @@ class AccountController < ApplicationController
     name = auth_hash[:info][:name]
     email = auth_hash[:info][:email]
     provider = auth_hash[:provider]
-
 
     #raise request.env["omniauth.auth"].to_yaml
 
