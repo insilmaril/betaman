@@ -29,21 +29,22 @@ class AccountController < ApplicationController
     logger.info("*  prov: #{provider}")
 
     if user.nil?
-      logger.info("* Couldn't find user, creating new")
-      user = User.new(:uid => uid)
-      user.name = name
+      flash[:error] = "Coudln't find user with uid: #{uid} "
+      #logger.info("* Couldn't find user, creating new")
+      #user = User.new(:uid => uid)
+      #user.name = name
+    else
+      user.name = name unless name.blank?
+      user.email = email unless email.blank?
+
+      user.save!
+
+      session[:user_id] = user.id
+
+      flash[:success] = "You are signed in."
     end
 
-    user.name = name unless name.blank?
-    user.email = email unless email.blank?
-
-    user.save!
-
-    session[:user_id] = user.id
-
-    flash[:success] = "You are signed in."
-
-    redirect_to root_path
+    redirect_to "http://born.suse.de:4321/"
   end
 
   def current_user

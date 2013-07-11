@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
       return true
     else
       store_location
+      flash.keep
       redirect_to :controller=>"/account", :action =>"login"
       return false
     end
