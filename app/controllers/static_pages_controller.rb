@@ -1,7 +1,8 @@
 class StaticPagesController < ApplicationController
+  skip_before_filter :login_required
+
   def home
     flash.keep
-    logger.info "** static home"
   end
 
   def help

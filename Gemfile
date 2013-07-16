@@ -24,6 +24,7 @@ group :assets do
 end
 
 group :development, :test do
+  gem 'hirb'
   gem 'rspec-rails'
   gem 'guard-rspec', '1.2.1'
   gem 'rb-inotify', '~> 0.9'

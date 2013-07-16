@@ -5,9 +5,7 @@
     %th Name
     %th Begin
     %th End
-    %th
-    %th
-    %th
+    %th Actions
 
   - @betas.each do |beta|
     %tr
@@ -17,16 +15,11 @@
       %td
         = link_to(beta, :title => 'Info') do
           %i.icon-info-sign
-      - if @current_user.admin?
-        %td
+        - if @current_user.admin?
           = link_to(beta_path(beta), :title => 'Edit') do
             %i{:class => ['icon-red', 'icon-pencil']}
-        %td
           = link_to(beta, :title => 'Delete', :method => :delete, :data => { :confirm => 'Are you sure?' }) do
             %i.icon-trash
-      - else
-        %td
-        %td
 
 %br
 

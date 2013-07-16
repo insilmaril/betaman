@@ -6,7 +6,9 @@
       %ul.nav.pull-right
         %li= link_to "Help", help_path
         - unless @current_user
-          %li= link_to "Login", '#' 
+          %li
+            = link_to(:controller => "account", :action => "login") do
+              Login
         - if @current_user
           %li
             = link_to "Betas", betas_path
@@ -15,4 +17,5 @@
           %li
             = link_to(:controller => "account", :action => "logout") do
               Log out
+              = @current_user.name
 
