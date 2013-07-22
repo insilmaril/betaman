@@ -6,16 +6,21 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-users = User.create(
+User.create(
   [
     {first_name: 'Uwe', last_name: 'Drechsel', email: 'uwe@insilmaril.de'},
     {first_name: 'Dagobert', last_name: 'Duck', email: 'test@insilmaril.de'}
   ]
 )
 
-u = users.first
-u.set_admin(true)
-u.set_uid('http://insilmaril.openid.com/')
+0.upto(20) do |n| 
+  User.create( {first_name: n, last_name: 'User', email: "user_#{n}@company.com"})
+end
+
+
+u = User.find(1)
+u.admin = true
+u.uid = 'http://insilmaril.myopenid.com/'
 u.save!
 
 betas = Beta.create(
