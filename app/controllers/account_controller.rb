@@ -30,9 +30,10 @@ class AccountController < ApplicationController
 
     if user.nil?
       logger.info("* Couldn't find user, creating new")
-      user = User.new(:uid => uid)
+      user = User.new
       user.name = name unless name.blank?
       user.email = email unless email.blank?
+      user.set_uid(uid) unless uid.blank?
       user.save!
       flash[:success] = "New account created!"
     else
