@@ -5,6 +5,7 @@
     %th Name
     %th Begin
     %th End
+    %th Users
     %th Actions
 
   - @betas.each do |beta|
@@ -12,6 +13,7 @@
       %td= beta.name
       %td= beta.begin
       %td= beta.end
+      %td= beta.users.count
       %td
         = link_to(beta, :title => 'Info') do
           %i.icon-info-sign

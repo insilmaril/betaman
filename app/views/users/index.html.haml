@@ -6,6 +6,7 @@
     %th Email
     %th Admin
     %th uid
+    %th Betas
     %th Admin Actions
 
 
@@ -15,6 +16,7 @@
       %td= user.email
       %td= user.admin
       %td= user.uid
+      %td= user.betas.count
       %td
         = link_to 'Show', user
         = link_to 'Edit', edit_user_path(user)

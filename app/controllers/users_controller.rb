@@ -3,6 +3,8 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     @users = User.all
+    @betas = Beta.all
+    @x = Beta.first.users
 
     respond_to do |format|
       format.html # index.html.erb
