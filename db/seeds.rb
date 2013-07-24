@@ -13,15 +13,19 @@ User.create(
   ]
 )
 
-0.upto(20) do |n| 
-  User.create( {first_name: n, last_name: 'User', email: "user_#{n}@company.com"})
-end
-
-
 u = User.find(1)
 u.admin = true
 u.uid = 'http://insilmaril.myopenid.com/'
 u.save!
+
+u = User.find(2)
+u.uid = 'http://vym.myopenid.com/'
+u.save!
+
+0.upto(20) do |n| 
+  User.create( {first_name: n, last_name: 'User', email: "user_#{n}@company.com"})
+end
+
 
 betas = Beta.create(
   [
