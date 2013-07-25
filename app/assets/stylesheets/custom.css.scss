@@ -69,3 +69,7 @@ p {
   color: #fff;
   text-decoration: none;
 }
+
+/* No empty table cells */
+
+table { empty-cells: show; }
