@@ -11,8 +11,8 @@ class User < ActiveRecord::Base
   end
 
   def set_admin(b)
-    admin=b
-    admin.save!
+    admin = b
+    self.save!
   end
 
   def set_uid(s)
