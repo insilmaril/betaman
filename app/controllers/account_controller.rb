@@ -21,7 +21,7 @@ class AccountController < ApplicationController
 
     #raise request.env["omniauth.auth"].to_yaml
 
-    user = User.find_by_uid uid
+    user = User.joins(:accounts).where(accounts: {uid: uid}).first
 
     logger.info("*   uid: #{uid}")
     logger.info("*  name: #{name}")
@@ -31,9 +31,9 @@ class AccountController < ApplicationController
     if user.nil?
       logger.info("* Couldn't find user, creating new")
       user = User.new
-      user.name = name unless name.blank?
+      user.last_name = name.split.last unless name.blank?
       user.email = email unless email.blank?
-      user.set_uid(uid) unless uid.blank?
+      user.accounts << Account.new(uid: uid)
       user.save!
       flash[:success] = "New account created!"
     else

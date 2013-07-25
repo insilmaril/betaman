@@ -12,9 +12,16 @@ class User < ActiveRecord::Base
 
   def set_admin(b)
     admin=b
+    admin.save!
   end
 
   def set_uid(s)
     uid = s
+  end
+
+  def uids
+    ar = []
+    accounts.each { |a| ar << a.uid }
+    ar
   end
 end
