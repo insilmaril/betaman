@@ -7,7 +7,8 @@
     %th Admin
     %th uids
     %th Betas
-    %th Admin Actions
+    - if @current_user.admin?
+      %th Actions
 
 
   - @users.each do |user|
@@ -21,12 +22,13 @@
       %td= user.admin
       %td= raw user.uids.join("<br />")
       %td= user.betas.count
-      %td
+      - if @current_user.admin?
+        %td
         = link_to 'Show', user
         = link_to 'Edit', edit_user_path(user)
         = link_to 'Delete', user, :method => :delete, :data => { :confirm => 'Are you sure?' }
 
-%br
-%i.icon-plus
-
-= link_to 'Add new user', new_user_path
+- if @current_user.admin?
+  %br
+  %i.icon-plus
+  = link_to 'Add new user', new_user_path

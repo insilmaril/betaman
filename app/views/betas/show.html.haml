@@ -10,6 +10,7 @@
   %b Email:
   = @beta.end
 
-= link_to 'Edit', edit_beta_path(@beta)
-\|
+- if @current_user.admin?
+  = link_to 'Edit', edit_beta_path(@beta)
+  \|
 = link_to 'Back', betas_path

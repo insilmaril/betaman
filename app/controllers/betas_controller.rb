@@ -9,15 +9,25 @@ class BetasController < ApplicationController
   end
 
   def edit
-    @beta = Beta.find(params[:id])
+    if @current_user.admin?
+      @beta = Beta.find(params[:id])
+    else
+      flash[:error] = "Access denied: Editing Beta test"
+      redirect_to root_path
+    end
   end
 
   def new
+    if @current_user.admin?
     @beta = Beta.new
 
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @beta }
+    end
+    else
+      flash[:error] = "Access denied: New Beta test"
+      redirect_to root_path
     end
   end
 
@@ -59,12 +69,17 @@ class BetasController < ApplicationController
   end
 
   def destroy
-    @beta = Beta.find(params[:id])
-    @beta.destroy
+    if @current_user.admin?
+      @beta = Beta.find(params[:id])
+      @beta.destroy
 
-    respond_to do |format|
-      format.html { redirect_to betas_url }
-      format.json { head :no_content }
+      respond_to do |format|
+        format.html { redirect_to betas_url }
+        format.json { head :no_content }
+      end
+    else
+      flash[:error] = "Access denied: Delete Beta test"
+      redirect_to root_path
     end
   end
 end

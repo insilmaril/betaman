@@ -13,6 +13,7 @@
   %b Admin:
   = @user.admin
 
-= link_to 'Edit', edit_user_path(@user)
-\|
+- if @current_user.admin?
+  = link_to 'Edit', edit_user_path(@user)
+  \|
 = link_to 'Back', users_path
