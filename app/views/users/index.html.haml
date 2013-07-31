@@ -10,7 +10,6 @@
     - if @current_user.admin?
       %th Actions
 
-
   - @users.each do |user|
     %tr
       %td
@@ -24,9 +23,9 @@
       %td= user.betas.count
       - if @current_user.admin?
         %td
-        = link_to 'Show', user
-        = link_to 'Edit', edit_user_path(user)
-        = link_to 'Delete', user, :method => :delete, :data => { :confirm => 'Are you sure?' }
+          = link_to 'Show', user
+          = link_to 'Edit', edit_user_path(user)
+          = link_to 'Delete', user, :method => :delete, :data => { :confirm => 'Are you sure?' }
 
 - if @current_user.admin?
   %br
