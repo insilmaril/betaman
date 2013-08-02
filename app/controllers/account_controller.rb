@@ -19,7 +19,7 @@ class AccountController < ApplicationController
     email = auth_hash[:info][:email]
     provider = auth_hash[:provider]
 
-    #raise request.env["omniauth.auth"].to_yaml
+    #rise request.env["omniauth.auth"].to_yaml
 
     user = User.joins(:accounts).where(accounts: {uid: uid}).first
 
@@ -46,6 +46,11 @@ class AccountController < ApplicationController
     redirect_to "http://born.suse.de:4321/"
   end
 
+  def failure
+    flash[:error] = "Authentication failed, please try again."
+    redirect_to root_path
+  end
+
   def current_user
     return @current_user if @current_user
 
@@ -64,7 +69,6 @@ class AccountController < ApplicationController
   private
 
   def auth_hash
-    puts "AUTH HASH"
     request.env['omniauth.auth']
   end
   
