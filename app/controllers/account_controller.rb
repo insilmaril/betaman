@@ -19,7 +19,7 @@ class AccountController < ApplicationController
     email = auth_hash[:info][:email]
     provider = auth_hash[:provider]
 
-    #rise request.env["omniauth.auth"].to_yaml
+    #raise request.env["omniauth.auth"].to_yaml
 
     user = User.joins(:accounts).where(accounts: {uid: uid}).first
 
@@ -40,10 +40,11 @@ class AccountController < ApplicationController
       user.save!
       flash[:success] = "New account created!"
     else
+      logger.info("* Signed in: #{user.accounts.first.uid} URL: #{@url} Cookies: #{@_cookies}")
       flash[:success] = "You are signed in."
     end
     session[:user_id] = user.id
-    redirect_to "http://born.suse.de:4321/"
+    redirect_to betas_path
   end
 
   def failure
