@@ -3,4 +3,10 @@ class Beta < ActiveRecord::Base
 
   has_many :participations
   has_many :users, :through => :participations
+
+  default_scope -> { order('begin DESC') }
+
+  scope :active, where('? BETWEEN betas.begin AND betas.end', Date.today)
+  scope :planned, where('betas.begin >= ?', Date.today)
+  scope :finished, where('betas.end < ?', Date.today)
 end
