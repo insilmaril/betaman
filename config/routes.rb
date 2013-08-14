@@ -7,6 +7,8 @@ Betaman::Application.routes.draw do
   match '/help', to: 'static_pages#help'
   get "static_pages/help"
 
+  match '/dashboard', to:'dashboard#index'
+
   match '/auth/:provider/callback', :to => 'account#callback'
   match '/auth/failure', :to => 'account#failure'
   match '/auth/:provider/failure', :to => 'account#failure'

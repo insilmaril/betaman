@@ -1,0 +1,33 @@
+- if type == 'active'
+  - name = 'Active beta tests'
+  - @beta_list = @active_betas
+- elsif type == 'planned' 
+  - name = 'Planned beta tests'
+  - @beta_list = @planned_betas
+- else
+  - name = 'Finished beta tests'
+  - @beta_list = @finished_betas
+
+%h3 #{name}
+
+%table.table.table-bordered
+  %tr
+    %th Name
+    %th Begin
+    %th End
+    %th Users
+    - if @current_user.admin?
+      %th Actions
+
+  - @beta_list.each do |beta|
+    %tr
+      %td{:width => '50%'}= link_to(beta.name, beta ) 
+      %td= beta.begin
+      %td= beta.end
+      %td= beta.users.count
+      - if @current_user.admin?
+        %td
+          = link_to(beta_path(beta), :title => 'Edit') do
+            %i{:class => ['icon-red', 'icon-pencil']}
+          = link_to(beta, :title => 'Delete', :method => :delete, :data => { :confirm => 'Are you sure?' }) do
+            %i.icon-trash
