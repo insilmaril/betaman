@@ -44,7 +44,7 @@ class AccountController < ApplicationController
       flash[:success] = "You are signed in."
     end
     session[:user_id] = user.id
-    redirect_to betas_path
+    redirect_to dashboard_path
   end
 
   def failure

@@ -19,7 +19,7 @@ RSpec.configure do |config|
   # config.mock_with :rr
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  #config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -36,4 +36,42 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = "random"
+
+  def test_login_user()
+    #request.env['omniauth.auth'] = OmniAuth.config.mock_auth[:default]
+    #@request.session[:user_id] = user.id
+    #@controller.instance_variable_set('@current_user', user)
+    OmniAuth.config.test_mode = true
+    OmniAuth.config.add_mock(
+      :default, 
+      { :provider    => "open_id", 
+        :uid         => "http://user.myopenid.com", 
+        :user_info   => { :name => "John-User Doe", :nickname  => "joe-user" },
+        :credentials => { :auth_token => "lk2j3lkjasldkjflk3ljsdf"} })
+    visit "/auth/open_id"
+  end 
+
+  def test_login_admin()
+    #request.env['omniauth.auth'] = OmniAuth.config.mock_auth[:default]
+    #@request.session[:user_id] = user.id
+    #@controller.instance_variable_set('@current_user', user)
+    OmniAuth.config.test_mode = true
+    OmniAuth.config.add_mock(
+      :default, 
+      { :provider    => "open_id", 
+        :uid         => "http://admin.myopenid.com", 
+        :user_info   => { :name => "John-Admin Doe", :nickname  => "joe-admin" },
+        :credentials => { :auth_token => "lk2j3lkjasldkjflk3ljsdf"} })
+    visit "/auth/open_id"
+  end 
+
+  def assume_login
+    @current_user = User.find(1)
+    session[:user_id] = @current_user.id
+  end
+
+  def assume_logout
+    @current_user = nil
+    session[:user_id] = nil
+  end
 end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe UsersController do
+describe BetasController do
 
   describe "GET 'index'" do
 
@@ -11,19 +11,39 @@ describe UsersController do
       end
     end
 
-=begin
     describe "for signed-in users" do
       before(:each) do
-        @user = test_login( Factory(:user) )
+        #FactoryGirl.create(:beta)
+        #test_login_user
+        assume_login
       end
 
-      it "should list users" do
-        puts "@user=#{@user.last_name}"
+      it "gets INDEX" do
+        #us = FactoryGirl.create(:user_regular)
+        #test_login_user
         get :index
-        puts page
+        #loc = @response.headers['Location']
+        #pp "Body: #{@response.body}"
+        ##pp "Response: #{@response.header}"
+        #pp "Redirect to: #{loc}"
+        assert_response :success
+        assert_not_nil assigns(:betas)
+        
       end
-    end
+
+=begin
+      it "assigns all betas as @betas" do
+        FactoryGirl.create(:beta)
+        get :index
+        #pp assigns(:betas)
+        #     pp "pp_active: #{beta_active}"
+        pp "Beta.count: #{Beta.count}"
+        #assigns(:betas).should eq(Beta)
+        pp "assigns(betas): #{assigns(:betas)}"
+        assigns(:betas).should_not be_nil
+      end
 =end
+    end
   end
 end
 
