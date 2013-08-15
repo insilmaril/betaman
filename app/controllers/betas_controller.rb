@@ -82,4 +82,9 @@ class BetasController < ApplicationController
       redirect_to root_path
     end
   end
+
+  def users
+    @beta = Beta.find(params[:id])
+    @users = @beta.users
+  end
 end

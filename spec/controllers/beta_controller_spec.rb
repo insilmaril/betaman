@@ -2,47 +2,32 @@ require 'spec_helper'
 
 describe BetasController do
 
-  describe "GET 'index'" do
+  describe "for non-logged-in users" do
+    it "should redirect to login page" do
+      get :index
+      response.should redirect_to '/account/login'
+    end
+  end
 
-    describe "for non-signed-in users" do
-      it "should redirect to login page" do
-        get :index
-        response.should redirect_to '/account/login'
-      end
+  describe "for logged-in users" do
+    before(:each) do
+      #FactoryGirl.create(:beta)
+      #test_login_user
+      assume_login
     end
 
-    describe "for signed-in users" do
-      before(:each) do
-        #FactoryGirl.create(:beta)
-        #test_login_user
-        assume_login
-      end
+    it "gets INDEX" do
+      get :index
+      assert_response :success
+      assert_not_nil assigns(:betas)
+    end
 
-      it "gets INDEX" do
-        #us = FactoryGirl.create(:user_regular)
-        #test_login_user
-        get :index
-        #loc = @response.headers['Location']
-        #pp "Body: #{@response.body}"
-        ##pp "Response: #{@response.header}"
-        #pp "Redirect to: #{loc}"
-        assert_response :success
-        assert_not_nil assigns(:betas)
-        
-      end
-
-=begin
-      it "assigns all betas as @betas" do
-        FactoryGirl.create(:beta)
-        get :index
-        #pp assigns(:betas)
-        #     pp "pp_active: #{beta_active}"
-        pp "Beta.count: #{Beta.count}"
-        #assigns(:betas).should eq(Beta)
-        pp "assigns(betas): #{assigns(:betas)}"
-        assigns(:betas).should_not be_nil
-      end
-=end
+    it 'gets users' do
+      beta = FactoryGirl.create(:beta)
+      get :users, { id: beta }
+      assert_response :success
+      assert_not_nil assigns(:beta)
+      assert_not_nil assigns(:users)
     end
   end
 end

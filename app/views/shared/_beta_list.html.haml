@@ -24,7 +24,9 @@
       %td{:width => '50%'}= link_to(beta.name, beta ) 
       %td= beta.begin
       %td= beta.end
-      %td= beta.users.count
+      %td
+        = link_to(beta_users_path(beta)) do
+          = beta.users.count
       - if @current_user.admin?
         %td
           = link_to(beta_path(beta), :title => 'Edit') do

@@ -1,7 +1,10 @@
 Betaman::Application.routes.draw do
 
   resources :users
+  get '/betas/:id/users', to: 'betas#users', as: 'beta_users'
+
   resources :betas
+  get '/users/:id/betas', to: 'users#betas', as: 'user_betas'
 
   root to: 'static_pages#home'
   match '/help', to: 'static_pages#help'
@@ -15,8 +18,6 @@ Betaman::Application.routes.draw do
   match '/auth/failure', :to => 'account#failure'
 
   match ':controller/:action' => ":controller#:action"
-
-  get '/users/:id/betas', to: 'users#betas', as: 'user_betas'
 
   
   # The priority is based upon order of creation:
