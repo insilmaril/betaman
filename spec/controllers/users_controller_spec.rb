@@ -23,7 +23,7 @@ describe UsersController do
     describe "GET show" do
       it "assigns the requested user as @user" do
         user = FactoryGirl.create(:user) #valid_attributes
-        get :show, {:id => user.to_param} #, valid_session
+        get :show, { id:  user.to_param} #, valid_session
         assigns(:user).should eq(user)
       end
     end
@@ -31,7 +31,7 @@ describe UsersController do
     describe 'GET betas' do
       it 'for given user' do
         user = FactoryGirl.create(:user) #valid_attributes
-        get :betas, {:id => user.to_param}       
+        get :betas, { id: user.to_param}       
         assert_response :success
       assert_not_nil assigns(:betas)
       end
