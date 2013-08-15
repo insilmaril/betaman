@@ -98,4 +98,12 @@ class UsersController < ApplicationController
       redirect_to root_path
     end
   end
+
+  def betas
+    @user = User.find(params[:id])
+    @betas = @user.betas
+    @active_betas = @betas.active
+    @planned_betas = @betas.planned
+    @finished_betas = @betas.finished
+  end
 end

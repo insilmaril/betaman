@@ -20,12 +20,17 @@
       %td= mail_to user.email
       %td= user.admin
       %td= raw user.uids.join("<br />")
-      %td= user.betas.count
+      %td
+        = link_to(user_betas_path(user) ) do
+          =user.betas.count
+          - if user.betas.count > 0
+            %i.icon-eye-open
       - if @current_user.admin?
         %td
-          = link_to 'Show', user
-          = link_to 'Edit', edit_user_path(user)
-          = link_to 'Delete', user, :method => :delete, :data => { :confirm => 'Are you sure?' }
+          = link_to(edit_user_path(user)) do
+            .i.icon-pencil
+          = link_to(user, :method => :delete, :data => { :confirm => 'Are you sure?' } ) do
+            .i.icon-trash
 
 - if @current_user.admin?
   %br

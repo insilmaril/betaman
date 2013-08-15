@@ -13,9 +13,12 @@ Betaman::Application.routes.draw do
   match '/auth/failure', :to => 'account#failure'
   match '/auth/:provider/failure', :to => 'account#failure'
   match '/auth/failure', :to => 'account#failure'
+
   match ':controller/:action' => ":controller#:action"
 
-  #
+  get '/users/:id/betas', to: 'users#betas', as: 'user_betas'
+
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

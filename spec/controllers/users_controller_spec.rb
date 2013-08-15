@@ -2,28 +2,40 @@ require 'spec_helper'
 
 describe UsersController do
 
-  describe "GET 'index'" do
+  describe "for non-logged-in users" do
+    it "should redirect to login page" do
+      get :index
+      response.should redirect_to '/account/login'
+    end
+  end
 
-    describe "for non-signed-in users" do
-      it "should redirect to login page" do
-        get :index
-        response.should redirect_to '/account/login'
+  describe "for logged-in users" do
+    before(:each) do
+      assume_login
+    end
+
+    it "gets INDEX" do
+      get :index
+      assert_response :success
+      assert_not_nil assigns(:users)
+    end
+
+    describe "GET show" do
+      it "assigns the requested user as @user" do
+        user = FactoryGirl.create(:user) #valid_attributes
+        get :show, {:id => user.to_param} #, valid_session
+        assigns(:user).should eq(user)
       end
     end
 
-=begin
-    describe "for signed-in users" do
-      before(:each) do
-        @user = test_login( Factory(:user) )
-      end
-
-      it "should list users" do
-        puts "@user=#{@user.last_name}"
-        get :index
-        puts page
+    describe 'GET betas' do
+      it 'for given user' do
+        user = FactoryGirl.create(:user) #valid_attributes
+        get :betas, {:id => user.to_param}       
+        assert_response :success
+      assert_not_nil assigns(:betas)
       end
     end
-=end
   end
 end
 
@@ -44,21 +56,6 @@ describe UsersController do
     {}
   end
 
-  describe "GET index" do
-    it "assigns all users as @users" do
-      us = User.create! valid_attributes
-      get :index, {}, valid_session
-      assigns(:users).should eq([us])
-    end
-  end
-
-  describe "GET show" do
-    it "assigns the requested user as @user" do
-      user = User.create! valid_attributes
-      get :show, {:id => user.to_param}, valid_session
-      assigns(:user).should eq(user)
-    end
-  end
 
   describe "GET new" do
     it "assigns a new user as @user" do
