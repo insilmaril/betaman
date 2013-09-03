@@ -1,3 +1,4 @@
+.xheader { color: #FF0000 }
 @import "bootstrap";
 
 /* universal */
@@ -58,7 +59,6 @@ p {
   margin-right: 10px;
   font-size: 1.7em;
   color: #fff;
-  text-transform: uppercase;
   letter-spacing: -1px;
   padding-top: 9px;
   font-weight: bold;
@@ -70,6 +70,42 @@ p {
   text-decoration: none;
 }
 
-/* No empty table cells */
+.navbar.nav.li.a {
+  color: #FFF;
+  text-shadow: 0px 0px 0px #000;
+}
 
+
+
+/* No empty table cells */
 table { empty-cells: show; }
+
+.navbar{
+  .navbar-inner{
+    background-color: #71AB32;
+    background-image: -moz-linear-gradient(top, #7FBD3A 1px, #C1D99D 2px, #7FBD3A 2px, #649A2A 98%, #546742);
+    background-image: -ms-linear-gradient(top, #7FBD3A 1px, #C1D99D 2px, #7FBD3A 2px, #649A2A 98%, #546742);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#7FBD3A), to(#C1D99D));
+    background-image: -webkit-linear-gradient(top, #7FBD3A 1px, #C1D99D 2px, #7FBD3A 2px, #649A2A 98%, #546742);
+    background-image: -o-linear-gradient(top, #7FBD3A 1px, #C1D99D 2px, #7FBD3A 2px, #649A2A 98%, #546742);
+    background-image: linear-gradient(top, #7FBD3A 1px, #C1D99D 2px, #7FBD3A 2px, #649A2A 98%, #546742);
+    background-repeat: repeat-x;
+    height: 36px;
+    line-height: 36px;
+    position: relative;
+    border-bottom:solid 1px #ccc;
+    .nav{
+      margin-left:20px;
+      li{
+        a{
+          padding:5px;
+          margin:5px 5px 0 0;
+          @include border-radius(5px);  
+          &:hover{ color:#FFF; };
+          text-shadow: none;
+        }
+      }
+    }
+  } 
+}
+

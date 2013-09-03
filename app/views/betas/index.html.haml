@@ -1,26 +1,4 @@
-%h1 Beta tests
-
-%table.table.table-bordered
-  %tr
-    %th Name
-    %th Begin
-    %th End
-    %th Users
-    - if @current_user.admin?
-      %th Actions
-
-  - @betas.each do |beta|
-    %tr
-      %td= link_to(beta.name, beta ) 
-      %td= beta.begin
-      %td= beta.end
-      %td= beta.users.count
-      - if @current_user.admin?
-        %td
-          = link_to(edit_beta_path(beta), :title => 'Edit') do
-            %i{:class => ['icon-red', 'icon-pencil']}
-          = link_to(beta, :title => 'Delete', :method => :delete, :data => { :confirm => 'Are you sure?' }) do
-            %i.icon-trash
+=render partial: 'shared/beta_list', locals:{ type: 'all' }
 
 %br
 
