@@ -4,7 +4,6 @@ class UsersController < ApplicationController
   def index
     @users = User.all
     @betas = Beta.all
-    @x = Beta.first.users
 
     respond_to do |format|
       format.html # index.html.erb

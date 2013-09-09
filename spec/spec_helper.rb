@@ -37,36 +37,22 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 
-  def test_login_user()
+  def test_login(user)
     #request.env['omniauth.auth'] = OmniAuth.config.mock_auth[:default]
     #@request.session[:user_id] = user.id
-    #@controller.instance_variable_set('@current_user', user)
     OmniAuth.config.test_mode = true
     OmniAuth.config.add_mock(
       :default, 
       { :provider    => "open_id", 
-        :uid         => "http://user.myopenid.com", 
-        :user_info   => { :name => "John-User Doe", :nickname  => "joe-user" },
+        :uid         => user.accounts.first.uid, 
+        :user_info   => { :name => user.full_name, :nickname  => user.first_name },
         :credentials => { :auth_token => "lk2j3lkjasldkjflk3ljsdf"} })
     visit "/auth/open_id"
-  end 
-
-  def test_login_admin()
-    #request.env['omniauth.auth'] = OmniAuth.config.mock_auth[:default]
-    #@request.session[:user_id] = user.id
-    #@controller.instance_variable_set('@current_user', user)
-    OmniAuth.config.test_mode = true
-    OmniAuth.config.add_mock(
-      :default, 
-      { :provider    => "open_id", 
-        :uid         => "http://admin.myopenid.com", 
-        :user_info   => { :name => "John-Admin Doe", :nickname  => "joe-admin" },
-        :credentials => { :auth_token => "lk2j3lkjasldkjflk3ljsdf"} })
-    visit "/auth/open_id"
+    @controller.instance_variable_set('@current_user', user)
   end 
 
   def assume_login
-    @current_user = User.find(1)
+    @current_user = User.first
     session[:user_id] = @current_user.id
   end
 

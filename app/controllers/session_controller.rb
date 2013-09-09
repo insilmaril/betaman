@@ -1,9 +1,12 @@
-class AccountController < ApplicationController
+class SessionController < ApplicationController
   
   before_filter :current_user
   skip_before_filter :login_required
 
   protect_from_forgery :except => :callback
+
+  def index
+  end
 
   def login
   end

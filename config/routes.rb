@@ -1,5 +1,7 @@
 Betaman::Application.routes.draw do
 
+  get "dashboard/index"
+
   resources :users
   get '/betas/:id/users', to: 'betas#users', as: 'beta_users'
 
@@ -12,13 +14,16 @@ Betaman::Application.routes.draw do
 
   match '/dashboard', to:'dashboard#index'
 
-  match '/auth/:provider/callback', :to => 'account#callback'
-  match '/auth/failure', :to => 'account#failure'
-  match '/auth/:provider/failure', :to => 'account#failure'
-  match '/auth/failure', :to => 'account#failure'
+  match '/auth/:provider/callback', :to => 'session#callback'
+  match '/auth/failure', :to => 'session#failure'
+  match '/auth/:provider/failure', :to => 'session#failure'
+  match '/auth/failure', :to => 'session#failure'
 
   match ':controller/:action' => ":controller#:action"
 
+  namespace :admin do
+    get '', to: 'dashboard#index', as: '/'
+  end
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

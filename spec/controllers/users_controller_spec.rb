@@ -14,10 +14,21 @@ describe UsersController do
       assume_login
     end
 
+    user = FactoryGirl.create(:user_regular)
+    puts "user.email = #{user.email}"
+    puts "user.admin = #{user.admin.to_s}"
+
     it "gets INDEX" do
       get :index
       assert_response :success
+      puts "INDEX response: #{response.status}"
       assert_not_nil assigns(:users)
+    end
+
+    it "assigns @current_user" do
+      get :index
+      assigns(:current_user).should be_kind_of(User)
+      puts "current_user=#{@current_user.full_name}"
     end
 
     describe "GET show" do

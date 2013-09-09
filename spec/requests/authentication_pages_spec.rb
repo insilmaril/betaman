@@ -1,20 +1,18 @@
 require 'spec_helper'
 
-describe "Authentication regular user" do
+describe "Authentication " do
   it "should provide OpenID" do
-    visit "/account/login/"
+    visit "/session/login/"
     page.should have_content "OpenID"
   end
 
   it "should login regular user" do
-    us = FactoryGirl.create(:user_regular)
-    test_login_user
-    #visit "/auth/open_id"
+    user = FactoryGirl.create(:user_regular)
+    test_login(user)
     page.should have_content 'John-User'
   end
 
   it "should display flash for regular user" do
-    #us = FactoryGirl.create(:user_with_account)
     visit "/auth/open_id"
     visit root_path
   end
