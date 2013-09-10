@@ -11,7 +11,7 @@
   = @user.email
 %p
   %b Admin:
-  = @user.admin
+  = @user.admin?
 
 - if @current_user.admin?
   = link_to 'Edit', edit_user_path(@user)

@@ -4,7 +4,22 @@ class User < ActiveRecord::Base
   has_many :accounts
   has_many :participations
   has_many :betas, :through => :participations
+  has_and_belongs_to_many :roles
   validates :email, presence: true
+
+  def admin?
+    self.roles.each do  |r| 
+      return true if r.name == 'Admin'
+    end
+    false
+  end
+
+  def employee?
+    self.roles.each do  |r| 
+      return true if r.name == 'Employee'
+    end
+    false
+  end
 
   def full_name
     "#{first_name} #{last_name}"

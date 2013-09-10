@@ -1,10 +1,10 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+# Create default roles
+r = Role.new(name: "Admin")
+r.save
+r = Role.new(name: "Employee")
+r.save
+r = Role.new(name: "Tester")
+r.save
 
 if Rails.env == 'development'
 
@@ -20,6 +20,9 @@ if Rails.env == 'development'
   u.accounts << Account.new(uid: 'http://insilmaril.myopenid.com/')
   u.save!
 
+  Role.all.each do |r|
+    u.roles << r
+  end
 
   u = User.find(2)
   u.accounts << Account.new(uid: 'http://vym.myopenid.com/')
@@ -40,3 +43,4 @@ if Rails.env == 'development'
   # Create some relations
   User.find_by_email('uwe@insilmaril.de').betas << Beta.all
 end
+

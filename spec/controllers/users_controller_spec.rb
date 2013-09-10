@@ -28,7 +28,6 @@ describe UsersController do
     it "assigns @current_user" do
       get :index
       assigns(:current_user).should be_kind_of(User)
-      puts "current_user=#{@current_user.full_name}"
     end
 
     describe "GET show" do

@@ -19,12 +19,18 @@ Betaman::Application.routes.draw do
   match '/auth/:provider/failure', :to => 'session#failure'
   match '/auth/failure', :to => 'session#failure'
 
-  match ':controller/:action' => ":controller#:action"
 
   namespace :admin do
+    resources :users
+    resources :betas
     get '', to: 'dashboard#index', as: '/'
+    #get 'users', to: 'user#index', as: '/'
+    #match '', to: 'dashboard#index'
+    #match 'admin/users', to: 'dashboard#index'
   end
   
+  match ':controller/:action' => ":controller#:action"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

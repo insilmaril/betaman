@@ -1,2 +1,5 @@
-%h1 Admin Dashboard
+%h2 Admin Dashboard
 %hr
+%h3= link_to "#{User.count} Users", admin_users_path
+%h3= link_to "#{Beta.count} Betas", admin_betas_path
+

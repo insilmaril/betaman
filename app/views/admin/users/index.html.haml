@@ -1,7 +1,11 @@
+%h1 Listing users for admin
+
 %table.table.table-bordered
   %tr
     %th Name
     %th Email
+    %th Roles
+    %th uids
     %th Betas
     - if @current_user.admin?
       %th Actions
@@ -14,6 +18,9 @@
         - else
           = link_to user.full_name, user
       %td= mail_to user.email
+      %td
+        - user.roles.each do |role|
+          = role.name
       %td= raw user.uids.join("<br />")
       %td
         = link_to(user_betas_path(user) ) do
