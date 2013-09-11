@@ -13,7 +13,11 @@ role_tester.save
 # Create admin user
 #
 
-admin = User.create({first_name: 'Adam', last_name: 'Admin', email: 'uwe@insilmaril.de'} )
+admin = User.create({
+  first_name: 'Adam', 
+  last_name: 'Admin', 
+  email: 'uwe@insilmaril.de', 
+  login_name: 'insilmaril'} )
 admin.accounts << Account.new(uid: 'http://insilmaril.myopenid.com/')
 Role.all.each do |r|
   admin.roles << r
