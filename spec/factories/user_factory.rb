@@ -23,7 +23,7 @@ FactoryGirl.define do
         user.add_account("a.provider", "http://admin.myopenid.com")
         user.email = "admin@company.com"
         user.first_name = 'John-Admin'
-        user.admin = true
+        user.make_admin
         user.save!
       end
     end

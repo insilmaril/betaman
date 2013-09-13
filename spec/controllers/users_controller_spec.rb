@@ -15,8 +15,6 @@ describe UsersController do
     end
 
     user = FactoryGirl.create(:user_regular)
-    puts "user.email = #{user.email}"
-    puts "user.admin = #{user.admin.to_s}"
 
     it "gets INDEX" do
       get :index

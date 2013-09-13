@@ -14,6 +14,16 @@ class User < ActiveRecord::Base
     false
   end
 
+  def make_admin
+    admin_role = Role.find_by_name('Admin')
+    if admin_role.nil?
+      raise "Role 'Admin' missing in DB!"
+    else
+      self.roles << admin_role
+    end
+
+  end
+
   def employee?
     self.roles.each do  |r| 
       return true if r.name == 'Employee'

@@ -13,7 +13,6 @@ describe "Admin dashboard" do
     test_login(user)
     visit admin_path
     puts admin_path
-    puts @foo
     page.should have_content "Admin Dashboard"
   end
 end
