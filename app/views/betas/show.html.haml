@@ -4,11 +4,16 @@
   %b Name:
   = @beta.name
 %p
-  %b Begin:
-  = @beta.begin
-%p
-  %b Email:
+  %b Time:
+  = @beta.begin 
+  to
   = @beta.end
+
+%p
+  %b Users:
+  = "#{User.count} total, #{pluralize(User.admins.count, 'admin')}, "
+  = "#{pluralize(User.employees.count, 'employee')}, "
+  = "#{pluralize(User.testers.count, 'tester')}"
 
 - if @current_user.admin?
   = link_to 'Edit', edit_beta_path(@beta)

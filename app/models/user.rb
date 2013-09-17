@@ -68,4 +68,8 @@ class User < ActiveRecord::Base
       end 
     end
   end
+
+  scope :admins, User.joins(:roles).where('name = ?','Admin' )
+  scope :employees, User.joins(:roles).where('name = ?','Employee' )
+  scope :testers, User.joins(:roles).where('name = ?','Tester' )
 end
