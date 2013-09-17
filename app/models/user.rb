@@ -21,7 +21,6 @@ class User < ActiveRecord::Base
     else
       self.roles << admin_role
     end
-
   end
 
   def employee?

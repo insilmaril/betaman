@@ -23,6 +23,7 @@ Betaman::Application.routes.draw do
   namespace :admin do
     resources :users
     resources :betas
+    resources :companies
     get '', to: 'dashboard#index', as: '/'
     #get 'users', to: 'user#index', as: '/'
     #match '', to: 'dashboard#index'

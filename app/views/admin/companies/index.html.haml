@@ -1,0 +1,9 @@
+%h1 Admin view: Companies
+
+%table.table.table-bordered
+  %tr
+    %th Name
+
+  - @companies.each do |company|
+    %tr
+      %td= company.name
