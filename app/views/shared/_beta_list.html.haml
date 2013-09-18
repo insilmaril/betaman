@@ -32,7 +32,7 @@
             %i.icon-eye-open
       - if @current_user.admin?
         %td
-          = link_to(beta_path(beta), :title => 'Edit') do
+          = link_to(edit_beta_path(beta), :title => 'Edit') do
             %i{:class => ['icon-red', 'icon-pencil']}
           = link_to(beta, :title => 'Delete', :method => :delete, :data => { :confirm => 'Are you sure?' }) do
             %i.icon-trash
