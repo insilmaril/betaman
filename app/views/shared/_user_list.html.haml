@@ -23,7 +23,7 @@
         %td
           = link_to(edit_user_path(user)) do
             .i.icon-pencil
-          = link_to(beta_rmuser_path(@beta) ) do
+          = link_to(beta_rmuser_path(@beta, user_id: user) ) do
             = #link_to( :controller => 'betas', :action => 'rmuser', :id => @beta.id) do   #link_to(rmuser_betas_path(@beta) ) do #, :data => { :confirm => 'Are you sure?' } ) do
             =@beta.name
             \- remove

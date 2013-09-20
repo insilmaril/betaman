@@ -8,7 +8,7 @@ Betaman::Application.routes.draw do
   get '/users/:id/betas', to: 'users#betas', as: 'user_betas'
 
 
-  get '/betas/:id/rmuser', to: 'betas#rmuser', as: 'beta_rmuser'
+  get '/betas/:id/rmuser/:user_id', to: 'betas#rmuser', as: 'beta_rmuser'
   get '/betas/:id/users', to: 'betas#users', as: 'beta_users'
 
   root to: 'static_pages#home'

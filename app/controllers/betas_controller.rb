@@ -96,8 +96,11 @@ class BetasController < ApplicationController
 
   def rmuser
     if @current_user.admin?
+      beta = Beta.find(params[:id])
+      user = User.find(params[:user_id])
+
       #@beta = Beta.find(params[:user_id])
-      flash[:success] = "Removed user from !"
+      flash[:success] = "Removed user #{user.id} from beta #{beta.id}!"
       redirect_to root_path
       #@beta.users.delete(user)
     end
