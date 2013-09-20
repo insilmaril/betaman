@@ -15,7 +15,11 @@
   = "#{pluralize(User.employees.count, 'employee')}, "
   = "#{pluralize(User.testers.count, 'tester')}"
 
-- if @current_user.admin?
-  = link_to 'Edit', edit_beta_path(@beta)
-  \|
-= link_to 'Back', betas_path
+%div{ class: 'btn-group'}
+  = if @current_user.admin?
+    = link_to 'Edit', edit_beta_path(@beta),  class: 'btn btn-danger' 
+  = if @current_user.employee?
+    = link_to 'Show users', beta_users_path(@beta), class: 'btn btn-info' 
+    = link_to 'Add tester', betas_path,  class: 'btn btn-info' 
+  = link_to 'Join', "foo",  class: 'btn btn-success' 
+

@@ -70,17 +70,20 @@ p {
   text-decoration: none;
 }
 
-.navbar.nav.li.a {
-  color: #FFF;
-  text-shadow: 0px 0px 0px #000;
-}
-
 .right{
   text-align: right;
 }
 
 /* No empty table cells */
 table { empty-cells: show; }
+
+
+.btn-group{
+  .btn{ 
+  text-shadow:none; 
+  color: #000;
+  }
+}
 
 .navbar{
   .navbar-inner{

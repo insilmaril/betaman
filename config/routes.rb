@@ -3,10 +3,13 @@ Betaman::Application.routes.draw do
   get "dashboard/index"
 
   resources :users
-  get '/betas/:id/users', to: 'betas#users', as: 'beta_users'
-
   resources :betas
+
   get '/users/:id/betas', to: 'users#betas', as: 'user_betas'
+
+
+  get '/betas/:id/rmuser', to: 'betas#rmuser', as: 'beta_rmuser'
+  get '/betas/:id/users', to: 'betas#users', as: 'beta_users'
 
   root to: 'static_pages#home'
   match '/help', to: 'static_pages#help'

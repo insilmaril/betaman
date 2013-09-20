@@ -87,4 +87,19 @@ class BetasController < ApplicationController
     @beta = Beta.find(params[:id])
     @users = @beta.users
   end
+
+  def add_user(user)
+    if @current_user.admin?
+      @beta.users << user
+    end
+  end
+
+  def rmuser
+    if @current_user.admin?
+      #@beta = Beta.find(params[:user_id])
+      flash[:success] = "Removed user from !"
+      redirect_to root_path
+      #@beta.users.delete(user)
+    end
+  end
 end
