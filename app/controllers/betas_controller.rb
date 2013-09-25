@@ -90,7 +90,11 @@ class BetasController < ApplicationController
 
   def add_user(user)
     if @current_user.admin?
+      beta = Beta.find(params[:id])
+      user = User.find(params[:user_id])
       @beta.users << user
+      flash[:success] = "Added user #{user.id} from beta #{beta.id}!"
+      redirect_to root_path
     end
   end
 
@@ -98,11 +102,9 @@ class BetasController < ApplicationController
     if @current_user.admin?
       beta = Beta.find(params[:id])
       user = User.find(params[:user_id])
-
-      #@beta = Beta.find(params[:user_id])
+      beta.users.delete(user)
       flash[:success] = "Removed user #{user.id} from beta #{beta.id}!"
       redirect_to root_path
-      #@beta.users.delete(user)
     end
   end
 end
