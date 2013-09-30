@@ -1,38 +1,44 @@
-- if type == 'active'
-  %h3 Active beta tests
+- if type == 'available'
+  %h4 Available beta tests:
+  - @beta_list = @available_betas
+- elsif type == 'active'
+  %h4 Active beta tests:
   - @beta_list = @active_betas
 - elsif type == 'planned' 
-  %h3 Planned beta tests
+  %h4 Planned beta tests:
   - @beta_list = @planned_betas
 - elsif type == 'finished'
-  %h3 Finished beta tests
+  %h4 Finished beta tests:
   - @beta_list = @finished_betas
 - else
-  %h3 Beta tests
+  %h4 Beta tests:
   - @beta_list = @betas
 
-%table.table.table-bordered
-  %tr
-    %th Name
-    %th Begin
-    %th End
-    %th Users
-    - if @current_user.admin?
-      %th Actions
-
-  - @beta_list.each do |beta|
+- if @beta_list.empty?
+  %p None.
+-elsif  
+  %table.table.table-bordered
     %tr
-      %td{:width => '50%'}= link_to(beta.name, beta ) 
-      %td= beta.begin
-      %td= beta.end
-      %td
-        = link_to(beta_users_path(beta)) do
-          =beta.users.count
-          - if beta.users.count > 0
-            %i.icon-eye-open
+      %th Name
+      %th Begin
+      %th End
+      %th Users
       - if @current_user.admin?
+        %th Actions
+
+    - @beta_list.each do |beta|
+      %tr
+        %td{:width => '50%'}= link_to(beta.name, beta ) 
+        %td= beta.begin
+        %td= beta.end
         %td
-          = link_to(edit_beta_path(beta), :title => 'Edit') do
-            %i{:class => ['icon-red', 'icon-pencil']}
-          = link_to(beta, :title => 'Delete', :method => :delete, :data => { :confirm => 'Are you sure?' }) do
-            %i.icon-trash
+          = link_to(beta_users_path(beta)) do
+            =beta.users.count
+            - if beta.users.count > 0
+              %i.icon-eye-open
+        - if @current_user.admin?
+          %td
+            = link_to(edit_beta_path(beta), :title => 'Edit') do
+              %i{:class => ['icon-red', 'icon-pencil']}
+            = link_to(beta, :title => 'Delete', :method => :delete, :data => { :confirm => 'Are you sure?' }) do
+              %i.icon-trash

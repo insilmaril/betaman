@@ -9,4 +9,5 @@ class Beta < ActiveRecord::Base
   scope :active, where('? BETWEEN betas.begin AND betas.end', Date.current)
   scope :planned, where('betas.begin >= ?', Date.today)
   scope :finished, where('betas.end < ?', Date.today)
+  scope :not_finished, where('betas.end >= ?', Date.today)
 end

@@ -1,6 +1,11 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.12'
+gem 'jquery-rails'
+gem 'haml-rails'
+gem 'sqlite3'
+gem 'omniauth'
+gem 'omniauth-openid'
 gem 'bootstrap-sass', '2.1'
 
 # Production on Heroko requires postgres
@@ -32,11 +37,6 @@ group :test do
   gem 'factory_girl_rails'
 end
 
-gem 'jquery-rails'
-gem 'haml-rails'
-gem 'sqlite3'
-gem 'omniauth'
-gem 'omniauth-openid'
 #gem 'omniauth-google-oauth2'
 
 # To use ActiveModel has_secure_password

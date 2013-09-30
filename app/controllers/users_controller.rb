@@ -41,6 +41,8 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+    init_instance_variables
+
     if @current_user.admin?
       @user = User.find(params[:id])
     else
@@ -99,8 +101,29 @@ class UsersController < ApplicationController
   end
 
   def betas
+    init_instance_variables
+  end
+
+  def add_beta
+    init_instance_variables
+    beta = Beta.find(params[:beta_id])
+    @betas << beta
+    flash[:success] = "Added #{@user.full_name} to Beta #{beta.name}"
+    redirect_to :back
+  end
+
+  def remove_beta
+    init_instance_variables
+    beta = Beta.find(params[:beta_id])
+    beta.users.delete(@user)
+    flash[:success] = "Removed #{@user.full_name} from Beta #{beta.name}"
+    redirect_to :back
+  end
+
+  def init_instance_variables
     @user = User.find(params[:id])
     @betas = @user.betas
+    @available_betas = Beta.not_finished - @betas
     @active_betas = @betas.active
     @planned_betas = @betas.planned
     @finished_betas = @betas.finished

@@ -98,7 +98,7 @@ class BetasController < ApplicationController
     end
   end
 
-  def rmuser
+  def remove_user
     if @current_user.admin?
       beta = Beta.find(params[:id])
       user = User.find(params[:user_id])

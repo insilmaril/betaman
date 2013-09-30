@@ -6,9 +6,10 @@ Betaman::Application.routes.draw do
   resources :betas
 
   get '/users/:id/betas', to: 'users#betas', as: 'user_betas'
+  get '/users/:id/add_beta/:beta_id', to: 'users#add_beta', as: 'user_add_beta'
+  get '/users/:id/remove_beta/:beta_id', to: 'users#remove_beta', as: 'user_remove_beta'
 
-
-  get '/betas/:id/rmuser/:user_id', to: 'betas#rmuser', as: 'beta_rmuser'
+  get '/betas/:id/remove_user/:user_id', to: 'betas#remove_user', as: 'beta_remove_user'
   get '/betas/:id/users', to: 'betas#users', as: 'beta_users'
 
   root to: 'static_pages#home'

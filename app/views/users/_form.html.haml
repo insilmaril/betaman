@@ -7,41 +7,72 @@
           %li= msg
   %table
     %tr
-      %td.right
-        = f.label :last_name 
+      %td.right.bold.top
+        Last name
       %td
         = f.text_field :last_name
     %tr
-      %td.right
-        = f.label :first_name
+      %td.right.bold.top
+        First name
       %td
         = f.text_field :first_name
     %tr
       .field
-        %td.right= f.label :email
+        %td.right.bold.top
+          Email
         %td= f.text_field :email
     %tr
       .field
-        %td.right= f.label 'login_name'
+        %td.right.bold.top
+          Login name
         %td= f.text_field 'login_name'
     %tr
-      %td.right Street Address
+      %td.right.top.bold Roles
+      %td
+        %table
+          - @user.roles.each do |role|
+            %tr
+              %td=role.name
+
+    %tr 
+      %td.right.top.bold Betas
+      %td
+        %table
+          - @user.betas.each do |beta|
+            %tr
+              %td
+                =beta.name
+                =link_to(user_remove_beta_path(@user, beta_id: beta) ) do
+                  %i.icon-trash
+          - if !@available_betas.empty?
+            %tr
+              %td 
+                .btn-group
+                  %a{:class => "btn btn-mini dropdown-toggle", "data-toggle" => "dropdown", :href => "#"}
+                    Add available beta 
+                    %b.caret
+                  %ul.dropdown-menu
+                    - @available_betas.each do |beta|
+                      %li= link_to beta.name, user_add_beta_path(@user, beta_id: beta)
+
     %tr
-      %td.right Adress 2
+      %td.right.bold Street Address
     %tr
-      %td.right Adress 3
+      %td.right.bold Adress 2
     %tr
-      %td.right City
+      %td.right.bold Adress 3
     %tr
-      %td.right Zip/Postal code
+      %td.right.bold City
     %tr
-      %td.right Country
+      %td.right.bold Zip/Postal code
     %tr
-      %td.right State/Province
+      %td.right.bold Country
     %tr
-      %td.right Telephone
+      %td.right.bold State/Province
+    %tr
+      %td.right.bold Telephone
   -#.field
     = f.label :uid
     = f.text_field :uid
   .actions
-    = f.submit 'Save'
+    = f.submit 'Save changes'
