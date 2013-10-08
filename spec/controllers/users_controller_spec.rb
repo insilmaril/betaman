@@ -5,7 +5,7 @@ describe UsersController do
   describe "for non-logged-in users" do
     it "should redirect to login page" do
       get :index
-      response.should redirect_to '/account/login'
+      response.should redirect_to '/session/login'
     end
   end
 
@@ -15,6 +15,9 @@ describe UsersController do
     end
 
     user = FactoryGirl.create(:user_regular)
+
+    it "redirects non-employees to base page" do
+    end
 
     it "gets INDEX" do
       get :index
