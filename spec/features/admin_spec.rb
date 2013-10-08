@@ -12,7 +12,6 @@ describe "Admin dashboard" do
     user = FactoryGirl.create(:user_admin)
     test_login(user)
     visit admin_path
-    puts admin_path
     page.should have_content "Admin Dashboard"
   end
 end

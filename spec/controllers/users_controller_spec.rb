@@ -9,20 +9,14 @@ describe UsersController do
     end
   end
 
-  describe "for logged-in users" do
+  describe "for logged-in employees" do
     before(:each) do
       assume_login
-    end
-
-    user = FactoryGirl.create(:user_regular)
-
-    it "redirects non-employees to base page" do
     end
 
     it "gets INDEX" do
       get :index
       assert_response :success
-      puts "INDEX response: #{response.status}"
       assert_not_nil assigns(:users)
     end
 

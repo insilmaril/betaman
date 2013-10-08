@@ -37,6 +37,9 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 
+  # Include Capybara DSL
+  config.include Capybara::DSL  #, :type => :request
+
   def test_login(user)
     #request.env['omniauth.auth'] = OmniAuth.config.mock_auth[:default]
     #@request.session[:user_id] = user.id

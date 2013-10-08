@@ -1,12 +1,18 @@
 require 'spec_helper'
 
-describe "Users" do
-  describe "GET /users" do
-    it "Redirect without login" do
-      get users_path
-      response.status.should be(302)
-    end
+describe "GET /users" do
+  it "without login redirect to login" do
+    visit users_path
+    page.should have_content 'Login'
   end
+
+  it "redirect regular logged-in user to root" do
+    user = FactoryGirl.create(:user_regular)
+    test_login(user)
+    visit users_path
+    current_path.should == root_path
+  end
+
 end
 
 =begin
@@ -26,4 +32,6 @@ describe "Authentication" do
     it {should have_content('OpenID') } 
   end
 end
+
+
 
