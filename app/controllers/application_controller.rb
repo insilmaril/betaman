@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
     else
       store_location
       flash.keep
-      redirect_to :controller=>"/account", :action =>"login"
+      redirect_to :controller=>"/session", :action =>"login"
       return false
     end
   end
