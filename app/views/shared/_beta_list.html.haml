@@ -22,7 +22,8 @@
       %th Name
       %th Begin
       %th End
-      %th Participants
+      - if @current_user.admin? || @current_user.employee?
+        %th Participants
       - if @current_user.admin?
         %th Admin
 
@@ -31,11 +32,12 @@
         %td{:width => '50%'}= link_to(beta.name, beta ) 
         %td= beta.begin
         %td= beta.end
-        %td
-          = link_to(beta_users_path(beta)) do
-            =beta.users.count
-            - if beta.users.count > 0
-              %i.icon-eye-open
+        - if @current_user.admin? || @current_user.employee?
+          %td
+            = link_to(beta_users_path(beta)) do
+              =beta.users.count
+              - if beta.users.count > 0
+                %i.icon-eye-open
         - if @current_user.admin?
           %td
             = link_to(edit_beta_path(beta), :title => 'Edit') do
