@@ -1,7 +1,10 @@
 class BetasController < ApplicationController
+  def init_instance_variables
+    @beta = Beta.find(params[:id])
+  end
+
   def index
     @betas = Beta.all
-
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @betas }
@@ -10,7 +13,7 @@ class BetasController < ApplicationController
 
   def edit
     if @current_user.admin?
-      @beta = Beta.find(params[:id])
+      init_instance_variables
     else
       flash[:error] = "Access denied: Editing Beta test"
       redirect_to root_path
@@ -36,9 +39,11 @@ class BetasController < ApplicationController
 
     respond_to do |format|
       if @beta.save
-        format.html { redirect_to @beta, notice: 'Beta was successfully created.' }
+        flash[:success] = "Created beta #{@beta.name}"
+        format.html { redirect_to @beta }
         format.json { render json: @beta, status: :created, location: @beta }
       else
+        flash[:warning] = "Failed to create beta #{@beta.name}"
         format.html { render action: "new" }
         format.json { render json: @beta.errors, status: :unprocessable_entity }
       end
@@ -46,7 +51,8 @@ class BetasController < ApplicationController
   end
 
   def show
-    @beta = Beta.find(params[:id])
+    init_instance_variables
+    @users = @beta.users
 
     respond_to do |format|
       format.html # show.html.erb
@@ -55,13 +61,15 @@ class BetasController < ApplicationController
   end
 
   def update
-    @beta = Beta.find(params[:id])
+    init_instance_variables
 
     respond_to do |format|
       if @beta.update_attributes(params[:beta])
-        format.html { redirect_to @beta, notice: 'Beta was successfully updated.' }
+        flash[:success] = "Updated beta #{@beta.name}"
+        format.html { redirect_to @beta }
         format.json { head :no_content }
       else
+        flash[:warning] = "Failed to update beta #{@beta.name}"
         format.html { render action: "edit" }
         format.json { render json: @beta.errors, status: :unprocessable_entity }
       end
@@ -70,7 +78,7 @@ class BetasController < ApplicationController
 
   def destroy
     if @current_user.admin?
-      @beta = Beta.find(params[:id])
+      init_instance_variables
       @beta.destroy
 
       respond_to do |format|
@@ -84,27 +92,79 @@ class BetasController < ApplicationController
   end
 
   def users
-    @beta = Beta.find(params[:id])
+    init_instance_variables
+
     @users = @beta.users
   end
 
-  def add_user(user)
+  def nousers
+    users
+    @nousers = User.all - @users
+  end
+
+  def add_user
+    init_instance_variables
+    user = User.find(params[:user_id])
+
     if @current_user.admin?
-      beta = Beta.find(params[:id])
-      user = User.find(params[:user_id])
-      @beta.users << user
-      flash[:success] = "Added user #{user.id} from beta #{beta.id}!"
-      redirect_to root_path
+      if !@beta.users.include? user
+        @beta.users << user
+        flash[:success] = "Added #{user.id} to #{@beta.name}!"
+      else
+        flash[:warning] = "#{user.full_name} is already member of #{@beta.name}!"
+      end
+
+      redirect_to :back
     end
   end
 
+  def add_select_users
+    init_instance_variables
+    if @current_user.admin? 
+      nousers
+    end
+  end
+
+  def add_multiple_users
+    init_instance_variables
+    #params[:user_ids]       # Cont here and add set of users !!!!!
+    if @current_user.admin? 
+      if defined?(params[:user_ids])
+        #params[:user_ids].each do |id|
+        n = params[:user_ids].count
+        s = view_context.pluralize(n, 'participant')
+        flash[:success] = "Added #{s} to #{@beta.name}"
+        params[:user_ids].each do |user|
+          @beta.users << User.find(user)
+        end
+      else
+        flash[:warning] = "No Params defined"
+      end
+    end
+=begin
+      if !@beta.users.include? user
+        @beta.users << user
+        flash[:success] = "Added user #{user.id} from beta #{@beta.name}!"
+      else
+        flash[:warning] = "User #{user.full_name} is already member of beta #{@beta.name}!"
+      end
+=end
+    redirect_to beta_path(@beta)
+ end
+
   def remove_user
+    init_instance_variables
+
+    user = User.find(params[:user_id])
+
     if @current_user.admin?
-      beta = Beta.find(params[:id])
-      user = User.find(params[:user_id])
-      beta.users.delete(user)
-      flash[:success] = "Removed user #{user.id} from beta #{beta.id}!"
-      redirect_to root_path
+      if @beta.users.include? user
+        @beta.users.delete(user)
+        flash[:success] = "Removed user #{user.id} from beta #{@beta.name}!"
+      else
+        flash[:warning] = "User #{user.full_name} is not a member of beta #{@beta.name}!"
+      end
+      redirect_to :back
     end
   end
 end

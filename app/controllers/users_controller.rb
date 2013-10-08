@@ -1,4 +1,13 @@
 class UsersController < ApplicationController
+  def init_instance_variables
+    @user = User.find(params[:id])
+    @betas = @user.betas
+    @available_betas = Beta.not_finished - @betas
+    @active_betas = @betas.active
+    @planned_betas = @betas.planned
+    @finished_betas = @betas.finished
+  end
+  
   # GET /users
   # GET /users.json
   def index
@@ -21,6 +30,9 @@ class UsersController < ApplicationController
       format.html # show.html.erb
       format.json { render json: @user }
     end
+  end
+
+  def select
   end
 
   # GET /users/new
@@ -118,14 +130,5 @@ class UsersController < ApplicationController
     beta.users.delete(@user)
     flash[:success] = "Removed #{@user.full_name} from Beta #{beta.name}"
     redirect_to :back
-  end
-
-  def init_instance_variables
-    @user = User.find(params[:id])
-    @betas = @user.betas
-    @available_betas = Beta.not_finished - @betas
-    @active_betas = @betas.active
-    @planned_betas = @betas.planned
-    @finished_betas = @betas.finished
   end
 end

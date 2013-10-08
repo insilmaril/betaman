@@ -30,6 +30,15 @@ class User < ActiveRecord::Base
     false
   end
 
+  def make_employee
+    employee_role = Role.find_by_name('Employee')
+    if employee_role.nil?
+      raise "Role 'Employee' missing in DB!"
+    else
+      self.roles << employee_role
+    end
+  end
+
   def full_name
     "#{first_name} #{last_name}"
   end
