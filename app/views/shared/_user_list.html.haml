@@ -25,9 +25,6 @@
             .i.icon-pencil
           - if @beta
             = link_to(beta_remove_user_path(@beta, user_id: user) ) do
-              =@beta.name
-              \- remove
-              =user.full_name
               .i.icon-trash
           - else
             = link_to(user, :method => :delete, :data => { :confirm => 'Are you sure?' } ) do
