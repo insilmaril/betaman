@@ -109,9 +109,9 @@ class BetasController < ApplicationController
     if @current_user.admin?
       if !@beta.users.include? user
         @beta.users << user
-        flash[:success] = "Added #{user.id} to #{@beta.name}!"
+        flash[:success] = "Added #{user.full_name} to #{@beta.name}"
       else
-        flash[:warning] = "#{user.full_name} is already member of #{@beta.name}!"
+        flash[:warning] = "#{user.full_name} is already member of #{@beta.name}"
       end
 
       redirect_to :back
@@ -160,7 +160,7 @@ class BetasController < ApplicationController
     if @current_user.admin?
       if @beta.users.include? user
         @beta.users.delete(user)
-        flash[:success] = "Removed user #{user.id} from beta #{@beta.name}!"
+        flash[:success] = "Removed #{user.full_name} from #{@beta.name}"
       else
         flash[:warning] = "User #{user.full_name} is not a member of beta #{@beta.name}!"
       end

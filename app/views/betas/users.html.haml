@@ -1,4 +1,6 @@
-%h3="Participants of: #{@beta.name}"
+=link_to "#{@beta.name}", beta_path(@beta), class: 'btn'
+
+%h4="Participants:"
 
 =render partial: 'shared/user_list'
 

@@ -1,8 +1,7 @@
 %p#notice= notice
 
-%p
-  %b Name:
-  = @beta.name
+=link_to "#{@beta.name}", beta_path(@beta), class: 'btn'
+
 %p
   %b Time:
   = @beta.begin 
@@ -21,5 +20,6 @@
   = if @current_user.employee?
     = link_to 'Show participants', beta_users_path(@beta), class: 'btn btn-info' 
     = link_to 'Add participants', beta_add_select_users_path,  class: 'btn btn-info' 
-  = link_to 'Join', beta_add_user_path(@beta, user_id: @current_user), class: 'btn btn-success' 
+  - if !@beta.users.include?(@current_user)
+    = link_to 'Join', beta_add_user_path(@beta, user_id: @current_user), class: 'btn btn-success' 
 

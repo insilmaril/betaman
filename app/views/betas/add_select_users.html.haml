@@ -1,4 +1,6 @@
-%h2=@beta.name
+=link_to "#{@beta.name}", beta_path(@beta), class: 'btn'
 
-=render partial: 'shared/users_select', locals:{ userlist: @nousers, name: 'Add' }
+%br
+%br
+=render partial: 'shared/users_select', locals:{ userlist: @nousers, submitname: 'Add participants' }
 
