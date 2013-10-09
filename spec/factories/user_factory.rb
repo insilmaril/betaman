@@ -18,6 +18,14 @@ FactoryGirl.define do
       end
     end
 
+    factory :user_employee do
+      after_create do |user|
+        user.add_account("a.provider", "http://user.myopenid.com")
+        user.make_employee
+        user.save!
+      end
+    end
+
     factory :user_admin do
       after_create do |user|
         user.add_account("a.provider", "http://admin.myopenid.com")

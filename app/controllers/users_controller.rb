@@ -1,4 +1,7 @@
 class UsersController < ApplicationController
+
+#  before_filter :employee_required
+
   def init_instance_variables
     @user = User.find(params[:id])
     @betas = @user.betas
@@ -11,12 +14,17 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.all
-    @betas = Beta.all
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @users }
+    if @current_user.employee? || @current_user.admin?
+      @users = User.all
+      @betas = Beta.all
+
+      respond_to do |format|
+        format.html # index.html.erb
+        format.json { render json: @users }
+      end
+    else
+      redirect_to root_path
     end
   end
 

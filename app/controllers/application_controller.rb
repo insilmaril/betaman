@@ -17,6 +17,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def employee_required
+    if current_user.employee
+      return true
+    else
+      redirect_to root_path
+    end
+  end
+
   def current_user
     return @current_user if @current_user
     

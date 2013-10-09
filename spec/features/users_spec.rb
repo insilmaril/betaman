@@ -13,16 +13,21 @@ describe "GET /users" do
     current_path.should == root_path
   end
 
+  it "lists users for employee" do
+    user = FactoryGirl.create(:user_employee)
+    test_login(user)
+    visit users_path
+    current_path.should == users_path
+  end
+    
+  it "lists users for admin" do
+    user = FactoryGirl.create(:user_admin)
+    test_login(user)
+    visit users_path
+    current_path.should == users_path
+  end
+    
 end
-
-=begin
-describe "profile page" do
-  let(:user) { FactoryGirl.create(:user) }
-  before { visit user_path(user) }
-
-  it { should have_content(user.first_name) }
-end
-=end
 
 
 describe "Authentication" do
