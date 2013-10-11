@@ -22,12 +22,12 @@ class BetasController < ApplicationController
 
   def new
     if @current_user.admin?
-    @beta = Beta.new
+      @beta = Beta.new
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @beta }
-    end
+      respond_to do |format|
+        format.html # new.html.erb
+        format.json { render json: @beta }
+      end
     else
       flash[:error] = "Access denied: New Beta test"
       redirect_to root_path

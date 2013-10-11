@@ -9,7 +9,7 @@ class ListsController < ApplicationController
 
   def edit
     if @current_user.admin?
-      init_instance_variables
+      @list = List.find(params[:id])
     else
       flash[:error] = "Access denied: Editing List"
       redirect_to root_path
@@ -18,12 +18,12 @@ class ListsController < ApplicationController
 
   def new
     if @current_user.admin?
-    @list = List.new
+      @list = List.new
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @list }
-    end
+      respond_to do |format|
+        format.html 
+        format.json { render json: @list }
+      end
     else
       flash[:error] = "Access denied: New List"
       redirect_to root_path
@@ -31,13 +31,13 @@ class ListsController < ApplicationController
   end
 
   def create
-    @list = Beta.new(params[:list])
+    @list = List.new(params[:list])
 
     respond_to do |format|
       if @list.save
         flash[:success] = "Created list #{@list.name}"
-        format.html { redirect_to @beta }
-        format.json { render json: @beta, status: :created, location: @list }
+        format.html { redirect_to @list }
+        format.json { render json: @list, status: :created, location: @list }
       else
         flash[:warning] = "Failed to create list #{@list.name}"
         format.html { render action: "new" }
@@ -56,7 +56,7 @@ class ListsController < ApplicationController
   end
 
   def update
-    init_instance_variables
+    @list = List.find(params[:id])
 
     respond_to do |format|
       if @list.update_attributes(params[:list])
@@ -73,15 +73,16 @@ class ListsController < ApplicationController
 
   def destroy
     if @current_user.admin?
-      init_instance_variables
-      @list.destroy
+      list = List.find(params[:id])
+      list.destroy
+      flash[:success] = "Deleted list #{list.name}"
 
       respond_to do |format|
         format.html { redirect_to lists_url }
         format.json { head :no_content }
       end
     else
-      flash[:error] = "Access denied: Delete list test"
+      flash[:error] = "Access denied: Delete list #{list.name}"
       redirect_to root_path
     end
   end
@@ -98,5 +99,30 @@ class ListsController < ApplicationController
     flash[:warning] = "#{unsubscribed.count} users unsubscribed"
 
     redirect_to :back
+  end
+
+  def add_select_users
+    @list = List.find(params[:id])
+    if @current_user.admin? 
+      nousers
+    end
+  end
+
+  def add_multiple_users
+    @list = List.find(params[:id])
+    #params[:user_ids]       # Cont here and add set of users !!!!!
+    if @current_user.admin? 
+      if defined?(params[:user_ids])
+        #params[:user_ids].each do |id|
+        n = params[:user_ids].count
+        s = view_context.pluralize(n, 'participant')
+        flash[:success] = "Added #{s} to #{@beta.name}"
+        params[:user_ids].each do |user|
+          @beta.users << User.find(user)
+        end
+      else
+        flash[:warning] = "No Params defined"
+      end
+    end
   end
 end

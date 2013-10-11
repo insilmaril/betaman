@@ -16,6 +16,7 @@ Betaman::Application.routes.draw do
 
   get '/lists/:id/refresh', to: 'lists#refresh', as: 'list_refresh'
   get '/lists/:id/users', to: 'lists#users', as: 'list_users'
+  get '/lists/:id/add_select_users', to: 'lists#add_select_users', as: 'list_add_select_users'
 
   resources :users
   resources :betas
