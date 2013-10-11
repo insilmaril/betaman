@@ -1,11 +1,23 @@
-.row
-  .span12.sticky
-    %span.scratch
-    .paper
-      %h2 Log In
+%h4 Log in:
 
-      %p
+%p
+  = link_to '/auth/open_id' do
+    =image_tag('/images/openid_64.png') + "OpenID"
+-#%br
+-#= link_to image_tag('/images/google_64.png') + "Google", '/auth/google'
 
-      = link_to(image_tag('/images/openid_64.png') + "OpenID", '/auth/open_id')
-      -#%br
-      -#= link_to image_tag('/images/google_64.png') + "Google", '/auth/google'
+%br
+%br
+
+%h4 Notes:
+%ul
+  %li You can use any openID provider, e.g.
+  %ul
+    %li Google
+    %li Novell
+  %li You can also use you Bugzilla name, e.g.
+  %p
+    https://secure-www.novell.com/openid/user/BUGZILLANAME
+  %li After login you can edit your user profile
+
+
