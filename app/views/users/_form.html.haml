@@ -27,6 +27,10 @@
           Login name
         %td= f.text_field 'login_name'
     %tr
+      %td.right.bold.top
+        User ID
+      %td= @user.id
+    %tr
       %td.right.top.bold Roles
       %td
         %table
@@ -34,26 +38,38 @@
             %tr
               %td=role.name
 
-    %tr 
-      %td.right.top.bold Betas
-      %td
-        %table
-          - @user.betas.each do |beta|
-            %tr
-              %td
-                =beta.name
-                =link_to(user_remove_beta_path(@user, beta_id: beta) ) do
-                  %i.icon-trash
-          - if !@available_betas.empty?
-            %tr
-              %td 
-                .btn-group
-                  %a{:class => "btn btn-mini dropdown-toggle", "data-toggle" => "dropdown", :href => "#"}
-                    Add available beta 
-                    %b.caret
-                  %ul.dropdown-menu
-                    - @available_betas.each do |beta|
-                      %li= link_to beta.name, user_add_beta_path(@user, beta_id: beta)
+    - if @current_user.admin?
+      %tr 
+        %td.right.top.bold Betas
+        %td
+          %table
+            - @user.betas.each do |beta|
+              %tr
+                %td
+                  =beta.name
+                  =link_to(user_remove_beta_path(@user, beta_id: beta) ) do
+                    %i.icon-trash
+            - if !@available_betas.empty?
+              %tr
+                %td 
+                  .btn-group
+                    %a{:class => "btn btn-mini dropdown-toggle", "data-toggle" => "dropdown", :href => "#"}
+                      Add available beta 
+                      %b.caret
+                    %ul.dropdown-menu
+                      - @available_betas.each do |beta|
+                        %li= link_to beta.name, user_add_beta_path(@user, beta_id: beta)
+
+            - if !@finished_betas.empty?
+              %tr
+                %td 
+                  .btn-group
+                    %a{:class => "btn btn-mini dropdown-toggle", "data-toggle" => "dropdown", :href => "#"}
+                      Add finished beta 
+                      %b.caret
+                    %ul.dropdown-menu
+                      - @finished_betas.each do |beta|
+                        %li= link_to beta.name, user_add_beta_path(@user, beta_id: beta)
 
     %tr
       %td.right.bold Street Address
@@ -75,4 +91,4 @@
     = f.label :uid
     = f.text_field :uid
   .actions
-    = f.submit 'Save changes'
+    = f.submit 'Save', class: 'btn btn-success'

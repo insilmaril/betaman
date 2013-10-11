@@ -62,9 +62,9 @@ class UsersController < ApplicationController
   # GET /users/1/edit
   def edit
     init_instance_variables
+    @user = User.find(params[:id])
 
-    if @current_user.admin?
-      @user = User.find(params[:id])
+    if @current_user.admin? || @user == @current_user
       @finished_betas = Beta.finished
     else
       flash[:error] = "Access denied: Editing user"
@@ -95,7 +95,8 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.update_attributes(params[:user])
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
+      flash[:success] = "#{@user.full_name} has been updated"
+        format.html { redirect_to edit_user_path(@user) }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
