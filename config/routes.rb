@@ -14,8 +14,12 @@ Betaman::Application.routes.draw do
   get '/betas/:id/remove_user/:user_id', to: 'betas#remove_user', as: 'beta_remove_user'
   get '/betas/:id/users', to: 'betas#users', as: 'beta_users'
 
+  get '/lists/:id/refresh', to: 'lists#refresh', as: 'list_refresh'
+  get '/lists/:id/users', to: 'lists#users', as: 'list_users'
+
   resources :users
   resources :betas
+  resources :lists
 
   root to: 'static_pages#home'
   match '/help', to: 'static_pages#help'
@@ -33,6 +37,7 @@ Betaman::Application.routes.draw do
     resources :users
     resources :betas
     resources :companies
+    resources :lists
     get '', to: 'dashboard#index', as: '/'
   end
   

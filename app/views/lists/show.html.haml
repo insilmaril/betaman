@@ -1,0 +1,30 @@
+-#=link_to "#{@beta.name}", beta_path(@beta), class: 'btn'
+
+%p
+  %b Name:
+  = @list.name
+
+%p
+  %b Mailman:
+  = link_to (@list.admin_link) do
+    =@list.admin_link
+
+%p
+  %b Subscribers:
+  = @list.subscriptions.count
+
+-#
+  = "#{@users.count} total, #{pluralize(@users.admins.count, 'admin')}, "
+  = "#{pluralize(@users.employees.count, 'employee')}, "
+  = "#{pluralize(@users.testers.count, 'tester')}"
+
+-#
+  %div{ class: 'btn-group'}
+    = if @current_user.admin?
+      = link_to 'Edit', edit_beta_path(@beta),  class: 'btn btn-danger' 
+    = if @current_user.employee?
+      = link_to 'Show participants', beta_users_path(@beta), class: 'btn btn-info' 
+      = link_to 'Add participants', beta_add_select_users_path,  class: 'btn btn-info' 
+    - if !@beta.users.include?(@current_user)
+      = link_to 'Join', beta_add_user_path(@beta, user_id: @current_user), class: 'btn btn-success' 
+

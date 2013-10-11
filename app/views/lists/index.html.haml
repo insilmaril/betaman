@@ -1,0 +1,27 @@
+%h4 Lists:
+
+%table.table.table-bordered
+  %tr
+    %th Name
+    - if @current_user.admin? || @current_user.employee?
+      %th Subscribers
+    - if @current_user.admin?
+      %th Admin
+
+  - @lists.each do |list|
+    %tr
+      %td{:width => '50%'}= link_to(list.name, list ) 
+      - if @current_user.admin? || @current_user.employee?
+        %td
+          = link_to(list_users_path(list)) do
+            =list.users.count
+            - if list.users.count > 0
+              %i.icon-eye-open
+      - if @current_user.admin?
+        %td
+          =link_to(list_refresh_path(list)) do
+            Refresh
+          -#= link_to(edit_beta_path(beta), :title => 'Edit') do
+            %i{:class => ['icon-red', 'icon-pencil']}
+          -#= link_to(beta, :title => 'Delete', :method => :delete, :data => { :confirm => 'Are you sure?' }) do
+            %i.icon-trash

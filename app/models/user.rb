@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
   has_many :participations
   has_many :betas, :through => :participations
   has_and_belongs_to_many :roles
+  has_many :subscriptions
+  has_many :lists, :through => :subscriptions
   validates :email, presence: true
 
   def admin?

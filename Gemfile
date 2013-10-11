@@ -6,6 +6,7 @@ gem 'haml-rails'
 gem 'sqlite3'
 gem 'omniauth'
 gem 'omniauth-openid'
+gem 'mechanize'
 gem 'bootstrap-sass', '2.1'
 
 # Production on Heroko requires postgres
