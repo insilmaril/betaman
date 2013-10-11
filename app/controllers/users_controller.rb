@@ -65,6 +65,7 @@ class UsersController < ApplicationController
 
     if @current_user.admin?
       @user = User.find(params[:id])
+      @finished_betas = Beta.finished
     else
       flash[:error] = "Access denied: Editing user"
       redirect_to root_path
@@ -127,8 +128,13 @@ class UsersController < ApplicationController
   def add_beta
     init_instance_variables
     beta = Beta.find(params[:beta_id])
-    @betas << beta
-    flash[:success] = "Added #{@user.full_name} to Beta #{beta.name}"
+    if !@betas.include? beta
+      @betas << beta
+      flash[:success] = "Added #{@user.full_name} to Beta #{beta.name}"
+    else
+      flash[:warning] = "#{@user.full_name} is already participant of #{beta.name}"
+    end
+
     redirect_to :back
   end
 
