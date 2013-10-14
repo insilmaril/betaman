@@ -60,7 +60,7 @@
                       - @available_betas.each do |beta|
                         %li= link_to beta.name, user_add_beta_path(@user, beta_id: beta)
 
-            - if !@finished_betas.empty?
+            - if !@available_finished_betas.empty?
               %tr
                 %td 
                   .btn-group
@@ -68,7 +68,7 @@
                       Add finished beta 
                       %b.caret
                     %ul.dropdown-menu
-                      - @finished_betas.each do |beta|
+                      - @available_finished_betas.each do |beta|
                         %li= link_to beta.name, user_add_beta_path(@user, beta_id: beta)
 
     %tr

@@ -8,7 +8,8 @@ class UsersController < ApplicationController
     @available_betas = Beta.not_finished - @betas
     @active_betas = @betas.active
     @planned_betas = @betas.planned
-    @finished_betas = @betas.finished
+    @finished_betas = @betas.finished 
+    @available_finished_betas = Beta.finished - @betas
   end
   
   # GET /users
