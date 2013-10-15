@@ -13,9 +13,14 @@
 %ul
   %li You can use any openID provider, e.g.
   %ul
-    %li Google
-    %li Novell
-  %li You can also use you Bugzilla name, e.g.
+    %li 
+      Google: Find your URL after logging into your Google+ account. Then goto your 
+      =link_to('account/privacy settings', 'https://www.google.com/settings/privacy')
+      The URL looks like https://plus.google.com/{RANDOM_NUMBER}, where
+      the random number is specific to your profile.
+    %li 
+      Novell: The URL is https://secure-www.novell.com/openid/user/{USERNAME}
+  %li You can also use your Bugzilla name, the URL is the same as above:
   %p
     https://secure-www.novell.com/openid/user/BUGZILLANAME
   %li After login you can edit your user profile
