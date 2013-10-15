@@ -1,5 +1,6 @@
+require 'mail_helper'
+
 class SessionController < ApplicationController
-  
   before_filter :current_user
   skip_before_filter :login_required
 
@@ -34,14 +35,19 @@ class SessionController < ApplicationController
     if user.nil?
       logger.info("* Couldn't find user, creating new")
       user = User.new
-      user.last_name = name.split.last unless name.blank?
+      user.last_name  = name.split.last unless name.blank?
+      user.first_name = name.split.first unless name.blank?
       if email.blank?
         email = 'n.a.'
       end
       user.email = email 
       user.accounts << Account.new(uid: uid)
       user.save!
-      flash[:success] = "New account created!"
+      flash[:success] = "New account created for #{user.full_name}"
+      if MailHelper.internal_domain?(email)
+        user.make_employee
+        flash[:info] = "Added role 'employee' for #{user.full_name}"
+      end
     else
       logger.info("* Signed in: #{user.accounts.first.uid} URL: #{@url} Cookies: #{@_cookies}")
       flash[:success] = "You are signed in."
