@@ -136,7 +136,7 @@ class Mailmech
 
   def intern? (s)
     @internal_domains.each do |d|
-      return true if s =~ /#{d}/
+      return true if s =~ /#{d}$/
     end
     return false
   end
