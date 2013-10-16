@@ -38,6 +38,14 @@
             %tr
               %td=role.name
 
+    %tr
+      %td.right.top.bold Lists
+      %td
+        %table
+          - @user.lists.each do |list|
+            %tr
+              %td=list.name
+
     - if @current_user.admin?
       %tr 
         %td.right.top.bold Betas
