@@ -3,6 +3,7 @@ class Beta < ActiveRecord::Base
 
   has_many :participations
   has_many :users, :through => :participations
+  has_one :list
 
   default_scope -> { order('begin DESC') }
 

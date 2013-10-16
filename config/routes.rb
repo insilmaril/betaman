@@ -10,6 +10,9 @@ Betaman::Application.routes.draw do
 
   get '/betas/:id/add_select_users', to: 'betas#add_select_users', as: 'beta_add_select_users'
   post '/betas/:id/add_multiple_users', to: 'betas#add_multiple_users', as: 'beta_add_multiple_users'
+  get '/betas/:id/add_list_subscribers/:list_id', to: 'betas#add_list_subscribers', as: 'beta_add_list_subscribers'
+  get '/betas/:id/add_list/:list_id', to: 'betas#add_list', as: 'beta_add_list'
+  get '/betas/:id/remove_list', to: 'betas#remove_list', as: 'beta_remove_list'
   get '/betas/:id/add_user/:user_id', to: 'betas#add_user', as: 'beta_add_user'
   get '/betas/:id/remove_user/:user_id', to: 'betas#remove_user', as: 'beta_remove_user'
   get '/betas/:id/users', to: 'betas#users', as: 'beta_users'

@@ -1,18 +1,39 @@
-%p#notice= notice
-
 =link_to "#{@beta.name}", beta_path(@beta), class: 'btn'
 
-%p
-  %b Time:
-  = @beta.begin 
-  to
-  = @beta.end
+%table
+  %tr
+    %td.right.bold.top
+      Time:
+    %td
+      = @beta.begin 
+      to
+      = @beta.end
 
-%p
-  %b Participants:
-  = "#{@users.count} total, #{pluralize(@users.admins.count, 'admin')}, "
-  = "#{pluralize(@users.employees.count, 'employee')}, "
-  = "#{pluralize(@users.testers.count, 'tester')}"
+  %tr
+    %td.right.bold.top
+      Participants:
+    %td
+      = "#{@users.count} total, #{pluralize(@users.admins.count, 'admin')}, "
+      = "#{pluralize(@users.employees.count, 'employee')}, "
+      = "#{pluralize(@users.testers.count, 'tester')}"
+
+  %tr
+    %td.right.bold.top
+      Mailing list:
+    %td
+      -if @beta.list
+        = link_to @beta.list.name, list_path(@beta.list)
+        = link_to(beta_remove_list_path(@beta)) do
+          %i.icon-trash
+      -else
+        .btn-group
+          %a{:class => "btn btn-mini dropdown-toggle", "data-toggle" => "dropdown", :href => "#"}
+            Add list
+            %b.caret
+          %ul.dropdown-menu
+            - List.all.each do |list|
+              %li= link_to list.name, beta_add_list_path(@beta, list_id: list.id)
+
 
 %div{ class: 'btn-group'}
   = if @current_user.admin?

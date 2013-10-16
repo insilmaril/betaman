@@ -127,10 +127,8 @@ class BetasController < ApplicationController
 
   def add_multiple_users
     init_instance_variables
-    #params[:user_ids]       # Cont here and add set of users !!!!!
     if @current_user.admin? 
       if defined?(params[:user_ids])
-        #params[:user_ids].each do |id|
         n = params[:user_ids].count
         s = view_context.pluralize(n, 'participant')
         flash[:success] = "Added #{s} to #{@beta.name}"
@@ -141,16 +139,30 @@ class BetasController < ApplicationController
         flash[:warning] = "No Params defined"
       end
     end
-=begin
-      if !@beta.users.include? user
-        @beta.users << user
-        flash[:success] = "Added user #{user.id} from beta #{@beta.name}!"
-      else
-        flash[:warning] = "User #{user.full_name} is already member of beta #{@beta.name}!"
-      end
-=end
     redirect_to beta_path(@beta)
- end
+  end
+
+  def add_list_subscribers
+    init_instance_variables
+    list = List.find(params[:list_id])
+    if @current_user.admin? 
+      if list
+        add_users(list.users)
+        list.users.each do |user|
+          puts "+++ List users  #{user.full_name}"
+          end
+      end
+=begin
+        n = params[:user_ids].count
+        s = view_context.pluralize(n, 'participant')
+        flash[:success] = "Added #{s} to #{@beta.name}"
+        params[:user_ids].each do |user|
+          @beta.users << User.find(user)
+        end
+=end
+    end
+    redirect_to beta_path(@beta)
+  end
 
   def remove_user
     init_instance_variables
@@ -166,5 +178,49 @@ class BetasController < ApplicationController
       end
       redirect_to :back
     end
+  end
+
+  def add_list
+    if @current_user.admin?
+      beta = Beta.find(params[:id])
+      newlist = List.find(params[:list_id])
+      if beta.list
+        flash[:error] = "#{beta.name} already has a list named #{beta.list.name}"
+      else
+        beta.list = newlist
+        flash[:success] = "Added list #{newlist.name} to #{beta.name}"
+      end
+    end
+    redirect_to :back
+  end
+
+  def remove_list
+    if @current_user.admin?
+      beta = Beta.find(params[:id])
+      if beta.list
+        flash[:success] = "Removed list #{beta.list.name} from  #{beta.name}"
+        beta.list = nil
+      else
+        flash[:error] = "#{beta.name} has no mailing list"
+      end
+    end
+    redirect_to :back
+  end
+
+private 
+  def add_users(userlist)
+    count_subscribed  = 0
+    count_found  = 0
+    userlist.each do |user|
+      if !self.users.include? user
+        self.users << user
+        count_subscribed += 1
+      else
+        count_found += 1
+      end
+    end
+    s = view_context.pluralize(count_subscribed, 'participant')
+    t = view_context.pluralize(count_found, 'participant')
+    flash[:success] = "Added #{s} to #{@beta.name}, found already subscribed #{t}"
   end
 end

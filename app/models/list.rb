@@ -3,6 +3,7 @@ require 'mailmech'
 class List < ActiveRecord::Base
   has_many :subscriptions
   has_many :users, :through => :subscriptions
+  belongs_to :beta
   attr_accessible :comment, :name, :pass, :server
 
   def admin_link
@@ -15,17 +16,8 @@ class List < ActiveRecord::Base
     users_created = []
     users_unsubscribed = []
 
-    puts "Init mailmech ####################"
-    puts "server=#{server} name=#{name}"
-    
     mech.ensure_connection
     mech.reload_subscribers
-    puts "subscribers: #{mech.subscribers.count}"
-    puts "count old: #{subscriptions.count}"
-
-
-    #subscriptions.clear
-    #puts "count clear: #{subscriptions.count}"
 
     puts "subscribers:"
     subscribers = mech.subscribers
@@ -38,6 +30,7 @@ class List < ActiveRecord::Base
         end
       else
         puts "Create user for email #{s} !"
+        # FIXME add note, that user is created by list refresh
         u = User.new
         u.email = s
         u.save

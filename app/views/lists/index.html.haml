@@ -3,6 +3,7 @@
 %table.table.table-bordered
   %tr
     %th Name
+    %th Beta
     - if @current_user.admin? || @current_user.employee?
       %th Subscribers
     - if @current_user.admin?
@@ -10,7 +11,10 @@
 
   - @lists.each do |list|
     %tr
-      %td{:width => '50%'}= link_to(list.name, list ) 
+      %td= link_to(list.name, list ) 
+      %td
+        - if list.beta
+          =link_to list.beta.name, beta_path(list.beta)
       - if @current_user.admin? || @current_user.employee?
         %td
           = link_to(list_users_path(list)) do
