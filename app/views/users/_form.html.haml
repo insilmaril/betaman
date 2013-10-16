@@ -44,7 +44,7 @@
         %table
           - @user.lists.each do |list|
             %tr
-              %td=list.name
+              %td=link_to(list.name, list_path(list) )
 
     - if @current_user.admin?
       %tr 
@@ -54,7 +54,7 @@
             - @user.betas.each do |beta|
               %tr
                 %td
-                  =beta.name
+                  =link_to(beta.name,beta_path(beta) )
                   =link_to(user_remove_beta_path(@user, beta_id: beta) ) do
                     %i.icon-trash
             - if !@available_betas.empty?
