@@ -149,17 +149,8 @@ class BetasController < ApplicationController
       if list
         add_users(list.users)
         list.users.each do |user|
-          puts "+++ List users  #{user.full_name}"
           end
       end
-=begin
-        n = params[:user_ids].count
-        s = view_context.pluralize(n, 'participant')
-        flash[:success] = "Added #{s} to #{@beta.name}"
-        params[:user_ids].each do |user|
-          @beta.users << User.find(user)
-        end
-=end
     end
     redirect_to beta_path(@beta)
   end

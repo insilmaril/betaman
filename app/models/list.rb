@@ -19,7 +19,6 @@ class List < ActiveRecord::Base
     mech.ensure_connection
     mech.reload_subscribers
 
-    puts "subscribers:"
     subscribers = mech.subscribers
     subscribers.each do |s|
       puts "  #{s}"
@@ -29,10 +28,12 @@ class List < ActiveRecord::Base
           users << u
         end
       else
-        puts "Create user for email #{s} !"
+        # puts "Create user for email #{s} !"
         # FIXME add note, that user is created by list refresh
         u = User.new
         u.email = s
+        s =~ /(.*)@/
+        u.last_name = $1 if $1
         u.save
         users_created << u
         users << u
