@@ -33,7 +33,7 @@
         %td= link_to(beta.name, beta ) 
         %td 
           - if beta.list
-            = beta.list.name
+            = link_to(beta.list.name, list_path(beta.list))
         %td= beta.begin
         %td= beta.end
         - if @current_user.admin? || @current_user.employee?
