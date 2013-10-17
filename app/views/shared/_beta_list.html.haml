@@ -19,8 +19,8 @@
 -elsif  
   %table.table.table-bordered
     %tr
-      %th Name
-      %th List
+      %th{:width => '30%'} Name
+      %th{:width => '10%'} List
       %th Begin
       %th End
       - if @current_user.admin? || @current_user.employee?

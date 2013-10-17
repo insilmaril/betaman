@@ -1,17 +1,32 @@
--#=link_to "#{@beta.name}", beta_path(@beta), class: 'btn'
+=link_to "#{@list.name}", list_path(@list), class: 'btn'
 
-%p
-  %b Name:
-  = @list.name
+%table
+  %tr
+    %td.right.bold.top
+      Name:
+    %td
+      = @list.name
 
-%p
-  %b Mailman:
-  = link_to (@list.admin_link) do
-    =@list.admin_link
+  %tr
+    %td.right.bold.top
+      Mailman:
+    %td
+      = link_to (@list.admin_link) do
+        =@list.admin_link
 
-%p
-  %b Subscribers:
-  = @list.subscriptions.count
+  %tr
+    %td.right.bold.top
+      Subscribers:
+    %td
+      = @list.subscriptions.count
+
+  %tr
+    %td.right.bold.top
+      Beta:
+    %td
+      - if @list.beta
+        = @list.beta.name
+
 
 -#
   = "#{@users.count} total, #{pluralize(@users.admins.count, 'admin')}, "
@@ -22,7 +37,7 @@
   = if @current_user.admin?
     = link_to 'Refresh', list_refresh_path(@list),  class: 'btn btn-danger' 
     - if @list.beta
-      = link_to(beta_add_list_subscribers_path(Beta.find(1), :list_id => 6), class: 'btn btn-danger' ) do
+      = link_to(beta_add_list_subscribers_path(@list.beta, @list.id), class: 'btn btn-danger' ) do
         = "Add subscribers to #{@list.beta.name}"
     = link_to 'Edit', edit_list_path(@list),  class: 'btn btn-info' 
   = if @current_user.employee?
