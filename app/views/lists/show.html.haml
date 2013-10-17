@@ -1,12 +1,6 @@
-=link_to "#{@list.name}", list_path(@list), class: 'btn'
+=link_to "List: #{@list.name}", list_path(@list), class: 'btn'
 
 %table
-  %tr
-    %td.right.bold.top
-      Name:
-    %td
-      = @list.name
-
   %tr
     %td.right.bold.top
       Mailman:
@@ -25,7 +19,7 @@
       Beta:
     %td
       - if @list.beta
-        = @list.beta.name
+        = link_to(@list.beta.name, beta_path(@list.beta))
 
 
 -#
