@@ -5,6 +5,10 @@ class BetasController < ApplicationController
 
   def index
     @betas = Beta.all
+    @active_betas = Beta.active
+    @planned_betas = Beta.planned
+    @finished_betas = Beta.finished
+
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @betas }
