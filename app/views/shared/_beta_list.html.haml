@@ -1,20 +1,9 @@
-- if type == 'available'
-  %h4 Available beta tests:
-  - @beta_list = @available_betas
-- elsif type == 'active'
-  %h4 Active beta tests:
-  - @beta_list = @active_betas
-- elsif type == 'planned' 
-  %h4 Planned beta tests:
-  - @beta_list = @planned_betas
-- elsif type == 'finished'
-  %h4 Finished beta tests:
-  - @beta_list = @finished_betas
-- else
-  %h4 Beta tests:
-  - @beta_list = @betas
+%h4
+  = title
+  = 'Beta'.pluralize(betas.count) + ':'
+  
 
-- if @beta_list.empty?
+- if !betas || betas.count < 1
   %p None.
 -elsif  
   %table.table.table-bordered
@@ -28,7 +17,7 @@
       - if @current_user.admin?
         %th Admin
 
-    - @beta_list.each do |beta|
+    - betas.each do |beta|
       %tr
         %td= link_to(beta.name, beta ) 
         %td 

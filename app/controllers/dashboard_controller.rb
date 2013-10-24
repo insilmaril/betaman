@@ -1,10 +1,13 @@
 class DashboardController < ApplicationController
   def index
-    @betas = Beta.all
+    @betas = @current_user.betas
+    @available_betas = Beta.not_finished - @betas
 
-    @active_betas = Beta.active
-    @planned_betas = Beta.planned
-    @finished_betas = Beta.finished
+    @active_betas = @betas.active
+    @planned_betas = @betas.planned
+    @finished_betas = @betas.finished
+
+    @available_betas = Beta.not_finished - @betas
 
     respond_to do |format|
       format.html # index.html.erb
