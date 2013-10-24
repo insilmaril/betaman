@@ -77,6 +77,7 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     @user = User.new(params[:user])
+    @address = @user.address
 
     respond_to do |format|
       if @user.save
@@ -146,5 +147,18 @@ class UsersController < ApplicationController
     beta.users.delete(@user)
     flash[:success] = "Removed #{@user.full_name} from Beta #{beta.name}"
     redirect_to :back
+  end
+
+  def add_address
+    user = User.find(params[:id])
+    if user.address
+      flash[:error] = "#{user.full_name} already has address #{user.address.id}"
+    else
+      a = Address.create
+      user.address = a
+      user.save
+      flash[:success] = "Created address #{a.id} for #{user.full_name}"
+      redirect_to :back
+    end
   end
 end

@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  attr_accessible :email, :first_name, :last_name, :login_name
+  attr_accessible :email, :first_name, :last_name, :login_name, :address_attributes
 
   has_many :accounts
   has_many :participations
@@ -7,6 +7,9 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :roles
   has_many :subscriptions
   has_many :lists, :through => :subscriptions
+  has_one :address
+  accepts_nested_attributes_for :address
+
   validates :email, presence: true
 
   def admin?

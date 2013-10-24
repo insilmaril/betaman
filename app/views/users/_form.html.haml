@@ -62,7 +62,7 @@
                 %td 
                   .btn-group
                     %a{:class => "btn btn-mini dropdown-toggle", "data-toggle" => "dropdown", :href => "#"}
-                      Add subscribers to
+                      Add available beta
                       %b.caret
                     %ul.dropdown-menu
                       - @available_betas.each do |beta|
@@ -79,24 +79,37 @@
                       - @available_finished_betas.each do |beta|
                         %li= link_to beta.name, user_add_beta_path(@user, beta_id: beta)
 
-    %tr
-      %td.right.bold Street Address
-    %tr
-      %td.right.bold Adress 2
-    %tr
-      %td.right.bold Adress 3
-    %tr
-      %td.right.bold City
-    %tr
-      %td.right.bold Zip/Postal code
-    %tr
-      %td.right.bold Country
-    %tr
-      %td.right.bold State/Province
-    %tr
-      %td.right.bold Telephone
-  -#.field
-    = f.label :uid
-    = f.text_field :uid
+    - if @user.address
+      = f.fields_for :address do |af|
+        %tr
+          %td.right.top.bold Street Address
+          %td= af.text_field :address1
+        %tr
+          %td.right.top.bold Adress 2
+          %td= af.text_field :address2
+        %tr
+          %td.right.top.bold Adress 3
+          %td= af.text_field :address3
+        %tr
+          %td.right.top.bold City
+          %td= af.text_field :city
+        %tr
+          %td.right.top.bold Zip/Postal code
+          %td= af.text_field :zip
+        %tr
+          %td.right.top.bold Country
+          %td= af.text_field :country
+        %tr
+          %td.right.top.bold State/Province
+          %td= af.text_field :state
+        %tr
+          %td.right.top.bold Telephone
+          %td= af.text_field :phone
+    - else
+      %tr
+        %td Address
+        %td
+          = link_to('Add address', user_add_address_path(@user), class: 'btn btn-mini' ) 
   .actions
     = f.submit 'Save', class: 'btn btn-success'
+
