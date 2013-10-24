@@ -1,3 +1,9 @@
+%h3 My Lists:
+%ul
+  - @current_user.lists.each do |list|
+    %li= link_to list.name, list_path(list)
+
+%h3 My Betas:
 =render partial: "shared/beta_list", locals:{ type: 'planned' }
 =render partial: "shared/beta_list", locals:{ type: 'active' }
 =render partial: "shared/beta_list", locals:{ type: 'finished' }
