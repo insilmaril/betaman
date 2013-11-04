@@ -1,5 +1,10 @@
 class User < ActiveRecord::Base
-  attr_accessible :email, :first_name, :last_name, :login_name, :address_attributes
+  attr_accessible :email, 
+    :first_name, 
+    :last_name, 
+    :login_name, 
+    :address_attributes, 
+    :note
 
   has_many :accounts
   has_many :participations

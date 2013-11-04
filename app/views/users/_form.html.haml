@@ -26,6 +26,14 @@
         %td.right.bold.top
           Login name
         %td= f.text_field 'login_name'
+
+    - if @current_user.admin?
+      %tr
+        .field
+          %td.right.bold.top
+            Note
+          %td= f.text_area(:note, cols: 80, rows: 5)
+
     %tr
       %td.right.bold.top
         User ID
@@ -107,7 +115,7 @@
           %td= af.text_field :phone
     - else
       %tr
-        %td Address
+        %td.right.top.bold Address
         %td
           = link_to('Add address', user_add_address_path(@user), class: 'btn btn-mini' ) 
   .actions
