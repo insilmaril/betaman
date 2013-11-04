@@ -43,6 +43,12 @@ class SessionController < ApplicationController
       user.email = email 
       user.accounts << Account.new(uid: uid)
       user.save!
+      UserMailer.admin_mail(
+        "Created #{user.full_name}",
+        "User ID: #{user.id}\n" +
+        "  Email: #{email}\n" +
+        "Account: #{uid}"
+      ).deliver
       flash[:success] = "New account created for #{user.full_name}"
       if MailHelper.internal_domain?(email)
         user.make_employee
@@ -51,6 +57,7 @@ class SessionController < ApplicationController
     else
       logger.info("* Signed in: #{user.accounts.first.uid} URL: #{@url} Cookies: #{@_cookies}")
       flash[:success] = "You are signed in."
+      UserMailer.admin_mail("Signed in #{user.full_name}","User ID: #{user.id}").deliver
     end
     session[:user_id] = user.id
     redirect_to dashboard_path
