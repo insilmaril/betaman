@@ -42,9 +42,10 @@ Betaman::Application.routes.draw do
     resources :users
     resources :betas
     resources :companies
-    resources :lists
+    #get 'lists', to: '/lists/'
     get '', to: 'dashboard#index', as: '/'
   end
+  resources :lists, :path => '/admin/lists'
   
   match ':controller/:action' => ":controller#:action"
 

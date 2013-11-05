@@ -25,46 +25,109 @@ class SessionController < ApplicationController
 
     #raise request.env["omniauth.auth"].to_yaml
 
-    user = User.joins(:accounts).where(accounts: {uid: uid}).first
-
     logger.info("*   uid: #{uid}")
     logger.info("*  name: #{name}")
     logger.info("* email: #{email}")
     logger.info("*  prov: #{provider}")
 
+    user = User.joins(:accounts).where(accounts: {uid: uid}).first
+
     if user.nil?
-      logger.info("* Couldn't find user, creating new")
-      user = User.new
-      user.last_name  = name.split.last unless name.blank?
-      user.first_name = name.split.first unless name.blank?
-      if email.blank?
-        email = 'n.a.'
+      # No user account found for this provider
+
+      # Check if user already exists without account, e.g. via list
+      # subscription
+
+      if email.blank? # FIXME better validate email
+        flash[:error] = "No email provided for #{provider}."
+        redirect_to root_path
+        return
       end
-      user.email = email 
-      user.accounts << Account.new(uid: uid)
-      user.save!
-      UserMailer.admin_mail(
-        "Created #{user.full_name}",
-        "User ID: #{user.id}\n" +
-        "  Email: #{email}\n" +
-        "Account: #{uid}"
-      ).deliver
-      flash[:success] = "New account created for #{user.full_name}"
-      if MailHelper.internal_domain?(email)
-        user.make_employee
-        flash[:info] = "Added role 'employee' for #{user.full_name}"
+
+      user = User.find_by_email(email)
+
+      if user.nil?
+        # No account and no user with this email => Create user
+
+        logger.info("* Couldn't find user, creating new")
+        user = User.new
+        user.last_name  = name.split.last unless name.blank?
+        user.first_name = name.split.first unless name.blank?
+        user.email = email 
+        user.accounts << Account.new(uid: uid)
+        user.save!
+        UserMailer.admin_mail(
+          "Created #{user.full_name}",
+          "User ID: #{user.id}\n" +
+          "  Email: #{email}\n" +
+          "Account: #{uid}"
+        ).deliver
+        flash[:success] = "New account created for #{user.full_name}"
+        UserMailer.welcome_mail
+
+        if MailHelper.internal_domain?(email) # FIXME remove this automatism
+          user.make_employee
+          flash[:info] = "Added role 'employee' for #{user.full_name}"
+        end
+
+      else
+        # No account, but user with same email
+        # Check, if user has logged in before
+
+        if user.accounts.count > 0
+          # User account for given provider does not exist,
+          # but a user for the email exists and that user
+          # already has a different account
+          # => notify user and admin, but don't login # FIXME better send validation link
+          flash[:error] = "There is already a user with #{email}, admin has been notified"
+          UserMailer.admin_mail(
+            "Signin problem",
+            "openID provided:\n" +
+            "    uid: #{uid}\n" + 
+            "   name: #{name}\n" + 
+            "  email: #{email}\n" +
+            "   prov: #{provider}\n\n" + 
+            "User exists with:\n" +
+            "  email: #{user.email}\n" +
+            "   name: #{user.full_name}\n" + 
+            "     ID: #{user.id}").deliver
+          redirect_to root_path
+          return
+        else
+          # User account for given provider does not exist,
+          # but a user for the email exists and that user
+          # has not logged in yet (has no account)
+          # This happens when user is created from analyzing mailing
+          # lists (which are administered by Beta admin)
+          # => notify user and admin, and add account # FIXME better send validation link
+
+          user.accounts << Account.new(uid: uid)
+          user.save!
+          UserMailer.admin_mail(
+            "Account created for existing user",
+            "    email: #{user.email}\n" +
+            "     name: #{user.full_name}\n" +
+            "       ID: #{user.id}").deliver
+        end
       end
-    else
-      logger.info("* Signed in: #{user.accounts.first.uid} URL: #{@url} Cookies: #{@_cookies}")
-      flash[:success] = "You are signed in."
-      UserMailer.admin_mail("Signed in #{user.full_name}","User ID: #{user.id}").deliver
     end
+    # sign in
+    logger.info("* Signed in: #{user.accounts.first.uid} URL: #{@url} Cookies: #{@_cookies}")
+    flash[:success] = "You are signed in."
+
+    # For the time being tell admin
+    UserMailer.admin_mail("Signed in #{user.full_name}","User ID: #{user.id}").deliver
+    
     session[:user_id] = user.id
     redirect_to dashboard_path
   end
 
   def failure
     flash[:error] = "Authentication failed, please try again."
+      
+    UserMailer.admin_mail(
+      "User authentication failed",
+      "    URL: #{session['omniauth.params']['openid_url'].to_s}").deliver
     redirect_to root_path
   end
 

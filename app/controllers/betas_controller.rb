@@ -149,12 +149,21 @@ class BetasController < ApplicationController
   def add_list_subscribers
     init_instance_variables
     list = List.find(params[:list_id])
-    if @current_user.admin? 
-      if list
-        add_users(list.users)
-        list.users.each do |user|
-          end
-      end
+    if @current_user.admin? && list && @beta
+      added, existing = @beta.add_users(list.users)
+      all_count   = view_context.pluralize(list.users.count, 'subscriber')
+      added_count = view_context.pluralize(added.count, 'participant')
+      exist_count = view_context.pluralize(existing.count, 'participant')
+      flash[:success] = "Added #{added_count} to #{@beta.name}, found already #{exist_count}."
+      UserMailer.admin_mail(
+        "Added #{added_count} from #{list.name} to beta #{@beta.name}",
+        "Beta: #{@beta.name}\n" +
+        "List: #{list.name}\n\n" +
+        "request to add #{all_count} resulted in \n" +
+        "#{added_count} new participants  (see below) and " +
+        "#{exist_count} already existing\n\n" +
+        added.join("\n")
+      ).deliver
     end
     redirect_to beta_path(@beta)
   end
@@ -200,22 +209,5 @@ class BetasController < ApplicationController
       end
     end
     redirect_to :back
-  end
-
-private 
-  def add_users(userlist)
-    count_subscribed  = 0
-    count_found  = 0
-    userlist.each do |user|
-      if !self.users.include? user
-        self.users << user
-        count_subscribed += 1
-      else
-        count_found += 1
-      end
-    end
-    s = view_context.pluralize(count_subscribed, 'participant')
-    t = view_context.pluralize(count_found, 'participant')
-    flash[:success] = "Added #{s} to #{@beta.name}, found already subscribed #{t}"
   end
 end
