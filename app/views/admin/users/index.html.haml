@@ -4,6 +4,7 @@
   %tr
     %th Name
     %th Email
+    %th ID
     %th Login
     %th Roles
     %th uids
@@ -19,6 +20,7 @@
         - else
           = link_to user.full_name, user
       %td= mail_to user.email
+      %td= user.id
       %td= user.login_name
       %td
         - user.roles.each do |role|
