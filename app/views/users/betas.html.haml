@@ -1,6 +1,5 @@
 %h3="Beta tests of: #{@user.full_name}"
 
-=render partial: "shared/beta_list", locals:{ type: 'available' }
-=render partial: "shared/beta_list", locals:{ type: 'planned' }
-=render partial: "shared/beta_list", locals:{ type: 'active' }
-=render partial: "shared/beta_list", locals:{ type: 'finished' }
+=render partial: "shared/beta_list", locals: { betas: @available_betas, title: 'Available' }
+=render partial: "shared/beta_list", locals: { betas: @active_betas, title: 'Active' }
+=render partial: "shared/beta_list", locals: { betas: @finished_betas, title: 'Finished' }
