@@ -42,7 +42,6 @@ Betaman::Application.routes.draw do
     resources :users
     resources :betas
     resources :companies
-    #get 'lists', to: '/lists/'
     get '', to: 'dashboard#index', as: '/'
   end
   resources :lists, :path => '/admin/lists'
