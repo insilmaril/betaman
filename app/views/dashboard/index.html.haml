@@ -1,4 +1,6 @@
-%h4 My Lists:
+%h2= "Dashboard #{@current_user.full_name}" 
+
+%h4 Mailing list subscriptions:
 - if @current_user.lists.count > 0
   %ul
     - @current_user.lists.each do |list|
@@ -6,6 +8,7 @@
 - else
   None.
 
-=render partial: "shared/beta_list", locals:{betas: @available_betas, title: 'My available' }
-=render partial: "shared/beta_list", locals:{betas: @active_betas, title: 'My active' }
-=render partial: "shared/beta_list", locals:{betas: @finished_betas, title: 'My finished' }
+=render partial: "shared/beta_list", locals: {betas: @available_betas, title: 'Available' }
+=render partial: "shared/beta_list", locals: { betas: @planned_betas, title: 'Planned' }
+=render partial: "shared/beta_list", locals: {betas: @active_betas, title: 'Active' }
+=render partial: "shared/beta_list", locals: {betas: @finished_betas, title: 'Finished' }

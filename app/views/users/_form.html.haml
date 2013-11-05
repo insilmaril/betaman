@@ -54,38 +54,42 @@
             %tr
               %td=link_to(list.name, list_path(list) )
 
-    - if @current_user.admin?
-      %tr 
-        %td.right.top.bold Betas
-        %td
-          %table
-            - @user.betas.each do |beta|
+    %tr 
+      %td.right.top.bold Betas
+      %td
+        %table
+          - @user.betas.each do |beta|
+            %tr
+              %td
+                =link_to(beta.name,beta_path(beta) )
+                =link_to(user_remove_beta_path(@user, beta_id: beta) ) do
+                  %i.icon-trash
+
+            - if @current_user.admin?
               %tr
                 %td
-                  =link_to(beta.name,beta_path(beta) )
-                  =link_to(user_remove_beta_path(@user, beta_id: beta) ) do
-                    %i.icon-trash
-            - if !@available_betas.empty?
-              %tr
-                %td 
-                  .btn-group
-                    %a{:class => "btn btn-mini dropdown-toggle", "data-toggle" => "dropdown", :href => "#"}
-                      Add available beta
-                      %b.caret
-                    %ul.dropdown-menu
-                      - @available_betas.each do |beta|
-                        %li= link_to beta.name, user_add_beta_path(@user, beta_id: beta)
+                %td
+                  - if !@available_betas.empty?
+                    %tr
+                      %td 
+                        .btn-group
+                          %a{:class => "btn btn-mini dropdown-toggle", "data-toggle" => "dropdown", :href => "#"}
+                            Add available beta
+                            %b.caret
+                          %ul.dropdown-menu
+                            - @available_betas.each do |beta|
+                              %li= link_to beta.name, user_add_beta_path(@user, beta_id: beta)
 
-            - if !@available_finished_betas.empty?
-              %tr
-                %td 
-                  .btn-group
-                    %a{:class => "btn btn-mini dropdown-toggle", "data-toggle" => "dropdown", :href => "#"}
-                      Add finished beta 
-                      %b.caret
-                    %ul.dropdown-menu
-                      - @available_finished_betas.each do |beta|
-                        %li= link_to beta.name, user_add_beta_path(@user, beta_id: beta)
+                    - if !@available_finished_betas.empty?
+                      %tr
+                        %td 
+                          .btn-group
+                            %a{:class => "btn btn-mini dropdown-toggle", "data-toggle" => "dropdown", :href => "#"}
+                              Add finished beta 
+                              %b.caret
+                            %ul.dropdown-menu
+                              - @available_finished_betas.each do |beta|
+                                %li= link_to beta.name, user_add_beta_path(@user, beta_id: beta)
 
     - if @user.address
       = f.fields_for :address do |af|
