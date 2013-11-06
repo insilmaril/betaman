@@ -44,7 +44,6 @@ Betaman::Application.routes.draw do
     resources :companies
     get '', to: 'dashboard#index', as: '/'
   end
-  resources :lists, :path => '/admin/lists'
   
   match ':controller/:action' => ":controller#:action"
 
