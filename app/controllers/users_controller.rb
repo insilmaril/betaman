@@ -10,6 +10,8 @@ class UsersController < ApplicationController
     @planned_betas = @betas.planned
     @finished_betas = @betas.finished 
     @available_finished_betas = Beta.finished - @betas
+
+    @available_lists = List.all - @user.lists
   end
   
   # GET /users
@@ -48,11 +50,15 @@ class UsersController < ApplicationController
   # GET /users/new.json
   def new
     if @current_user.admin?
-      @user = User.new
+      user = User.new
 
-      respond_to do |format|
-        format.html # new.html.erb
-        format.json { render json: @user }
+      if user.save!
+        redirect_to edit_user_path(user)
+      else
+        respond_to do |format|
+          format.html # new.html.erb
+          format.json { render json: @user }
+        end
       end
     else
       flash[:error] = "Access denied: New user"

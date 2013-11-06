@@ -11,6 +11,8 @@ class List < ActiveRecord::Base
   end
 
   def sync
+    # Sync the internal represantation to the external "real" list
+    # (which leaves the external list untouched!)
     mech = Mailmech.new(server,name,pass)
 
     users_created = []
@@ -38,18 +40,25 @@ class List < ActiveRecord::Base
 
     users.each do |u|
       if !subscribers.include? u.email
-        puts "Unsubscribe #{u.email} !" #FIXME
-        users.destroy(u)
-        users_unsubscribed << u  #FIXME and actually unsub user...
+        users.delete(u)
+        users_unsubscribed << u 
       end
     end
 
     return users_created, users_unsubscribed
   end
 
+  def subscribe(user)
+    mech = Mailmech.new(server,name,pass)
+    mech.subscribe([user.email])
+    sync
+  end
+
   def unsubscribe(user)
     mech = Mailmech.new(server,name,pass)
     mech.delete([user.email])
+    created, unsubscribed = sync
+    return unsubscribed
   end
 end
 

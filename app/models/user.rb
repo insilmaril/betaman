@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   has_one :address
   accepts_nested_attributes_for :address
 
-  validates :email, presence: true
+  #validates :email, presence: true
 
   def admin?
     self.roles.each do  |r| 

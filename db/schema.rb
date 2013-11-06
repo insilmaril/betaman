@@ -95,5 +95,4 @@ ActiveRecord::Schema.define(:version => 20131104093011) do
     t.integer  "address_id"
     t.string   "note"
   end
-
 end

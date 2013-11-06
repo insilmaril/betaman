@@ -126,14 +126,27 @@ class ListsController < ApplicationController
     end
   end
 
+  def subscribe_user
+    if @current_user.admin? 
+      list = List.find(params[:id])
+      user = User.find(params[:user_id])
+      list.subscribe(user)
+      if list.users.include? user
+        flash[:success] = "Subscribed #{user.email} to #{list.name}"
+      else
+        flash[:error] = "Subscribing #{user.email} to #{list.name} failed"
+      end
+    end
+    redirect_to :back
+  end
+
   def unsubscribe_user
     if @current_user.admin? 
       list = List.find(params[:id])
       user = User.find(params[:user_id])
-      list.unsubscribe(user)
-      created, unsubscribed = list.sync
+      unsubscribed = list.unsubscribe(user)
       if unsubscribed.include? user
-        flash[:success] = "Unsubscribed #{user.email} succeeded"
+        flash[:success] = "Unsubscribed #{user.email}"
       else
         flash[:error] = "Unsubscribing #{user.email} failed"
       end
