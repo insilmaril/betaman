@@ -10,18 +10,14 @@ class List < ActiveRecord::Base
     "#{server}/admin/#{name}"
   end
 
-  def refresh
+  def sync
     mech = Mailmech.new(server,name,pass)
 
     users_created = []
     users_unsubscribed = []
 
-    mech.ensure_connection
-    mech.reload_subscribers
-
     subscribers = mech.subscribers
     subscribers.each do |s|
-      puts "  #{s}"
       u = User.find_by_email(s)
       if  u
         if !users.include? u
@@ -29,7 +25,7 @@ class List < ActiveRecord::Base
         end
       else
         # puts "Create user for email #{s} !"
-        # FIXME add note, that user is created by list refresh
+        # FIXME add note, that user is created by list sync
         u = User.new
         u.email = s
         s =~ /(.*)@/
@@ -42,15 +38,18 @@ class List < ActiveRecord::Base
 
     users.each do |u|
       if !subscribers.include? u.email
-        puts "Unsubscribe #{u.email} !"
-        users_unsubscribed << u
+        puts "Unsubscribe #{u.email} !" #FIXME
+        users.destroy(u)
+        users_unsubscribed << u  #FIXME and actually unsub user...
       end
     end
 
-    puts "Users created: #{users_created.count}"
-    puts "Users unsub  : #{users_unsubscribed.count}"
-    
     return users_created, users_unsubscribed
+  end
+
+  def unsubscribe(user)
+    mech = Mailmech.new(server,name,pass)
+    mech.delete([user.email])
   end
 end
 

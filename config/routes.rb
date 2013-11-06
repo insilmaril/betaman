@@ -18,9 +18,10 @@ Betaman::Application.routes.draw do
   get '/betas/:id/remove_user/:user_id', to: 'betas#remove_user', as: 'beta_remove_user'
   get '/betas/:id/users', to: 'betas#users', as: 'beta_users'
 
-  get '/lists/:id/refresh', to: 'lists#refresh', as: 'list_refresh'
+  get '/lists/:id/sync', to: 'lists#sync', as: 'list_sync'
   get '/lists/:id/users', to: 'lists#users', as: 'list_users'
   get '/lists/:id/add_select_users', to: 'lists#add_select_users', as: 'list_add_select_users'
+  get '/lists/:id/unsubscribe_user/:user_id', to: 'lists#unsubscribe_user', as: 'list_unsubscribe_user'
 
   resources :users
   resources :betas

@@ -29,7 +29,7 @@
 
 %div{ class: 'btn-group'}
   = if @current_user.admin?
-    = link_to 'Refresh', list_refresh_path(@list),  class: 'btn btn-danger' 
+    = link_to 'Sync', list_sync_path(@list),  class: 'btn btn-danger' 
     - if @list.beta
       = link_to(beta_add_list_subscribers_path(@list.beta, @list.id), class: 'btn btn-danger' ) do
         = "Add subscribers to #{@list.beta.name}"

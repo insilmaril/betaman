@@ -92,9 +92,9 @@ class ListsController < ApplicationController
     @users = @list.users
   end
 
-  def refresh
+  def sync
     list = List.find(params[:id])
-    created, unsubscribed = list.refresh
+    created, unsubscribed = list.sync
     flash[:success] = "#{created.count} users created"
     flash[:warning] = "#{unsubscribed.count} users unsubscribed"
 
@@ -124,5 +124,20 @@ class ListsController < ApplicationController
         flash[:warning] = "No Params defined"
       end
     end
+  end
+
+  def unsubscribe_user
+    if @current_user.admin? 
+      list = List.find(params[:id])
+      user = User.find(params[:user_id])
+      list.unsubscribe(user)
+      created, unsubscribed = list.sync
+      if unsubscribed.include? user
+        flash[:success] = "Unsubscribed #{user.email} succeeded"
+      else
+        flash[:error] = "Unsubscribing #{user.email} failed"
+      end
+    end
+    redirect_to :back
   end
 end
