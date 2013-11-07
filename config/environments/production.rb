@@ -69,7 +69,7 @@ Betaman::Application.configure do
   #Configure mail
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address: 'smtp://relay.suse.de',
+    address: 'localhost',
     domain: 'suse.de'
   }
 end
