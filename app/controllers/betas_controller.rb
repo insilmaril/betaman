@@ -160,8 +160,8 @@ class BetasController < ApplicationController
         "Beta: #{@beta.name}\n" +
         "List: #{list.name}\n\n" +
         "request to add #{all_count} resulted in \n" +
-        "#{added_count} new participants  (see below) and " +
-        "#{exist_count} already existing\n\n" +
+        "  #{added_count} added (see below) and\n" +
+        "  #{exist_count} already existing\n\n" +
         added.join("\n")
       ).deliver
     end
