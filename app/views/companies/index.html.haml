@@ -1,0 +1,25 @@
+%h2 Companies
+
+%table.table.table-bordered
+  %tr
+    %th Name
+    %th Users
+    - if @current_user.admin?
+      %th Admin
+
+  - @companies.each do |company|
+    %tr
+      %td= link_to company.name, company_path(company)
+      %td= company.users.count
+      - if @current_user.admin?
+        %td 
+          = link_to(edit_company_path(company), :title => 'Edit') do
+            %i{:class => ['icon-red', 'icon-pencil']}
+          = link_to(company, :title => 'Delete', :method => :delete, :data => { :confirm => 'Are you sure?' }) do
+            %i.icon-trash
+
+%br
+- if @current_user.admin?
+  = link_to(new_company_path) do
+    %i{class: ["icon-plus", " icon-large"]}
+    Add new company

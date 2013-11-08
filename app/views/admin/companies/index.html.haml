@@ -1,9 +1,13 @@
-%h1 Admin view: Companies
+%h2 Admin view: Companies
 
 %table.table.table-bordered
   %tr
     %th Name
+    %th ID
+    %th Users
 
   - @companies.each do |company|
     %tr
       %td= company.name
+      %td= company.id
+      %td= company.users.count

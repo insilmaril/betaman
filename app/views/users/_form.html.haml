@@ -22,6 +22,17 @@
           Email
         %td= f.text_field :email
     %tr
+      %td.right.bold.top
+        Company
+      %td
+        %table
+          %tr
+            %td
+              = collection_select(:user, :company_id, Company.all, :id, :name )
+          %tr
+            %td= link_to 'Add company', new_company_path, class: 'btn btn-mini'  
+
+    %tr
       .field
         %td.right.bold.top
           Login name

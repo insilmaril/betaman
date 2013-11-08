@@ -82,6 +82,12 @@ p {
   font-weight: bold;
 }
 
+table {
+  .th {
+    font-weight: normal;
+  }
+}
+
 /* No empty table cells */
 table { empty-cells: show; }
 

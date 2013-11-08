@@ -12,6 +12,9 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :roles
   has_many :subscriptions
   has_many :lists, :through => :subscriptions
+  belongs_to :company
+  attr_accessible :company_id
+  accepts_nested_attributes_for :company
   has_one :address
   accepts_nested_attributes_for :address
 
