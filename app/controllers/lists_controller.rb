@@ -89,14 +89,14 @@ class ListsController < ApplicationController
 
   def users
     @list = List.find(params[:id])
-    @users = @list.users
+    @users = @list.users.order :email
   end
 
   def sync
     list = List.find(params[:id])
-    created, unsubscribed = list.sync
-    flash[:success] = "#{created.count} users created"
-    flash[:warning] = "#{unsubscribed.count} users unsubscribed"
+    added, removed, created = list.sync
+    flash[:success] = "#{added.count} users added to internal list, #{created.count} of them created"
+    flash[:warning] = "#{removed.count} users removed from internal list"
 
     redirect_to :back
   end

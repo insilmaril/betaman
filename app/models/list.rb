@@ -15,15 +15,23 @@ class List < ActiveRecord::Base
     # (which leaves the external list untouched!)
     mech = Mailmech.new(server,name,pass)
 
-    users_created = []
-    users_unsubscribed = []
-
     subscribers = mech.subscribers
+
+    users_created = []
+    users_added   = []
+    users_same    = []
+
+    # Eliminate duplicates
+    users.uniq!
+
     subscribers.each do |s|
       u = User.find_by_email(s)
       if  u
-        if !users.include? u
+        if users.include? u
+          users_same << u
+        else
           users << u
+          users_added << u
         end
       else
         # puts "Create user for email #{s} !"
@@ -38,14 +46,17 @@ class List < ActiveRecord::Base
       end
     end
 
+    users_removed = []
     users.each do |u|
       if !subscribers.include? u.email
-        users.delete(u)
-        users_unsubscribed << u 
+        users_removed << u
       end
     end
+    users_removed.each do |u|
+      users.delete u
+    end
 
-    return users_created, users_unsubscribed
+    return users_added, users_removed, users_created
   end
 
   def subscribe(user)

@@ -1,8 +1,4 @@
 class BetasController < ApplicationController
-  def init_instance_variables
-    @beta = Beta.find(params[:id])
-  end
-
   def index
     @betas = Beta.all
     @active_betas = Beta.active
@@ -17,7 +13,8 @@ class BetasController < ApplicationController
 
   def edit
     if @current_user.admin?
-      init_instance_variables
+      @beta = Beta.find(params[:id])
+
     else
       flash[:error] = "Access denied: Editing Beta test"
       redirect_to root_path
@@ -55,7 +52,7 @@ class BetasController < ApplicationController
   end
 
   def show
-    init_instance_variables
+    @beta = Beta.find(params[:id])
     @users = @beta.users
 
     respond_to do |format|
@@ -65,7 +62,7 @@ class BetasController < ApplicationController
   end
 
   def update
-    init_instance_variables
+    @beta = Beta.find(params[:id])
 
     respond_to do |format|
       if @beta.update_attributes(params[:beta])
@@ -82,7 +79,7 @@ class BetasController < ApplicationController
 
   def destroy
     if @current_user.admin?
-      init_instance_variables
+      @beta = Beta.find(params[:id])
       @beta.destroy
 
       respond_to do |format|
@@ -96,8 +93,7 @@ class BetasController < ApplicationController
   end
 
   def users
-    init_instance_variables
-
+    @beta = Beta.find(params[:id])
     @users = @beta.users
   end
 
@@ -107,7 +103,7 @@ class BetasController < ApplicationController
   end
 
   def add_user
-    init_instance_variables
+    @beta = Beta.find(params[:id])
     user = User.find(params[:user_id])
 
     if @current_user.admin?
@@ -123,14 +119,14 @@ class BetasController < ApplicationController
   end
 
   def add_select_users
-    init_instance_variables
+    @beta = Beta.find(params[:id])
     if @current_user.admin? 
       nousers
     end
   end
 
   def add_multiple_users
-    init_instance_variables
+    @beta = Beta.find(params[:id])
     if @current_user.admin? 
       if defined?(params[:user_ids])
         n = params[:user_ids].count
@@ -147,7 +143,7 @@ class BetasController < ApplicationController
   end
 
   def add_list_subscribers
-    init_instance_variables
+    @beta = Beta.find(params[:id])
     list = List.find(params[:list_id])
     if @current_user.admin? && list && @beta
       added, existing = @beta.add_users(list.users)
@@ -169,7 +165,7 @@ class BetasController < ApplicationController
   end
 
   def remove_user
-    init_instance_variables
+    @beta = Beta.find(params[:id])
 
     user = User.find(params[:user_id])
 
@@ -209,5 +205,43 @@ class BetasController < ApplicationController
       end
     end
     redirect_to :back
+  end
+
+  def join
+    @beta = Beta.find(params[:id])
+    if !@beta.users.include? @current_user
+      flash[:success] = "Added #{@current_user.full_name} to #{@beta.name}"
+      @beta.users << @current_user
+
+      list =  @beta.list.users
+      if list 
+        if !list.include?(@current_user)
+          list.subscribe @current_user
+          flash[:success] = "Subscribed #{@current_user.full_name} to #{list.name} list"
+        else
+          flash[:warning] = "#{@current_user.full_name} is already subscribed to #{list.name} list"
+        end
+      end
+
+      redirect_to :back
+    end
+  end
+
+  def leave
+    @beta = Beta.find(params[:id])
+    if @beta.users.include? @current_user
+      flash[:success] = "Removed user #{@current_user.full_name} from #{@beta.name}"
+      @beta.users.delete @current_user
+
+      if list 
+        if list.include?(@current_user)
+          list.unsubscribe @current_user
+          flash[:success] = "Unsubscribed #{@current_user.full_name} from  #{list.name} list"
+        else
+          flash[:warning] = "#{@current_user.full_name} is not subscribed to #{list.name} list"
+        end
+      end
+      redirect_to :back
+    end
   end
 end

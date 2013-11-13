@@ -12,6 +12,7 @@
       %th{:width => '10%'} List
       %th Begin
       %th End
+      %th Action
       - if @current_user.admin? || @current_user.employee?
         %th Participants
       - if @current_user.admin?
@@ -25,6 +26,12 @@
             = link_to(beta.list.name, list_path(beta.list))
         %td= beta.begin
         %td= beta.end
+        %td
+          - if beta.users.include?( @current_user )
+            = link_to 'Leave', beta_leave_path(beta), class: 'btn btn-warning btn-mini'
+          - else
+            = link_to 'Join', beta_join_path(beta), class: 'btn btn-success btn-mini'
+
         - if @current_user.admin? || @current_user.employee?
           %td
             = link_to(beta_users_path(beta)) do

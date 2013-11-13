@@ -92,7 +92,7 @@ class User < ActiveRecord::Base
   end
 
   def self.find_by_email(email)
-    User.where('lower(email) = ?', email.downcase )
+    User.where('lower(email) = ?', email.downcase ).first
   end
 
   scope :admins, User.joins(:roles).where('name = ?','Admin' )
