@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+require 'colorize'
 require 'mechanize'
 require 'logger'
 
@@ -33,15 +34,15 @@ class Mailmech
     
     # Define global options, if not already available
     $options = {} if ! defined? $options
-
   end
 
   def ensure_connection
     if !@connected then
-      puts "Connecting to #{@listname}..." if $options[:verbose]
       @connected = true
       @basepage = "#{@server}/admin/#{@listname}"
-      page = @agent.get @basepage
+      url = @basepage
+      puts "* mailmech: ensure_connection to #{url} ...".green if $options[:verbose]
+      page = @agent.get url
 
       login_form = page.form
       login_form.adminpw = @password
@@ -52,7 +53,14 @@ class Mailmech
 
   def reload_subscribers
     @subscriber_list = []
-    page = @agent.get("#{@server}/roster/#{@listname}")
+    url = "#{@server}/roster/#{@listname}"
+    puts "* mailmech: reload subscribers from #{url} ...".green if $options[:verbose]
+    begin
+      page = @agent.get url
+    rescue Mechanize::ResponseCodeError => e
+      puts "* mailmech: Error #{e}".red
+      return []
+    end
 
     page.links_with(:href => /--at--/).each do |l|
       @subscriber_list << l.href
@@ -60,23 +68,24 @@ class Mailmech
     @subscriber_list.map! { |x| x.gsub!(/--at--/,"@").gsub!(/^(.*\/)/,'') }
 
     @subscriber_list.sort! if @subscriber_list.count > 0
-    @subsciber_list
+    @subscriber_list
   end
 
-  def subscribers (param = {})
+  def subscribers 
     ensure_connection
     reload_subscribers
-
-    ret = @subscriber_list
-    return ret.reject { |x| !intern?(x) } if !param[:internal].nil?
-    return ret.reject { |x|  intern?(x) } if !param[:external].nil? 
-    ret
+    @subscriber_list
   end
     
   def delete (del)
     ensure_connection
 
-    page = @agent.get "#{@basepage}/members/remove"
+    url = "#{@basepage}/members/remove"
+
+    puts "* mailmech: unsubscribe #{url} ...".green if $options[:verbose]
+
+    page = @agent.get url
+
     submit_form = page.form
     submit_form.unsubscribees = del.join "\n"
     if !$options[:dryrun]
@@ -121,7 +130,10 @@ class Mailmech
   def subscribe (subscribees)
     ensure_connection
 
-    page = @agent.get "#{@basepage}/members/add"
+    url = "#{@basepage}/members/add"
+    puts "* mailmech: subscribe #{url} ...".green if $options[:verbose]
+
+    page = @agent.get url
     submit_form = page.form
     submit_form.subscribees = subscribees.join("\n")
     if !$options[:dryrun]
@@ -129,16 +141,21 @@ class Mailmech
     end
   end
 
-  def domains (param = {})
-    ret = subscribers(param).map { |x| x.split('@').last }
-    ret.sort.uniq
-  end
-
   def intern? (s)
     @internal_domains.each do |d|
-      return true if s =~ /#{d}$/
+      return true if s =~ /#{d}/
     end
     return false
+  end
+
+  def split(list)
+    # Return array [internal subscribers, external subscribers]
+    return list.reject { |x| !intern?(x) },  list.reject { |x| intern?(x) } 
+  end
+
+  def domains(list)
+    ret = list.map { |x| x.split('@').last }
+    ret.sort.uniq
   end
 end
 
@@ -245,15 +262,15 @@ class MailingLists
     s += '-'*21 + ('+' + '-'*w)*5 + ('+' + '-'*20) + "\n"
 
     sublists.each do |l|
-      l.ensure_connection
-      l.reload_subscribers
+      slist = l.subscribers
+      slist_int, slist_ext = l.split(slist)
       s += sprintf("%20s |%#{w}s|%#{w}i|%#{w}i|%#{w}i|%#{w}i|%20s\n",
              l.listname, 
              l.listalias,
-             l.subscribers.count, 
-             l.subscribers(:internal => 1).count, 
-             l.subscribers(:external => 1).count, 
-             l.domains(:external => 1).count,
+             slist.count,
+             slist_int.count, 
+             slist_ext.count, 
+             l.domains(slist_ext).count,
              l.comment)
     end
     s
@@ -309,44 +326,33 @@ class MailingLists
     end
   end
 
-  def list(a, options = [])
-    l = find_by_alias(a)
-    if !l.nil? then
-      l.subscribers(:external => 1)
-    else
-      []
-    end
-  end
-
-  def to_s(aliases = [])
-    aliases = @lists if aliases.empty?
-    s = ""
+  def to_s(aliases = [])  
     sublists = []
-    aliases.each do |a|
-      l = find_by_alias(a)
-      if !l.nil? then
-        sublists << l
+    if aliases.empty? then
+      sublists = @lists
+    else
+      aliases.each do |a|
+        l = find_by_alias(a)
+        if !l.nil? then
+          sublists << l
+        end
       end
     end
+
+    s = ''
     sublists.each do |l|
-      l.ensure_connection
-      l.reload_subscribers
+      slist = l.subscribers
+      slist_int, slist_ext = l.split(slist)
       if l.internal_domains.count > 0
-        a = l.subscribers :internal => 1
-        #s +=  "Internal subscribers #{l.listname} (#{l.comment})\n"
-        a.each {|x| s +=  "subint, #{l.listname}, #{x}\n"}
-        a = l.subscribers :external => 1
-        #s +=  "External subscribers #{l.listname} (#{l.comment}):\n"
-        a.each {|x| s +=  "subext, #{l.listname}, #{x}\n"}
-        a = l.domains :internal => 1
-        #s +=  "Internal domains #{l.listname} (#{l.comment}):\n"
+        slist_int.each {|x| s +=  "subint, #{l.listname}, #{x}\n"}
+        slist_ext.each {|x| s +=  "subext, #{l.listname}, #{x}\n"}
+        a = l.domains(slist_int)
         a.each {|x| s +=  "domint, #{l.listname}, #{x}\n"}
-        a = l.domains :external => 1
-        #s +=  "External domains #{l.listname} (#{l.comment}):\n"
+        a = l.domains(slist_ext)
         a.each {|x| s +=  "domext, #{l.listname}, #{x}\n"}
       else
         s += "All subscribers #{l.listname}, #{l.comment}\n"
-        l.subscribers.each {|x| s +=  "suball, #{l.listname}, #{x}\n"}
+        slist.each {|x| s +=  "suball, #{l.listname}, #{x}\n"}
       end
       s += "\n"
     end

@@ -8,6 +8,9 @@ gem 'omniauth-openid'
 gem 'mechanize'
 gem 'bootstrap-sass', '2.1'
 
+# mailmech currently requires colorize
+gem 'colorize'
+
 # Production on Heroko requires postgres
 gem 'pg', '0.12.2'
 
