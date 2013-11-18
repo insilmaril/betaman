@@ -63,7 +63,7 @@ class SessionController < ApplicationController
           "Account: #{uid}"
         ).deliver
         flash[:success] = "New account created for #{user.full_name}"
-        UserMailer.welcome_mail
+        UserMailer.welcome_mail(user)
 
         if MailHelper.internal_domain?(email) # FIXME remove this automatism
           user.make_employee
