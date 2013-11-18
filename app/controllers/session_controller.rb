@@ -39,9 +39,8 @@ class SessionController < ApplicationController
       # subscription
 
       if email.blank? # FIXME better validate email
-        flash[:error] = "No email provided for #{provider}."
-        redirect_to root_path
-        return
+        flash[:error] = "No email provided by #{provider}. Please check your account seetings!"
+        email = ''
       end
 
       user = User.find_by_email(email)
