@@ -6,13 +6,13 @@ class User < ActiveRecord::Base
     :address_attributes, 
     :note
 
-  has_many :accounts
-  has_many :participations
+  has_many :accounts, :dependent => :destroy
+  has_many :participations, :dependent => :destroy
   has_many :betas, :through => :participations
   has_and_belongs_to_many :roles
-  has_many :subscriptions
+  has_many :subscriptions, :dependent => :destroy
   has_many :lists, :through => :subscriptions
-  has_one :address
+  has_one :address, :dependent => :destroy
   accepts_nested_attributes_for :address
 
   #validates :email, presence: true
