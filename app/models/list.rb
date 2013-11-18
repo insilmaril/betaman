@@ -1,7 +1,7 @@
 require 'mailmech'
 
 class List < ActiveRecord::Base
-  has_many :subscriptions
+  has_many :subscriptions, :dependent => :destroy
   has_many :users, :through => :subscriptions
   belongs_to :beta
   attr_accessible :comment, :name, :pass, :server
