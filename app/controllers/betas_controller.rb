@@ -213,13 +213,15 @@ class BetasController < ApplicationController
       flash[:success] = "Added #{@current_user.full_name} to #{@beta.name}"
       @beta.users << @current_user
 
-      list =  @beta.list.users
-      if list 
-        if !list.include?(@current_user)
-          list.subscribe @current_user
-          flash[:success] = "Subscribed #{@current_user.full_name} to #{list.name} list"
-        else
-          flash[:warning] = "#{@current_user.full_name} is already subscribed to #{list.name} list"
+      if !@beta.list.nil?
+        list =  @beta.list.users
+        if list 
+          if !list.include?(@current_user)
+            list.subscribe @current_user
+            flash[:success] = "Subscribed #{@current_user.full_name} to #{list.name} list"
+          else
+            flash[:warning] = "#{@current_user.full_name} is already subscribed to #{list.name} list"
+          end
         end
       end
 
@@ -233,12 +235,14 @@ class BetasController < ApplicationController
       flash[:success] = "Removed user #{@current_user.full_name} from #{@beta.name}"
       @beta.users.delete @current_user
 
-      if list 
-        if list.include?(@current_user)
-          list.unsubscribe @current_user
-          flash[:success] = "Unsubscribed #{@current_user.full_name} from  #{list.name} list"
-        else
-          flash[:warning] = "#{@current_user.full_name} is not subscribed to #{list.name} list"
+      if !@beta.list.nil?
+        if list 
+          if list.include?(@current_user)
+            list.unsubscribe @current_user
+            flash[:success] = "Unsubscribed #{@current_user.full_name} from  #{list.name} list"
+          else
+            flash[:warning] = "#{@current_user.full_name} is not subscribed to #{list.name} list"
+          end
         end
       end
       redirect_to :back
