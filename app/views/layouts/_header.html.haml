@@ -20,8 +20,8 @@
               %li= link_to "Lists", lists_path
               %li= link_to "Companies", companies_path
           - if @current_user.admin?
-            %li 
-              = link_to "Admin", admin_path
+            %li= link_to "Groups", admin_groups_path
+            %li= link_to "Admin", admin_path
 
           %ul.nav.navbar-nav.navbar-right.hidden-xs
             %li.dropdown

@@ -1,0 +1,6 @@
+=link_to "#{@group.name}", admin_group_path(@group), class: 'btn'
+
+%br
+%br
+=render partial: 'shared/users_select', locals:{ path: admin_groups_add_multiple_users_path(@group), userlist: @nousers, submitname: 'Add members' }
+

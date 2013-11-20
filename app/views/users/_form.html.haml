@@ -118,6 +118,30 @@
                             - @available_finished_betas.each do |beta|
                               %li= link_to beta.name, user_add_beta_path(@user, beta_id: beta)
 
+    %tr
+      %td.right.top.bold Groups
+      %td
+        %table
+          - @user.groups.each do |group|
+            %tr
+              %td
+                =link_to(group.name, admin_group_path(group) )
+                =link_to(admin_group_remove_user_path(group, user_id: @user) ) do
+                  %i.icon-trash
+          - if @current_user.admin? && !@available_groups.empty?
+            - if !@user.id
+              n.a.
+            - else
+              %tr
+                %td
+                  .btn-group
+                    %a{:class => "btn btn-mini dropdown-toggle", "data-toggle" => "dropdown", :href => "#"}
+                      Add to group 
+                      %b.caret
+                    %ul.dropdown-menu
+                      - @available_groups.each do |group|
+                        %li= link_to group.name, admin_group_add_user_path(group, user_id: @user.id)
+
     - if @user.address
       = f.fields_for :address do |af|
         %tr

@@ -1,0 +1,31 @@
+%h4 Groups:
+
+%table.table.table-bordered
+  %tr
+    %th Name
+    - if @current_user.admin? || @current_user.employee?
+      %th Comment
+      %th Members
+    - if @current_user.admin?
+      %th Admin
+
+  - @groups.each do |group|
+    %tr
+      %td= link_to(group.name, admin_group_path(group) ) 
+      - if @current_user.admin? || @current_user.employee?
+        %td
+          = group.comment
+        %td
+          = link_to(admin_group_users_path(group)) do
+            =group.users.count
+            - if group.users.count > 0
+              %i.icon-eye-open
+      - if @current_user.admin?
+        %td
+          = link_to(edit_admin_group_path(group), :title => 'Edit') do
+            %i{:class => ['icon-red', 'icon-pencil']}
+          = link_to(admin_group_path(group), :title => 'Delete', :method => :delete, :data => { :confirm => 'Are you sure?' }) do
+            %i.icon-trash
+
+- if @current_user.admin?
+  = link_to 'Add group', new_admin_group_path, class: 'btn btn-info '

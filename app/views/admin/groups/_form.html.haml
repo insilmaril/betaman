@@ -1,0 +1,20 @@
+= form_for([:admin, @group]) do |f|
+  - if @group.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@group.errors.count, "error")} prohibited this group from being saved:"
+      %ul
+        - @group.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :name
+    = f.text_field :name
+
+  .field
+    = f.label :comment
+    = f.text_area(:comment, cols: 80, rows: 5)
+
+  .actions
+    = f.submit 'Save', class: 'btn btn-success'
+
+

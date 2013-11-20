@@ -9,6 +9,8 @@ class User < ActiveRecord::Base
   has_many :accounts, :dependent => :destroy
   has_many :participations, :dependent => :destroy
   has_many :betas, :through => :participations
+  has_many :groups, :through => :memberships
+  has_many :memberships, :dependent => :destroy
   has_and_belongs_to_many :roles
   has_many :subscriptions, :dependent => :destroy
   has_many :lists, :through => :subscriptions

@@ -26,6 +26,7 @@ Betaman::Application.routes.draw do
   get '/lists/:id/subscribe_user/:user_id',   to: 'lists#subscribe_user',   as: 'list_subscribe_user'
   get '/lists/:id/unsubscribe_user/:user_id', to: 'lists#unsubscribe_user', as: 'list_unsubscribe_user'
 
+
   resources :users
   resources :betas
   resources :lists
@@ -44,9 +45,16 @@ Betaman::Application.routes.draw do
 
 
   namespace :admin do
+    get '/groups/:id/users', to: 'groups#users', as: 'group_users'
+    get '/groups/:id/add_user/:user_id', to: 'groups#add_user', as: 'group_add_user'
+    get '/groups/:id/add_select_users',  to: 'groups#add_select_users', as: 'select_users'
+    get '/groups/:id/remove_user/:user_id', to: 'groups#remove_user', as: 'group_remove_user'
+    post '/groups/:id/add_multiple_users',  to: 'groups#add_multiple_users', as: 'groups_add_multiple_users'
+
     resources :users
     resources :betas
     resources :companies
+    resources :groups
     get '', to: 'dashboard#index', as: '/'
   end
   

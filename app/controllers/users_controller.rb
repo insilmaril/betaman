@@ -5,7 +5,9 @@ class UsersController < ApplicationController
   def init_instance_variables
     @user = User.find(params[:id])
     @betas = @user.betas
-    @available_betas = Beta.not_finished - @betas
+    @available_betas  = Beta.not_finished - @betas
+    @groups = @user.groups
+    @available_groups = Group.all - @groups
     @active_betas = @betas.active
     @planned_betas = @betas.planned
     @finished_betas = @betas.finished 

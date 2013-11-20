@@ -1,0 +1,22 @@
+=link_to "Group: #{@group.name}", admin_group_path(@group), class: 'btn'
+
+%table
+  %tr
+    %td.right.bold.top
+      Members:
+    %td
+      = @group.memberships.count
+
+  %tr
+    %td.right.bold.top
+      Comment:
+    %td
+      = @group.comment
+
+%div{ class: 'btn-group'}
+  = if @current_user.admin?
+    = link_to 'Edit', edit_admin_group_path(@group),  class: 'btn btn-info' 
+  - if @current_user.admin?
+    = link_to 'Add members', admin_select_users_path,  class: 'btn btn-info' 
+  = if @current_user.admin?
+    = link_to 'Show members', admin_group_users_path(@group), class: 'btn btn-info' 
