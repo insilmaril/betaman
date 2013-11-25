@@ -54,7 +54,11 @@ Betaman::Application.routes.draw do
     resources :users
     resources :betas
     resources :companies
-    resources :groups
+    resources :groups do
+      member do
+        post 'upload'
+      end
+    end
     get '', to: 'dashboard#index', as: '/'
   end
   

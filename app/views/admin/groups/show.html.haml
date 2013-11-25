@@ -18,5 +18,22 @@
     = link_to 'Edit', edit_admin_group_path(@group),  class: 'btn btn-info' 
   - if @current_user.admin?
     = link_to 'Add members', admin_select_users_path,  class: 'btn btn-info' 
-  = if @current_user.admin?
     = link_to 'Show members', admin_group_users_path(@group), class: 'btn btn-info' 
+
+
+%br
+%br
+%h5 Upload members and add to group:
+
+= form_tag upload_admin_group_path, multipart: true do
+  = file_field_tag(:file)
+  = submit_tag 'Upload'
+
+-#= form_for :group, :url => { :action => 'upload'}, :html => {:multipart => true} do |f| 
+  -#= f.error_messages 
+
+  %table 
+    %tr
+      %td= f.file_field :csv
+      %td= f.submit 'Upload', class: 'btn btn-success'
+

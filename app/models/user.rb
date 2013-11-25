@@ -58,6 +58,13 @@ class User < ActiveRecord::Base
     "#{first_name} #{last_name}"
   end
 
+  def set_full_name(s)
+    a = s.split " "
+    self.last_name = a.pop
+    self.first_name = a.join " "
+    self.save!
+  end
+
   def set_uid(s)
     uid = s
   end

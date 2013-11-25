@@ -1,0 +1,19 @@
+=link_to "Group: #{@group.name}", admin_group_path(@group), class: 'btn'
+
+%h4 Upload members and add to group
+
+%p
+  Upload a csv file:
+
+= form_tag upload_admin_groups_path, multipart: true do
+  = file_field_tag(:file)
+  = submit_tag 'Upload'
+
+-#= form_for :group, :html => {:multipart => true} do |f| 
+  -#= f.error_messages 
+
+  %table 
+    %tr
+      %td= f.file_field :csv
+      %td= f.submit 'Upload', class: 'btn btn-success'
+

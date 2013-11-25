@@ -49,8 +49,5 @@ if Rails.env == 'development'
       {name: 'SUSE Linux Enterprise Server 11 SP3', begin: '2013-02-14', end: '2013-07-31'}
   ]
   )
-
-  # Add some test betas to user
-  User.find_by_email('uwe@insilmaril.de').betas << Beta.all
 end
 

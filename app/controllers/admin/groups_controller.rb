@@ -153,4 +153,10 @@ class Admin::GroupsController < ApplicationController
     end
   end
 
+  def upload
+    @group = Group.find(params[:id])
+    users_created, companies_created = @group.import(params[:file])  
+    flash[:success] = "Finished importing: Created #{users_created} users and #{companies_created} companies"
+    redirect_to admin_group_path(@group)
+  end
 end
