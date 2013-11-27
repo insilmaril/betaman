@@ -65,6 +65,26 @@ class User < ActiveRecord::Base
     self.save!
   end
 
+  def copy(other)
+    puts "Copy user"
+    # Quick hack to merge the record itself, not the betas and lists
+    self.first_name = other.first_name if !other.first_name.blank?
+    self.last_name = other.last_name if !other.last_name.blank?
+    self.email = other.email if !other.email.blank?
+    self.login_name = other.login_name if !other.login_name.blank?
+    self.note = other.note if !other.note.blank?
+    if !other.address.nil?
+      if self.address.nil?
+        self.address = other.address.dup
+      else
+        self.address.copy other.address
+      end
+    end
+    
+    #company
+    self.save!
+  end
+
   def set_uid(s)
     uid = s
   end

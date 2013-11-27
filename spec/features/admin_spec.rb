@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Admin dashboard" do
+describe "Checking permissions: Admin dashboard" do
   it "is not accessible for regular user" do
     user = FactoryGirl.create(:user_regular)
     test_login(user)

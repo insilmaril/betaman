@@ -16,16 +16,3 @@
             %td= link_to( u.full_name, edit_user_path(u) )
             %td (#{ mail_to u.email})
 
-
-
--#
-  %div{ class: 'btn-group'}
-    - if @current_user.admin?
-      = link_to 'Edit', edit_company_path(@company),  class: 'btn btn-danger' 
-    - if @current_user.employee?
-      = link_to 'Show participants', company_users_path(@company), class: 'btn btn-info' 
-    - if @current_user.admin?
-      = link_to 'Add participants', company_add_select_users_path,  class: 'btn btn-info' 
-    - if !@company.users.include?(@current_user)
-      = link_to 'Join', company_add_user_path(@company, user_id: @current_user), class: 'btn btn-success' 
-

@@ -16,7 +16,7 @@
         %td
           = group.comment
         %td
-          = link_to(admin_group_users_path(group)) do
+          = link_to(users_admin_group_path(group)) do
             =group.users.count
             - if group.users.count > 0
               %i.icon-eye-open

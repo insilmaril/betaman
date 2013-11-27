@@ -5,7 +5,7 @@
     %td.right.bold.top
       Members:
     %td
-      = @group.memberships.count
+      = @group.users.count
 
   %tr
     %td.right.bold.top
@@ -15,25 +15,31 @@
 
 %div{ class: 'btn-group'}
   = if @current_user.admin?
-    = link_to 'Edit', edit_admin_group_path(@group),  class: 'btn btn-info' 
+    = link_to 'Edit', edit_admin_group_path(@group),  class: 'btn btn-info btn-mini' 
   - if @current_user.admin?
-    = link_to 'Add members', admin_select_users_path,  class: 'btn btn-info' 
-    = link_to 'Show members', admin_group_users_path(@group), class: 'btn btn-info' 
+    = link_to 'Add members', admin_select_users_path,  class: 'btn btn-info btn-mini' 
+    = link_to 'Show members', users_admin_group_path(@group), class: 'btn btn-info btn-mini' 
 
 
 %br
 %br
 %h5 Upload members and add to group:
-
+%p 
+  Create a new user (and member of this group) for each of the lines in the csv file
 = form_tag upload_admin_group_path, multipart: true do
   = file_field_tag(:file)
   = submit_tag 'Upload'
 
--#= form_for :group, :url => { :action => 'upload'}, :html => {:multipart => true} do |f| 
-  -#= f.error_messages 
+%br
+%br
+%h5 Merge members into user database:
+%p
+  Group members will be merged by email address in order to copy address information
 
-  %table 
-    %tr
-      %td= f.file_field :csv
-      %td= f.submit 'Upload', class: 'btn btn-success'
+%p
+  Existing users will get the contact information of group members. 
+  The duplicate members afterwards will be deleted replaced by the user. 
+  Data like betas and lists from the original group member not be copied and thus lost!
 
+%br
+= link_to 'Merge members', merge_users_admin_group_path(@group),  class: 'btn btn-warning btn-mini' 

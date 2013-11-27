@@ -4,6 +4,7 @@
     %th Email
     %th Betas
     - if @current_user.admin?
+      %th Groups
       %th Actions
 
   - @users.each do |user|
@@ -19,7 +20,14 @@
           =user.betas.count
           - if user.betas.count > 0
             %i.icon-eye-open
+
       - if @current_user.admin?
+        %td
+        = link_to(user_betas_path(user) ) do
+          =user.betas.count
+          - if user.betas.count > 0
+            %i.icon-eye-open
+
         %td
           = link_to(edit_user_path(user)) do
             .i.icon-pencil

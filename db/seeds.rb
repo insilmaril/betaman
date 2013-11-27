@@ -32,15 +32,9 @@ if Rails.env == 'development'
   u = User.new
   u.first_name = 'Eva'
   u.last_name = 'Employee'
-  u.email = 'test@insilmaril.de'
+  u.email = 'test@company.org'
   u.roles << role_empl
-  u.accounts << Account.new(uid: 'http://vym.myopenid.com/')
   u.save
-
-  0.upto(20) do |n| 
-    User.create( {first_name: n, last_name: 'User', email: "user_#{n}@company.com"})
-  end
-
 
   # Create some test betas
   betas = Beta.create(

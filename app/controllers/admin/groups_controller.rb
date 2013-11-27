@@ -1,4 +1,6 @@
 class Admin::GroupsController < ApplicationController
+  before_filter :admin_required
+
   def index
     @groups = Group.all
     respond_to do |format|
@@ -158,5 +160,33 @@ class Admin::GroupsController < ApplicationController
     users_created, companies_created = @group.import(params[:file])  
     flash[:success] = "Finished importing: Created #{users_created} users and #{companies_created} companies"
     redirect_to admin_group_path(@group)
+  end
+
+  def merge_users
+    group = Group.find(params[:id])
+    update_users = []
+    delete_members = []
+    group.users.each do |guser|
+      existing_users = User.where("lower(email) = ?", guser.email.downcase)
+      existing_users.each do |user|
+        if user && ! group.users.include?(user)
+          user.copy guser
+          user.save!
+          update_users << user
+          delete_members << guser
+        end
+      end
+    end
+
+    update_users.each do |user|
+      group.users << user
+    end
+
+    delete_members.each do |guser|
+      group.users.delete guser
+    end
+
+    flash[:success] = "Finished merging: Merged #{} and updated #{update_users.count} users"
+    redirect_to :back
   end
 end

@@ -14,15 +14,15 @@ describe "GET /users" do
   end
 
   it "lists users for employee" do
-    user = FactoryGirl.create(:user_employee)
-    test_login(user)
+    employee = FactoryGirl.create(:user_employee)
+    test_login(employee)
     visit users_path
     current_path.should == users_path
   end
     
   it "lists users for admin" do
-    user = FactoryGirl.create(:user_admin)
-    test_login(user)
+    admin = FactoryGirl.create(:user_admin)
+    test_login(admin)
     visit users_path
     current_path.should == users_path
   end
