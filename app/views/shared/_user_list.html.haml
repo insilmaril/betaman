@@ -15,18 +15,15 @@
         - else
           = link_to user.full_name, user
       %td= mail_to user.email
-      %td
-        = link_to(user_betas_path(user) ) do
-          =user.betas.count
-          - if user.betas.count > 0
-            %i.icon-eye-open
 
       - if @current_user.admin?
         %td
-        = link_to(user_betas_path(user) ) do
-          =user.betas.count
-          - if user.betas.count > 0
-            %i.icon-eye-open
+          = link_to(user_betas_path(user) ) do
+            =user.betas.count
+            - if user.betas.count > 0
+              %i.icon-eye-open
+
+        %td= user.groups.count
 
         %td
           = link_to(edit_user_path(user)) do
