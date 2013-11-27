@@ -166,8 +166,10 @@ class Admin::GroupsController < ApplicationController
     group = Group.find(params[:id])
     update_users = []
     delete_members = []
+    untouched_count = 0
     group.users.each do |guser|
-      existing_users = User.where("lower(email) = ?", guser.email.downcase)
+      email = guser.email || ''
+      existing_users = User.where("lower(email) = ?", email)
       existing_users.each do |user|
         if user && ! group.users.include?(user)
           user.copy guser
@@ -186,7 +188,7 @@ class Admin::GroupsController < ApplicationController
       group.users.delete guser
     end
 
-    flash[:success] = "Finished merging: Merged #{} and updated #{update_users.count} users"
+    flash[:success] = "Finished merging: Kept #{untouched_count} and updated #{update_users.count} users"
     redirect_to :back
   end
 end
