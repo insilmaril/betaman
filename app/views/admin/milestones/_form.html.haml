@@ -1,0 +1,43 @@
+= form_for([:admin, @milestone]) do |f|
+  - if @milestone.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@milestone.errors.count, "error")} prohibited this milestone from being saved:"
+      %ul
+        - @milestone.errors.full_messages.each do |msg|
+          %li= msg
+
+  %table
+    %tr
+      %td.right.bold.top
+        Name
+      %td
+        = f.text_field :name
+
+    %tr
+      %td.right.bold.top
+        Date
+      %td
+        -#= f.date_select :date
+        = f.text_field :date
+
+    %tr
+      %td.right.bold.top
+        Comment
+      %td
+        = f.text_area(:comment, cols: 80, rows: 5)
+
+    %tr
+      %td.right.bold.top
+        Milestones
+      %td
+        %table
+          %tr
+            %td
+              -#= collection_select(:user, :company_id, Company.all, :id, :name )
+          %tr
+            %td 
+              -#= link_to 'Add company', new_company_path, class: 'btn btn-mini'  
+  .actions
+    = f.submit 'Save', class: 'btn btn-success'
+
+

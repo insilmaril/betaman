@@ -3,6 +3,10 @@ class Beta < ActiveRecord::Base
 
   has_many :participations, :dependent => :destroy
   has_many :users, :through => :participations
+
+  has_many :miles, :dependent => :destroy
+  has_many :milestones, :through => :miles
+
   has_one :list
 
   default_scope -> { order('begin DESC') }

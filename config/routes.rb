@@ -50,6 +50,7 @@ Betaman::Application.routes.draw do
     resources :users 
     resources :betas
     resources :companies
+    resources :milestones
     resources :groups do
       member do
         post 'upload'

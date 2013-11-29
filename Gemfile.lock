@@ -117,7 +117,7 @@ GEM
     omniauth-openid (1.0.1)
       omniauth (~> 1.0)
       rack-openid (~> 1.3.1)
-    pg (0.12.2)
+    pg (0.16.0)
     polyglot (0.3.3)
     pry (0.9.12.1)
       coderay (~> 1.0.5)
@@ -217,8 +217,8 @@ DEPENDENCIES
   mechanize
   omniauth
   omniauth-openid
-  pg (= 0.12.2)
-  rails (= 3.2.12)
+  pg
+  rails
   rb-inotify (~> 0.9)
   rspec-rails
   sass-rails (~> 3.2.3)

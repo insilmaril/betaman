@@ -1,0 +1,29 @@
+%h2 Admin view: Milestones
+
+%table.table.table-bordered
+  %tr
+    %th Name
+    %th Date
+    %th Comment
+    %th Betas
+    %th Actions
+
+  - @milestones.each do |ms|
+    %tr
+      %td= link_to ms.name, edit_admin_milestone_path(ms)
+      %td= ms.date
+      %td= ms.comment
+      %td
+        %table
+          - ms.betas.each do |beta|
+            %tr
+              %td= link_to beta.name, beta_path(beta)
+      %td
+        = link_to(edit_admin_milestone_path(ms)) do
+          .i.icon-pencil
+        = link_to(admin_milestone_path(ms), :method => :delete  ) do
+          .i.icon-trash
+
+= link_to(new_admin_milestone_path) do
+  %i{class: ["icon-plus", " icon-large"]}
+  Add new milestone

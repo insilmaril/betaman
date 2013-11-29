@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.12'
+gem 'rails'
 gem 'jquery-rails'
 gem 'haml-rails'
 gem 'omniauth'
@@ -12,7 +12,7 @@ gem 'bootstrap-sass', '2.1'
 gem 'colorize'
 
 # Production on Heroko requires postgres
-gem 'pg', '0.12.2'
+gem 'pg' #, '0.12.2'
 
 # Gems used only for assets and not required
 # in production environments by default.
