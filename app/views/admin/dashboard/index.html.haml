@@ -1,8 +1,12 @@
 %h2 Admin Dashboard
 %hr
-%h3= link_to "#{User.count} Users", admin_users_path
-%h3= link_to "#{Beta.count} Betas", admin_betas_path
-%h3= link_to "#{Company.count} Companies", admin_companies_path
-%h3= link_to "#{List.count} Lists", lists_path
-%h3= link_to "#{Group.count} Groups", admin_groups_path
+%h4= "#{User.count} Users"
+%ul
+  %li= link_to "List users", admin_users_path
+  %li= link_to "Find duplicate emails", admin_duplicate_emails_path
+
+%h4= link_to "#{Beta.count} Betas", admin_betas_path
+%h4= link_to "#{Company.count} Companies", admin_companies_path
+%h4= link_to "#{List.count} Lists", lists_path
+%h4= link_to "#{Group.count} Groups", admin_groups_path
 

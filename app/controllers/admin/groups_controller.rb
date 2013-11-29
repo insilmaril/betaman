@@ -156,10 +156,26 @@ class Admin::GroupsController < ApplicationController
   end
 
   def upload
-    @group = Group.find(params[:id])
-    users_created, companies_created = @group.import(params[:file])  
+    group = Group.find(params[:id])
+    users_created, companies_created = group.import(params[:file])  
     flash[:success] = "Finished importing: Created #{users_created} users and #{companies_created} companies"
-    redirect_to admin_group_path(@group)
+
+    # Check, if emails of users in group also exist outside of group
+    duplicate_mails = false
+    group.users.each do |guser|
+      email = guser.email || ''
+      existing_users = User.where("lower(email) = ?", email)
+      existing_users.each do |user|
+        if user && ! group.users.include?(user)
+          duplicate_mails = true
+        end
+      end
+    end
+    if duplicate_mails
+      flash[:warning] = "Warning: Found duplicate emails!"
+    end
+    
+    redirect_to admin_group_path(group)
   end
 
   def merge_users
@@ -175,7 +191,12 @@ class Admin::GroupsController < ApplicationController
           user.copy guser
           user.save!
           update_users << user
-          delete_members << guser
+          # In theory there should be no more than one existing 
+          # user in the DB (outside of group). So only delete guser
+          # once...
+          if !delete_members.include?(guser)
+            delete_members << guser
+          end
         end
       end
     end
@@ -185,10 +206,12 @@ class Admin::GroupsController < ApplicationController
     end
 
     delete_members.each do |guser|
-      group.users.delete guser
+      guser.delete
     end
+    group.reload
 
-    flash[:success] = "Finished merging: Kept #{untouched_count} and updated #{update_users.count} users"
-    redirect_to :back
+    flash[:success] = "Finished merge: Deleted #{delete_members.count} and updated #{update_users.count} users"
+
+    redirect_to admin_group_path(group)
   end
 end

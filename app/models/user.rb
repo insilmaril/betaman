@@ -66,7 +66,6 @@ class User < ActiveRecord::Base
   end
 
   def copy(other)
-    puts "Copy user"
     # Quick hack to merge the record itself, not the betas and lists
     self.first_name = other.first_name if !other.first_name.blank?
     self.last_name = other.last_name if !other.last_name.blank?

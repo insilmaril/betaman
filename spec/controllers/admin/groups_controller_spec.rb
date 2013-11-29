@@ -32,4 +32,41 @@ describe Admin::GroupsController do
       end
     end
   end
+
+  describe "User management:" do
+    before (:each) do
+      assume_login
+      @group = FactoryGirl.create(:group)
+      @user_group = FactoryGirl.create(:user, email: "user1@company.com")
+      @user_org   = FactoryGirl.create(:user, email: "user1@company.com")
+
+      @user_group_id = @user_group.id
+      @user_org_id   = @user_org.id
+
+      @count_before = @group.users.count
+      @group.users << @user_group
+    end
+
+    describe "before merging users" do
+      it "added a user to the group" do
+        @group.users.count.should == 1 + @count_before
+      end
+    end
+
+    describe "after merging" do
+      it "group still has same number of users" do
+        @group.users.count.should == 1 + @count_before
+      end
+
+      it "has replaced the user in group with already existing one" do
+        get :merge_users, :id => @group.id
+        @group.reload
+        user = @group.users.first
+        user.id.should_not  == @user_group_id
+
+        flash[:success].should eql "Finished merge: Deleted 1 and updated 1 users"
+
+      end
+    end
+  end
 end

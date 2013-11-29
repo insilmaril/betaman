@@ -45,26 +45,22 @@ Betaman::Application.routes.draw do
 
 
   namespace :admin do
-#    get '/groups/:id/users', to: 'groups#users', as: 'group_users'
-#    get '/groups/:id/add_user/:user_id', to: 'groups#add_user', as: 'group_add_user'
-    get '/groups/:id/add_select_users',  to: 'groups#add_select_users', as: 'select_users'
-#    get '/groups/:id/remove_user/:user_id', to: 'groups#remove_user', as: 'group_remove_user'
-#    post '/groups/:id/add_multiple_users',  to: 'groups#add_multiple_users', as: 'groups_add_multiple_users'
-
-    resources :users
+    get '/users/duplicate_emails', controller: 'duplicate_emails', as: 'duplicate_emails'
+    get '', to: 'dashboard#index', as: '/'
+    resources :users 
     resources :betas
     resources :companies
     resources :groups do
       member do
         post 'upload'
-        get '/groups/:id/merge_users',  to: 'groups#merge_users', as: 'merge_users'
+        get '/merge_users', to: 'groups#merge_users', as: 'merge_users'
         get '/groups/:id/users', to: 'groups#users', as: 'users'
         get '/groups/:id/add_user/:user_id', to: 'groups#add_user', as: 'add_user'
         get '/groups/:id/remove_user/:user_id', to: 'groups#remove_user', as: 'remove_user'
+        get '/groups/:id/add_select_users',  to: 'groups#add_select_users', as: 'select_users'
         post '/groups/:id/add_multiple_users',  to: 'groups#add_multiple_users', as: 'add_multiple_users'
       end
     end
-    get '', to: 'dashboard#index', as: '/'
   end
   
   match ':controller/:action' => ":controller#:action"

@@ -17,7 +17,7 @@
   = if @current_user.admin?
     = link_to 'Edit', edit_admin_group_path(@group),  class: 'btn btn-info btn-mini' 
   - if @current_user.admin?
-    = link_to 'Add members', admin_select_users_path,  class: 'btn btn-info btn-mini' 
+    = link_to 'Add members', select_users_admin_group_path,  class: 'btn btn-info btn-mini' 
     = link_to 'Show members', users_admin_group_path(@group), class: 'btn btn-info btn-mini' 
 
 
@@ -38,7 +38,7 @@
 
 %p
   Existing users will get the contact information of group members. 
-  The duplicate members afterwards will be deleted replaced by the user. 
+  The duplicate members afterwards will be replaced by the user. 
   Data like betas and lists from the original group member not be copied and thus lost!
 
 %br
