@@ -7,6 +7,7 @@ gem 'omniauth'
 gem 'omniauth-openid'
 gem 'mechanize'
 gem 'bootstrap-sass', '2.1'
+gem 'will_paginate'
 
 # mailmech currently requires colorize
 gem 'colorize'
@@ -24,7 +25,10 @@ group :assets do
   # gem 'therubyracer', :platforms => :ruby
 
   gem 'uglifier', '>= 1.0.3'
+  gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
+  gem 'jquery-ui-rails'
 end
+
 
 group :development, :test do
   gem 'hirb'
