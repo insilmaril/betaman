@@ -54,6 +54,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  def full_name_reverse_comma
+    ret = last_name
+    if !first_name.blank?
+      ret += ', ' + first_name
+    end
+    ret
+  end
+
   def full_name
     "#{first_name} #{last_name}"
   end

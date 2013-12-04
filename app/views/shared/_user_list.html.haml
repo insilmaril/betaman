@@ -1,16 +1,16 @@
 %table{id: 'users'}
-  -#.table.table-bordered
   %thead
     %tr
       %th Name
       %th Email
+      %th Company
       %th Betas
-      - if @current_user.admin?
+      -# if @current_user.admin?
         %th Groups
         %th Actions
 
   %tbody
-    - @users.each do |user|
+    -# @users.each do |user|
       %tr
         %td
           - if @current_user.admin?

@@ -17,7 +17,6 @@ describe UsersController do
     it "gets INDEX" do
       get :index
       assert_response :success
-      assert_not_nil assigns(:users)
     end
 
     it "assigns @current_user" do

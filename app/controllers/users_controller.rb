@@ -21,12 +21,9 @@ class UsersController < ApplicationController
   def index
 
     if @current_user.employee? || @current_user.admin?
-      @users = User.all
-      @betas = Beta.all
-
       respond_to do |format|
         format.html # index.html.erb
-        format.json { render json: @users }
+        format.json { render json: UsersDatatable.new(view_context) }
       end
     else
       redirect_to root_path
