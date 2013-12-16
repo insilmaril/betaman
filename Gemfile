@@ -15,6 +15,8 @@ gem 'colorize'
 # Production on Heroko requires postgres
 gem 'pg' #, '0.12.2'
 
+gem 'passenger'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
