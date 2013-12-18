@@ -4,7 +4,6 @@ class Address < ActiveRecord::Base
   accepts_nested_attributes_for :user
 
   def copy(other)
-    puts 'Copy address...'
     self.address1 = other.address1 if !other.address1.blank?
     self.address2 = other.address2 if !other.address2.blank?
     self.address3 = other.address3 if !other.address3.blank?

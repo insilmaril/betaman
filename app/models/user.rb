@@ -82,7 +82,9 @@ class User < ActiveRecord::Base
     self.note = other.note if !other.note.blank?
     if !other.address.nil?
       if self.address.nil?
-        self.address = other.address.dup
+        a = Address.new
+        a.copy(other.address)
+        self.address = a
       else
         self.address.copy other.address
       end
