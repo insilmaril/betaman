@@ -1,8 +1,9 @@
 class UsersDatatable
   delegate :params, :h, :link_to, :mail_to, :number_to_currency, to: :@view
 
-  def initialize(view)
+  def initialize(view, beta = nil)
       @view = view
+      @beta = beta
   end
 
   def as_json(options = {})
@@ -60,6 +61,9 @@ private
     end
 
     users = users.order("#{sort_column} #{sort_direction}")
+    if @beta
+      users = users.where("participations.beta_id = 1")
+    end
     @users_count = users.to_a.count
     users = users.page(page).per_page(per_page)
     users
