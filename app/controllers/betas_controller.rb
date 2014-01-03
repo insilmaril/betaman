@@ -101,9 +101,8 @@ class BetasController < ApplicationController
     end
   end
 
-  def nousers
-    users
-    @nousers = User.all - @users
+  def init_nousers
+    @nousers = User.all - @beta.users
   end
 
   def add_user
@@ -124,9 +123,7 @@ class BetasController < ApplicationController
 
   def add_select_users
     @beta = Beta.find(params[:id])
-    if @current_user.admin? 
-      nousers
-    end
+    @nousers = init_nousers
   end
 
   def add_multiple_users
