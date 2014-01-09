@@ -3,10 +3,13 @@ module ApplicationHelper
   # Returns the full title on a per-page basis.
   def full_title(page_title)
     base_title = "Betaman"
+    env = ""
+    env = " (dev)" if Rails.env.development?
+
     if page_title.empty?
-      base_title
+      base_title + env
     else
-      "#{base_title} | #{page_title}"
+      "#{base_title} | #{page_title}" + env
     end
   end
 
