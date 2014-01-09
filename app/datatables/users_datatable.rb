@@ -25,7 +25,7 @@ private
       end
       cname = user.name 
       [
-        link_to(User.find(user.id).full_name_reverse_comma, user),
+        link_to(User.find(user.id).full_name_reverse_comma, Rails.application.routes.url_helpers.edit_user_path(user) ),
         mail_to(user.email),
         cname,
         betas
