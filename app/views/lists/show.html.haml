@@ -29,13 +29,12 @@
 
 %div{ class: 'btn-group'}
   = if @current_user.admin?
-    = link_to 'Sync', list_sync_path(@list),  class: 'btn btn-danger' 
+    = link_to 'Sync ext -> int', list_sync_path(@list),  class: 'btn btn-danger' 
     - if @list.beta
       = link_to(beta_add_list_subscribers_path(@list.beta, @list.id), class: 'btn btn-danger' ) do
-        = "Add subscribers to #{@list.beta.name}"
+        = "Add (int) subscribers to #{@list.beta.name}"
     = link_to 'Edit', edit_list_path(@list),  class: 'btn btn-info' 
   = if @current_user.employee?
-    = link_to 'Show subscribers', list_users_path(@list), class: 'btn btn-info' 
--#
-    = link_to 'Add subscriber', list_add_select_users_path,  class: 'btn btn-info' 
+    = link_to 'Add subscriber (int)', list_add_select_users_path,  class: 'btn btn-info' 
+    = link_to 'Show subscribers (int)', list_users_path(@list), class: 'btn btn-info' 
 

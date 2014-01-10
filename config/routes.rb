@@ -23,6 +23,7 @@ Betaman::Application.routes.draw do
   get '/lists/:id/sync', to: 'lists#sync', as: 'list_sync'
   get '/lists/:id/users', to: 'lists#users', as: 'list_users'
   get '/lists/:id/add_select_users', to: 'lists#add_select_users', as: 'list_add_select_users'
+  post '/lists/:id/add_multiple_users', to: 'lists#add_multiple_users', as: 'list_add_multiple_users'
   get '/lists/:id/subscribe_user/:user_id',   to: 'lists#subscribe_user',   as: 'list_subscribe_user'
   get '/lists/:id/unsubscribe_user/:user_id', to: 'lists#unsubscribe_user', as: 'list_unsubscribe_user'
 

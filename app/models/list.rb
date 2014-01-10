@@ -19,7 +19,6 @@ class List < ActiveRecord::Base
 
     users_created = []
     users_added   = []
-    users_same    = []
 
     # Eliminate duplicates
     users.uniq!
@@ -27,9 +26,7 @@ class List < ActiveRecord::Base
     subscribers.each do |s|
       u = User.find_by_email(s)
       if  u
-        if users.include? u
-          users_same << u
-        else
+        if !users.include? u
           users << u
           users_added << u
         end
@@ -51,6 +48,7 @@ class List < ActiveRecord::Base
       if !subscribers.include? u.email
         users_removed << u
       end
+
     end
     users_removed.each do |u|
       users.delete u

@@ -95,35 +95,39 @@ class ListsController < ApplicationController
   def sync
     list = List.find(params[:id])
     added, removed, created = list.sync
-    flash[:success] = "#{added.count} users added to internal list, #{created.count} of them created"
-    flash[:warning] = "#{removed.count} users removed from internal list"
+    if added.count > 0 || created.count > 0
+      flash[:success] = "#{added.count} users added to internal list, #{created.count} of them created new"
+    end
+    if removed.count > 0
+      flash[:warning] = "#{removed.count} users removed from internal list"
+    end
 
     redirect_to :back
   end
 
   def add_select_users
     @list = List.find(params[:id])
+    @nousers = []
     if @current_user.admin? 
-      nousers
+      @nousers = User.all
     end
   end
 
   def add_multiple_users
     @list = List.find(params[:id])
-    #params[:user_ids]       # Cont here and add set of users !!!!!
     if @current_user.admin? 
       if defined?(params[:user_ids])
-        #params[:user_ids].each do |id|
         n = params[:user_ids].count
-        s = view_context.pluralize(n, 'participant')
-        flash[:success] = "Added #{s} to #{@beta.name}"
+        s = view_context.pluralize(n, 'subscriber')
+        flash[:success] = "Added #{s} to #{@list.name}"
         params[:user_ids].each do |user|
-          @beta.users << User.find(user)
+          @list.users << User.find(user)
         end
       else
         flash[:warning] = "No Params defined"
       end
     end
+    redirect_to list_path(@list)
   end
 
   def subscribe_user
