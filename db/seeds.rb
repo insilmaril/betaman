@@ -10,9 +10,13 @@ role_tester.save
 
 
 #
+# Create empty company
+#
+Company.new(name: " ")
+
+#
 # Create admin user
 #
-
 admin = User.create({
   first_name: 'Ada', 
   last_name: 'Admin' } )

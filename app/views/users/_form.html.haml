@@ -28,7 +28,7 @@
         %table
           %tr
             %td
-              = collection_select(:user, :company_id, Company.all, :id, :name )
+              = collection_select(:user, :company_id, Company.order('name ASC'), :id, :name )
           %tr
             %td= link_to 'Add company', new_company_path, class: 'btn btn-mini'  
 

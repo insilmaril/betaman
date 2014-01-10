@@ -1,6 +1,6 @@
 class CompaniesController < ApplicationController
   def index
-    @companies = Company.all
+    @companies = Company.order('name ASC')
 
     respond_to do |format|
       format.html # index.html.erb
