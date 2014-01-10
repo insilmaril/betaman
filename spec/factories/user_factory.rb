@@ -20,6 +20,7 @@ FactoryGirl.define do
 
     factory :user_employee do
       after_create do |user|
+        user.first_name = 'John-Employee'
         user.add_account("a.provider", "http://user.myopenid.com")
         user.make_employee
         user.save!
