@@ -51,7 +51,7 @@ private
       select("#{grouping}, COUNT (*) AS betas_count").
       group( grouping )
 
-    if params[:sSearch].present?
+    if params[:sSearch].present? 
       s = ['users.email']
       s << 'users.last_name'
       s << 'users.first_name'
@@ -62,7 +62,7 @@ private
 
     users = users.order("#{sort_column} #{sort_direction}")
     if @beta
-      users = users.where("participations.beta_id = 1")
+      users = users.where("participations.beta_id = ?", @beta.id)
     end
     @users_count = users.to_a.count
     users = users.page(page).per_page(per_page)
