@@ -23,7 +23,7 @@
               %i.icon-eye-open
       - if @current_user.admin?
         %td
-          =link_to(list_sync_path(list)) do
+          =link_to(list_sync_extern_to_intern_path(list)) do
             %i.icon-refresh 
           = link_to(edit_list_path(list), :title => 'Edit') do
             %i{:class => ['icon-red', 'icon-pencil']}
