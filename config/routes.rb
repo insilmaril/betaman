@@ -20,7 +20,7 @@ Betaman::Application.routes.draw do
   get '/betas/:id/join', to: 'betas#join', as: 'beta_join'
   get '/betas/:id/leave', to: 'betas#leave', as: 'beta_leave'
 
-  get '/lists/:id/sync', to: 'lists#sync', as: 'list_sync'
+  get '/lists/:id/sync_extern_to_intern', to: 'lists#sync_extern_to_intern', as: 'list_sync_extern_to_intern'
   get '/lists/:id/users', to: 'lists#users', as: 'list_users'
   get '/lists/:id/add_select_users', to: 'lists#add_select_users', as: 'list_add_select_users'
   post '/lists/:id/add_multiple_users', to: 'lists#add_multiple_users', as: 'list_add_multiple_users'

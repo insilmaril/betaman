@@ -92,9 +92,9 @@ class ListsController < ApplicationController
     @users = @list.users.order :email
   end
 
-  def sync
+  def sync_extern_to_intern
     list = List.find(params[:id])
-    added, removed, created = list.sync
+    added, removed, created = list.sync_extern_to_intern
     if added.count > 0 || created.count > 0
       flash[:success] = "#{added.count} users added to internal list, #{created.count} of them created new"
     end

@@ -10,8 +10,8 @@ class List < ActiveRecord::Base
     "#{server}/admin/#{name}"
   end
 
-  def sync
-    # Sync the internal represantation to the external "real" list
+  def sync_extern_to_intern
+    # Sync the external represantation to the internal "real" list
     # (which leaves the external list untouched!)
     mech = Mailmech.new(server,name,pass)
 
@@ -60,13 +60,13 @@ class List < ActiveRecord::Base
   def subscribe(user)
     mech = Mailmech.new(server,name,pass)
     mech.subscribe([user.email])
-    sync
+    sync_extern_to_intern
   end
 
   def unsubscribe(user)
     mech = Mailmech.new(server,name,pass)
     mech.delete([user.email])
-    created, unsubscribed = sync
+    created, unsubscribed = sync_extern_to_intern
     return unsubscribed
   end
 end
