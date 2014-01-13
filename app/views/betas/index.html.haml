@@ -1,6 +1,6 @@
-=render partial: "shared/beta_list", locals:{ show_actions: true, betas: @planned_betas, title: 'Planned' }
-=render partial: "shared/beta_list", locals:{ show_actions: true, betas: @active_betas, title: 'Active' }
-=render partial: "shared/beta_list", locals:{ show_actions: true, betas: @finished_betas, title: 'Finished' }
+=render partial: "shared/beta_list", locals:{ show_actions: false, betas: @planned_betas, title: 'Planned' }
+=render partial: "shared/beta_list", locals:{ show_actions: false, betas: @active_betas, title: 'Active' }
+=render partial: "shared/beta_list", locals:{ show_actions: false, betas: @finished_betas, title: 'Finished' }
 %br
 
 - if @current_user.admin?
