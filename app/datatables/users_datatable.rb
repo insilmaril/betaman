@@ -1,9 +1,9 @@
 class UsersDatatable
   delegate :params, :h, :link_to, :mail_to, :number_to_currency, to: :@view
 
-  def initialize(view, beta = nil)
+  def initialize(view, users_filtered = nil)
       @view = view
-      @beta = beta
+      @users_filtered = users_filtered
   end
 
   def as_json(options = {})
@@ -51,6 +51,11 @@ private
       select("#{grouping}, COUNT (*) AS betas_count").
       group( grouping )
 
+    if @users_filtered
+      s = @users_filtered.map{|c| c.id}.join(',')
+      users = users.where("users.id IN (#{s})")
+    end
+
     if params[:sSearch].present? 
       s = ['users.email']
       s << 'users.last_name'
@@ -61,9 +66,6 @@ private
     end
 
     users = users.order("#{sort_column} #{sort_direction}")
-    if @beta
-      users = users.where("participations.beta_id = ?", @beta.id)
-    end
     @users_count = users.to_a.count
     users = users.page(page).per_page(per_page)
     users

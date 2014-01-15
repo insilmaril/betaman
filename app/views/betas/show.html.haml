@@ -15,7 +15,8 @@
     %td
       = "#{@users.count} total, #{pluralize(@users.admins.count, 'admin')}, "
       = "#{pluralize(@users.employees.count, 'employee')}, "
-      = "#{pluralize(@users.testers.count, 'tester')}"
+      = "#{pluralize(@users.testers.count, 'tester')},"
+      = link_to "#{pluralize(@users.external.count, 'external')}", beta_users_external_path(@beta)
 
   %tr
     %td.right.bold.top

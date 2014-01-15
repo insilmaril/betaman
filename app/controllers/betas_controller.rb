@@ -97,7 +97,16 @@ class BetasController < ApplicationController
     @users = @beta.users
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: UsersDatatable.new(view_context, @beta) }
+      format.json { render json: UsersDatatable.new(view_context, @users) }
+    end
+  end
+
+  def users_external
+    @beta = Beta.find(params[:id])
+    @users = @beta.users.external
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: UsersDatatable.new(view_context, @users) }
     end
   end
 

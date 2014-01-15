@@ -136,4 +136,5 @@ class User < ActiveRecord::Base
   scope :admins, User.joins(:roles).where('name = ?','Admin' )
   scope :employees, User.joins(:roles).where('name = ?','Employee' )
   scope :testers, User.joins(:roles).where('name = ?','Tester' )
+  scope :external, User.all - User.employees
 end
