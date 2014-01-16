@@ -19,7 +19,6 @@ class ListsController < ApplicationController
   def new
     if @current_user.admin?
       @list = List.new
-
       respond_to do |format|
         format.html 
         format.json { render json: @list }
@@ -35,11 +34,15 @@ class ListsController < ApplicationController
 
     respond_to do |format|
       if @list.save
-        flash[:success] = "Created list #{@list.name}"
+        msg = "#{@list.logname} created"
+        flash[:success] = msg
+        Blog.info msg, @current_user
         format.html { redirect_to @list }
         format.json { render json: @list, status: :created, location: @list }
       else
-        flash[:warning] = "Failed to create list #{@list.name}"
+        msg = "Failed to create #{@list.logname}"
+        flash[:warning] = msg
+        Blog.warn msg, @current_user
         format.html { render action: "new" }
         format.json { render json: @list.errors, status: :unprocessable_entity }
       end
@@ -60,11 +63,15 @@ class ListsController < ApplicationController
 
     respond_to do |format|
       if @list.update_attributes(params[:list])
-        flash[:success] = "Updated list #{@list.name}"
+        msg = "Updated list #{@list.logname}"
+        flash[:success] = msg
+        Blog.info msg, @current_user
         format.html { redirect_to @list }
         format.json { head :no_content }
       else
-        flash[:warning] = "Failed to update list #{@list.name}"
+        msg = "Failed to update list #{@list.logname}"
+        flash[:warning] = msg
+        Blog.warn msg, @current_user
         format.html { render action: "edit" }
         format.json { render json: @list.errors, status: :unprocessable_entity }
       end
@@ -75,14 +82,16 @@ class ListsController < ApplicationController
     if @current_user.admin?
       list = List.find(params[:id])
       list.destroy
-      flash[:success] = "Deleted list #{list.name}"
+      msg = "Deleted #{list.logname}"
+      flash[:success] = msg
+      Blog.info msg, @current_user
 
       respond_to do |format|
         format.html { redirect_to lists_url }
         format.json { head :no_content }
       end
     else
-      flash[:error] = "Access denied: Delete list #{list.name}"
+      flash[:error] = "Access denied: Delete #{list.logname}"
       redirect_to root_path
     end
   end
@@ -95,12 +104,16 @@ class ListsController < ApplicationController
   def sync_extern_to_intern
     list = List.find(params[:id])
     added, removed, created = list.sync_extern_to_intern
+    Blog.info "#{list.logname} sync_extern_to_intern called:", @current_user
     if added.count > 0 || created.count > 0
       flash[:success] = "#{added.count} users added to internal list, #{created.count} of them created new"
     end
     if removed.count > 0
       flash[:warning] = "#{removed.count} users removed from internal list"
     end
+    Blog.info "    Added: #{added.map{|u| u.logname}.join(', ')}", @current_user
+    Blog.info "  Created: #{created.map{|u| u.logname}.join(', ')}", @current_user
+    Blog.info "  Removed: #{removed.map{|u| u.logname}.join(', ')}", @current_user
 
     redirect_to :back
   end
@@ -117,12 +130,20 @@ class ListsController < ApplicationController
     @list = List.find(params[:id])
     if @current_user.admin? 
       if defined?(params[:user_ids])
-        n = params[:user_ids].count
-        s = view_context.pluralize(n, 'subscriber')
-        flash[:success] = "Added #{s} to #{@list.name}"
+        added = []
         params[:user_ids].each do |user|
-          @list.users << User.find(user)
+          u = User.find(user)
+          if u
+            @list.users << u
+            added << u.logname
+          end
         end
+
+        n = added.count
+        s = view_context.pluralize(n, 'subscriber')
+        msg = "Added #{s} to #{@list.name}: #{added.join(", ")}"
+        flash[:success] = msg
+        Blog.info msg, @current_user
       else
         flash[:warning] = "No Params defined"
       end
@@ -136,9 +157,14 @@ class ListsController < ApplicationController
       user = User.find(params[:user_id])
       list.subscribe(user)
       if list.users.include? user
-        flash[:success] = "Subscribed #{user.email} to #{list.name}"
+
+        msg = "Subscribed #{user.logname} to #{list.name}"
+        flash[:success] = msg
+        Blog.info msg, @current_user
       else
-        flash[:error] = "Subscribing #{user.email} to #{list.name} failed"
+        msg = "Subscribing #{user.email} to #{list.name} failed"
+        flash[:error] = msg
+        Blog.warn msg, @current_user
       end
     end
     redirect_to :back
@@ -150,9 +176,13 @@ class ListsController < ApplicationController
       user = User.find(params[:user_id])
       unsubscribed = list.unsubscribe(user)
       if unsubscribed.include? user
-        flash[:success] = "Unsubscribed #{user.email}"
+        msg = "Unsubscribed #{user.logname} from #{list.logname}"
+        flash[:success] = msg
+        Blog.info msg, @current_user
       else
-        flash[:error] = "Unsubscribing #{user.email} failed"
+        msg = "Unsubscribing #{user.email} from #{list.logname} failed"
+        flash[:error] = msg
+        Blog.warn msg, @current_user
       end
     end
     redirect_to :back

@@ -84,15 +84,34 @@
     %tr 
       %td.right.top.bold Betas
       %td
-        %table
-          - @user.betas.each do |beta|
+        - if @user.participations.count > 0
+          %table(border="1")
             %tr
-              %td
-                =link_to(beta.name,beta_path(beta) )
-                =link_to(user_remove_beta_path(@user, beta_id: beta) ) do
-                  %i.icon-trash
+              %th Name
+              %th List
+              %th Note
+              %th Action
 
-          - if @current_user.admin?
+            - @user.participations.each do |p|
+              %tr
+                %td.left
+                  = link_to p.beta.name, beta_path(p.beta)
+                %td.center
+                  - if p.beta.list
+                    - if p.beta.list.users.include?(@user)
+                      subscribed
+                    - else
+                      missing subscription
+                  - else
+                    No list 
+                %td=p.note
+                %td
+                  = link_to(user_remove_beta_path(@user, beta_id: p.beta) ) do
+                    %i.icon-trash
+
+
+        - if @current_user.admin?
+          %table
             %tr
               %td
               %td

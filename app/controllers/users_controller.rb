@@ -119,7 +119,7 @@ class UsersController < ApplicationController
   def destroy
     if @current_user.admin?
       @user = User.find(params[:id])
-      Blog.info "Deleted user #{@user.logname}", @current_user
+      Blog.info "Deleted #{@user.logname}", @current_user
       @user.destroy
 
       respond_to do |format|
@@ -141,7 +141,7 @@ class UsersController < ApplicationController
     beta = Beta.find(params[:beta_id])
     if !@betas.include? beta
       @betas << beta
-      msg = "Added #{@user.id} (#{@user.email}) to Beta #{beta.name}"
+      msg = "#{@user.id} (#{@user.email}) added to Beta #{beta.name}"
       flash[:success] = msg
       Blog.info msg, @current_user
     else
@@ -155,7 +155,7 @@ class UsersController < ApplicationController
     init_instance_variables
     beta = Beta.find(params[:beta_id])
     beta.users.delete(@user)
-    msg = "Removed from Beta #{beta.name}: User #{@user.logname}" 
+    msg = "#{@user.logname} removed from #{beta.logname}" 
     flash[:success] = msg
     Blog.info msg, @current_user
     redirect_to :back

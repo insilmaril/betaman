@@ -39,6 +39,7 @@ class List < ActiveRecord::Base
         u.last_name = $1 if $1
         u.save
         users_created << u
+        users_added << u
         users << u
       end
     end
@@ -68,6 +69,14 @@ class List < ActiveRecord::Base
     mech.delete([user.email])
     created, unsubscribed = sync_extern_to_intern
     return unsubscribed
+  end
+
+  def logname
+    if name.nil? || name.empty? 
+      return "List #{id}"
+    else
+      return "List #{id} (#{name})"
+    end
   end
 end
 
