@@ -133,8 +133,8 @@ class User < ActiveRecord::Base
     User.where('lower(email) = ?', email.downcase ).first
   end
 
-  scope :admins, User.joins(:roles).where('name = ?','Admin' )
-  scope :employees, User.joins(:roles).where('name = ?','Employee' )
-  scope :testers, User.joins(:roles).where('name = ?','Tester' )
-  scope :external, User.all - User.employees
+  scope :admins, lambda { User.joins(:roles).where('name = ?','Admin' ) }
+  scope :employees, lambda { User.joins(:roles).where('name = ?','Employee' ) }
+  scope :testers, lambda { User.joins(:roles).where('name = ?','Tester' ) }
+  scope :external, lambda {User.all - User.employees }
 end
