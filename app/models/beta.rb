@@ -29,4 +29,8 @@ class Beta < ActiveRecord::Base
     end
     return added, existing
   end
+
+  def logname
+    "#{id} (#{name})"
+  end
 end

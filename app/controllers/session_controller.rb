@@ -63,11 +63,11 @@ class SessionController < ApplicationController
         ).deliver
         flash[:success] = "New account created for #{user.full_name}"
         # UserMailer.welcome_mail(user)
-        Blog.info "New account created in session controller for #{user.id} #{user.email}" 
+        Blog.info "Session controller: New account created for #{user.logname}" 
 
         if MailHelper.internal_domain?(email) # FIXME remove this automatism
           user.make_employee
-          msg = "Added role 'employee' for #{user.email}"
+          msg = "Session controller Added role 'employee' for #{user.logname}"
           flash[:info] = msg
           Blog.info msg
         end
@@ -119,7 +119,7 @@ class SessionController < ApplicationController
 
     # For the time being tell admin
     UserMailer.admin_mail("Signed in #{user.email}","User ID: #{user.id}").deliver
-    Blog.info "Signed in", user.id
+    Blog.info "Signed in", user
     
     session[:user_id] = user.id
     redirect_to dashboard_path

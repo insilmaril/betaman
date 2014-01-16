@@ -141,10 +141,17 @@ class BetasController < ApplicationController
       if defined?(params[:user_ids])
         n = params[:user_ids].count
         s = view_context.pluralize(n, 'participant')
-        flash[:success] = "Added #{s} to #{@beta.name}"
+
+        ulist = []
         params[:user_ids].each do |user|
-          @beta.users << User.find(user)
+          u = User.find(user)
+          if (u)
+            @beta.users << u
+            ulist << "#{u.id} (#{u.email})"
+          end
         end
+        flash[:success] = "Added #{s} to #{@beta.name}"
+        Blog.info "Added to #{@beta.name}: #{ulist.join(',')}", @current_user
       else
         flash[:warning] = "No Params defined"
       end
@@ -182,9 +189,11 @@ class BetasController < ApplicationController
     if @current_user.admin?
       if @beta.users.include? user
         @beta.users.delete(user)
-        flash[:success] = "Removed #{user.full_name} from #{@beta.name}"
+        msg = "Removed #{user.full_name} from #{@beta.name}"
+        flash[:success] = msg
+        Blog.info msg, @current_user
       else
-        flash[:warning] = "User #{user.full_name} is not a member of beta #{@beta.name}!"
+        flash[:warning] = "User #{user.full_name} is not a member of beta #{@beta.logname}!"
       end
       redirect_to :back
     end

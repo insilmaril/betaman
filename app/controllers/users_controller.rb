@@ -51,6 +51,7 @@ class UsersController < ApplicationController
       user = User.new
 
       if user.save!
+        Blog.info "Created new user #{user.logname}", @current_user
         redirect_to edit_user_path(user)
       else
         respond_to do |format|
@@ -101,7 +102,9 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.update_attributes(params[:user])
-      flash[:success] = "#{@user.full_name} has been updated"
+      msg = "#{@user.logname} has been updated"
+      Blog.info msg, @current_user
+      flash[:success] = msg
         format.html { redirect_to edit_user_path(@user) }
         format.json { head :no_content }
       else
@@ -116,6 +119,7 @@ class UsersController < ApplicationController
   def destroy
     if @current_user.admin?
       @user = User.find(params[:id])
+      Blog.info "Deleted user #{@user.logname}", @current_user
       @user.destroy
 
       respond_to do |format|
@@ -137,7 +141,9 @@ class UsersController < ApplicationController
     beta = Beta.find(params[:beta_id])
     if !@betas.include? beta
       @betas << beta
-      flash[:success] = "Added #{@user.full_name} to Beta #{beta.name}"
+      msg = "Added #{@user.id} (#{@user.email}) to Beta #{beta.name}"
+      flash[:success] = msg
+      Blog.info msg, @current_user
     else
       flash[:warning] = "#{@user.full_name} is already participant of #{beta.name}"
     end
@@ -149,7 +155,9 @@ class UsersController < ApplicationController
     init_instance_variables
     beta = Beta.find(params[:beta_id])
     beta.users.delete(@user)
-    flash[:success] = "Removed #{@user.full_name} from Beta #{beta.name}"
+    msg = "Removed from Beta #{beta.name}: User #{@user.logname}" 
+    flash[:success] = msg
+    Blog.info msg, @current_user
     redirect_to :back
   end
 
@@ -161,7 +169,9 @@ class UsersController < ApplicationController
       a = Address.create
       user.address = a
       user.save
-      flash[:success] = "Created address #{a.id} for #{user.full_name}"
+      msg = "Created address #{a.id} for user #{user.logname}"
+      flash[:success] = msg
+      Blog.info msg, @current_user
       redirect_to :back
     end
   end
