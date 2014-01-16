@@ -62,11 +62,14 @@ class SessionController < ApplicationController
           "Account: #{uid}"
         ).deliver
         flash[:success] = "New account created for #{user.full_name}"
-        UserMailer.welcome_mail(user)
+        # UserMailer.welcome_mail(user)
+        Blog.info "New account created in session controller for #{user.id} #{user.email}" 
 
         if MailHelper.internal_domain?(email) # FIXME remove this automatism
           user.make_employee
-          flash[:info] = "Added role 'employee' for #{user.full_name}"
+          msg = "Added role 'employee' for #{user.email}"
+          flash[:info] = msg
+          Blog.info msg
         end
 
       else
@@ -115,7 +118,8 @@ class SessionController < ApplicationController
     flash[:success] = "You are signed in."
 
     # For the time being tell admin
-    UserMailer.admin_mail("Signed in #{user.full_name}","User ID: #{user.id}").deliver
+    UserMailer.admin_mail("Signed in #{user.email}","User ID: #{user.id}").deliver
+    Blog.info "Signed in", user.id
     
     session[:user_id] = user.id
     redirect_to dashboard_path
@@ -124,9 +128,10 @@ class SessionController < ApplicationController
   def failure
     flash[:error] = "Authentication failed, please try again."
       
-    UserMailer.admin_mail(
-      "User authentication failed",
-      "    URL: #{session['omniauth.params']['openid_url'].to_s}").deliver
+    msg1 = "User authentication failed"
+    msg2 = "    URL: #{session['omniauth.params']['openid_url'].to_s}"
+    Blog.warn msg1 + msg2
+    UserMailer.admin_mail(msg1, msg2).deliver
     redirect_to root_path
   end
 
