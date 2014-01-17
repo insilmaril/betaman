@@ -14,7 +14,7 @@
       -if defined?(show_actions) && show_actions
         %th Action
       - if @current_user.admin? || @current_user.employee?
-        %th Participants
+        %th{:align => "center"} Participants
       - if @current_user.admin?
         %th Admin
 
@@ -34,11 +34,9 @@
               = link_to 'Join', beta_join_path(beta), class: 'btn btn-success btn-mini'
 
         - if @current_user.admin? || @current_user.employee?
-          %td
-            = link_to(beta_users_path(beta)) do
-              =beta.users.count
-              - if beta.users.count > 0
-                %i.icon-eye-open
+          %td{:align => "center"}
+            = link_to("#{beta.users.count} total / ",beta_users_path(beta) )
+            = link_to("#{beta.users.external.count} ext",beta_users_external_path(beta) )
         - if @current_user.admin?
           %td
             = link_to(edit_beta_path(beta), :title => 'Edit') do
