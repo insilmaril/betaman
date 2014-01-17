@@ -23,7 +23,7 @@ class List < ActiveRecord::Base
     # Eliminate duplicates
     users.uniq!
 
-    subscribers.each do |s|
+    subscribers.map{|s| s.downcase }.each do |s|
       u = User.find_by_email(s)
       if  u
         if !users.include? u
@@ -46,7 +46,7 @@ class List < ActiveRecord::Base
 
     users_removed = []
     users.each do |u|
-      if !subscribers.include? u.email
+      if !subscribers.include? u.email.downcase
         users_removed << u
       end
 
