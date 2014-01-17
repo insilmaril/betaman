@@ -89,6 +89,7 @@
             %tr
               %th Name
               %th List
+              %th Note ID
               %th Note
               %th Action
 
@@ -104,6 +105,7 @@
                       missing subscription
                   - else
                     No list 
+                %td=p.id
                 %td=p.note
                 %td
                   = link_to(user_remove_beta_path(@user, beta_id: p.beta) ) do
