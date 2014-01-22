@@ -104,16 +104,12 @@ class ListsController < ApplicationController
   def sync_extern_to_intern
     list = List.find(params[:id])
     added, removed, created = list.sync_extern_to_intern
-    Blog.info "#{list.logname} sync_extern_to_intern called:", @current_user
     if added.count > 0 || created.count > 0
       flash[:success] = "#{added.count} users added to internal list, #{created.count} of them created new"
     end
     if removed.count > 0
       flash[:warning] = "#{removed.count} users removed from internal list"
     end
-    Blog.info "    Added: #{added.map{|u| u.logname}.join(', ')}", @current_user
-    Blog.info "  Created: #{created.map{|u| u.logname}.join(', ')}", @current_user
-    Blog.info "  Removed: #{removed.map{|u| u.logname}.join(', ')}", @current_user
 
     redirect_to :back
   end

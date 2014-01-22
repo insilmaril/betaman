@@ -17,6 +17,6 @@ private
         username = "User #{user.id} (#{user.email}): "
       end
     end
-    logger.info "[BM] #{Time.now} #{type}: #{username}#{message}"
+    ActiveRecord::Base.logger.info "[BM] #{Time.now} #{type}: #{username}#{message}"
   end
 end
