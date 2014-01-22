@@ -35,6 +35,7 @@ class List < ActiveRecord::Base
         # FIXME add note, that user is created by list sync
         u = User.new
         u.email = s
+        u.note = "User created through\nList sync: #{name}"
         s =~ /(.*)@/
         u.last_name = $1 if $1
         u.save
@@ -55,6 +56,10 @@ class List < ActiveRecord::Base
       users.delete u
     end
 
+    Blog.info "#{logname} sync_extern_to_intern called:"
+    Blog.info "    Added: #{users_added.map{|u| u.logname}.join(', ')}"
+    Blog.info "  Created: #{users_created.map{|u| u.logname}.join(', ')}"
+    Blog.info "  Removed: #{users_removed.map{|u| u.logname}.join(', ')}"
     return users_added, users_removed, users_created
   end
 
