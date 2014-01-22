@@ -128,16 +128,16 @@
                           - @available_betas.each do |beta|
                             %li= link_to beta.name, user_add_beta_path(@user, beta_id: beta)
 
-                  - if !@available_finished_betas.empty?
-                    %tr
-                      %td 
-                        .btn-group
-                          %a{:class => "btn btn-mini dropdown-toggle", "data-toggle" => "dropdown", :href => "#"}
-                            Add finished beta 
-                            %b.caret
-                          %ul.dropdown-menu
-                            - @available_finished_betas.each do |beta|
-                              %li= link_to beta.name, user_add_beta_path(@user, beta_id: beta)
+                - if !@available_finished_betas.empty?
+                  %tr
+                    %td 
+                      .btn-group
+                        %a{:class => "btn btn-mini dropdown-toggle", "data-toggle" => "dropdown", :href => "#"}
+                          Add finished beta 
+                          %b.caret
+                        %ul.dropdown-menu
+                          - @available_finished_betas.each do |beta|
+                            %li= link_to beta.name, user_add_beta_path(@user, beta_id: beta)
 
     %tr
       %td.right.top.bold Groups
