@@ -1,0 +1,14 @@
+%h4 Edit participation
+= form_tag do 
+  %table
+    %tr
+      %td.right.top.bold User
+      %td=@user.full_name
+    %tr
+      %td.right.top.bold Beta
+      %td=@participation.beta.name
+    %tr 
+      %td.right.top.bold Note
+      %td
+        = text_field_tag(:note_new, @participation.note)
+  = submit_tag("Submit")

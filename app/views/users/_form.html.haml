@@ -89,6 +89,7 @@
             %tr
               %th Name
               %th List
+              %th Downloads
               %th Note ID
               %th Note
               %th Action
@@ -105,11 +106,17 @@
                       missing subscription
                   - else
                     No list 
-                %td=p.id
-                %td=p.note
+                %td.center
+                  n.a.
+                %td.center=p.id
+                %td
+                  = link_to(user_edit_participation_path(@user, participation_id: p)) do
+                    =p.note
                 %td
                   = link_to(user_remove_beta_path(@user, beta_id: p.beta) ) do
                     %i.icon-trash
+                  = link_to(user_edit_participation_path(@user, participation_id: p)) do
+                    %i.icon-pencil
 
 
         - if @current_user.admin?

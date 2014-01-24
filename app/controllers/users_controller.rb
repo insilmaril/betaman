@@ -175,4 +175,28 @@ class UsersController < ApplicationController
       redirect_to :back
     end
   end
+
+  def edit_participation
+    @user = User.find(params[:id])
+    @participation = Participation.find(params[:participation_id] )
+
+    if @current_user.admin? || @user == @current_user
+      @finished_betas = Beta.finished
+    else
+      flash[:error] = "Access denied: Editing user participation"
+      redirect_to root_path
+    end
+  end
+
+  def update_participation
+    Blog.info "BM: params: #{params}"
+    user = User.find(params[:id])
+    note_new = params[:note_new]
+    participation = Participation.find(params[:participation_id] )
+    if participation && participation.note != note_new
+      participation.note = note_new
+      participation.save
+    end
+    redirect_to edit_user_path(user)
+  end
 end
