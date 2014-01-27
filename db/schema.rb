@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140114105408) do
+ActiveRecord::Schema.define(:version => 20140127140503) do
 
   create_table "accounts", :force => true do |t|
     t.string   "uid"
@@ -98,7 +98,6 @@ ActiveRecord::Schema.define(:version => 20140114105408) do
     t.boolean  "downloads_act"
     t.boolean  "support_req"
     t.boolean  "support_act"
-    t.boolean  "list_act"
   end
 
   create_table "roles", :force => true do |t|
@@ -129,6 +128,7 @@ ActiveRecord::Schema.define(:version => 20140114105408) do
     t.integer  "address_id"
     t.string   "note"
     t.integer  "company_id"
+    t.string   "title"
   end
 
 end

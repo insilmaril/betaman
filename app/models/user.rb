@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   attr_accessible :email, 
     :first_name, 
     :last_name, 
+    :title,
     :login_name, 
     :address_attributes, 
     :note
@@ -55,7 +56,13 @@ class User < ActiveRecord::Base
   end
 
   def full_name_reverse_comma
-    ret = last_name
+    ret = ""
+    if !title.blank?
+      ret = title + " "
+    end
+    if !last_name.blank?
+      ret = ret + last_name
+    end
     if !first_name.blank?
       ret += ', ' + first_name
     end
@@ -63,7 +70,7 @@ class User < ActiveRecord::Base
   end
 
   def full_name
-    "#{first_name} #{last_name}"
+    "#{title} #{first_name} #{last_name}"
   end
 
   def set_full_name(s)
