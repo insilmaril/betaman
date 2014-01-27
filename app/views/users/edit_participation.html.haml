@@ -11,4 +11,13 @@
       %td.right.top.bold Note
       %td
         = text_field_tag(:note_new, @participation.note)
+    %tr 
+      %td.right.top.bold Support requested
+      %td
+        = check_box_tag(:support_req, @participation.support_req, @participation.support_req)
+    %tr 
+      %td.right.top.bold 
+        = label_tag(:support_act, " Support active")
+      %td
+        = check_box_tag(:support_act, @participation.support_act, @participation.support_act)
   = submit_tag("Submit")

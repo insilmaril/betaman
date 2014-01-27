@@ -193,8 +193,13 @@ class UsersController < ApplicationController
     user = User.find(params[:id])
     note_new = params[:note_new]
     participation = Participation.find(params[:participation_id] )
-    if participation && participation.note != note_new
-      participation.note = note_new
+    if participation 
+      if
+        participation.note != note_new
+        participation.note = note_new
+      end
+      participation.support_req = params[:support_req]
+      participation.support_act = params[:support_act]
       participation.save
     end
     redirect_to edit_user_path(user)
