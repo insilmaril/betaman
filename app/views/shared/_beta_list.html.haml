@@ -13,10 +13,11 @@
       %th End
       -if defined?(show_actions) && show_actions
         %th Action
-      - if @current_user.admin? || @current_user.employee?
-        %th{:align => "center"} Participants
-      - if @current_user.admin?
-        %th Admin
+      - if @current_user
+        - if @current_user.admin? || @current_user.employee? 
+          %th{:align => "center"} Participants
+        - if @current_user.admin?
+          %th Admin
 
     - betas.each do |beta|
       %tr
@@ -33,13 +34,14 @@
             - else
               = link_to 'Join', beta_join_path(beta), class: 'btn btn-success btn-mini'
 
-        - if @current_user.admin? || @current_user.employee?
-          %td{:align => "center"}
-            = link_to("#{beta.users.count} total / ",beta_users_path(beta) )
-            = link_to("#{beta.users.external.count} ext",beta_users_external_path(beta) )
-        - if @current_user.admin?
-          %td
-            = link_to(edit_beta_path(beta), :title => 'Edit') do
-              %i{:class => ['icon-red', 'icon-pencil']}
-            = link_to(beta, :title => 'Delete', :method => :delete, :data => { :confirm => 'Are you sure?' }) do
-              %i.icon-trash
+        - if @current_user
+          - if @current_user.admin? || @current_user.employee?
+            %td{:align => "center"}
+              = link_to("#{beta.users.count} total / ",beta_users_path(beta) )
+              = link_to("#{beta.users.external.count} ext",beta_users_external_path(beta) )
+          - if @current_user.admin?
+            %td
+              = link_to(edit_beta_path(beta), :title => 'Edit') do
+                %i{:class => ['icon-red', 'icon-pencil']}
+              = link_to(beta, :title => 'Delete', :method => :delete, :data => { :confirm => 'Are you sure?' }) do
+                %i.icon-trash

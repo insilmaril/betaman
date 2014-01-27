@@ -1,11 +1,13 @@
 require 'spec_helper'
 
 describe BetasController do
+  render_views
 
   describe "for non-logged-in users" do
     it "should redirect to login page" do
       get :index
-      response.should redirect_to '/session/login'
+      #response.should redirect_to '/session/login'
+      response.body.should have_content "Finished Betas"
     end
   end
 
@@ -22,7 +24,7 @@ describe BetasController do
       assert_not_nil assigns(:betas)
     end
 
-    it 'gets users' do
+    it "gets users" do
       beta = FactoryGirl.create(:beta)
       get :users, { id: beta }
       assert_response :success
