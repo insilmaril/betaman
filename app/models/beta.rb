@@ -1,5 +1,7 @@
+require 'betaadmin'
+
 class Beta < ActiveRecord::Base
-  attr_accessible :begin, :end, :name
+  attr_accessible :begin, :end, :name, :alias, :novell_id, :novell_user, :novell_pass
 
   has_many :participations, :dependent => :destroy
   has_many :users, :through => :participations
@@ -32,5 +34,19 @@ class Beta < ActiveRecord::Base
 
   def logname
     "#{id} (#{name})"
+  end
+
+  def update_downloads
+    admin = BetaAdmin.new( novell_user, novell_pass, novell_id)
+    admin.login
+    email_list = admin.customers.map{ |c| c[:email] }
+    participations.each do |p|
+      if email_list.include?(p.user.email)
+        p.downloads_act = true
+      else
+        p.downloads_act = false
+      end
+      p.save
+    end
   end
 end

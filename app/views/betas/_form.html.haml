@@ -5,15 +5,30 @@
       %ul
         - @beta.errors.full_messages.each do |msg|
           %li= msg
-
-  .field
-    = f.label :name
-    = f.text_field :name
-  .field
-    = f.label :begin
-    = f.text_field :begin
-  .field
-    = f.label :end
-    = f.text_field :end
+  %table
+    %tr
+      %td
+        = f.label :name
+        = f.text_field :name
+      %td
+        = f.label :alias
+        = f.text_field :alias
+    %tr
+      %td
+        = f.label :begin
+        = f.text_field :begin
+      %td
+        = f.label :end
+        = f.text_field :end
+    %tr
+      %td 
+        = f.label :novell_id, "Novell ID"
+        = f.text_field :novell_id
+      %td 
+        = f.label :novell_user
+        = f.text_field :novell_user
+      %td 
+        = f.label :novell_pass
+        = f.password_field(:novell_pass,  class: "form_input", value: @beta.novell_pass)
   .actions
     = f.submit 'Save', class: 'btn btn-success'
