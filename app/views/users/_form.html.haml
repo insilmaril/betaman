@@ -22,9 +22,9 @@
       %td
         = f.text_field :first_name
       - if @current_user.admin?
-        %td.right.bold.top(rowspan = "4")
+        %td.right.bold.top(rowspan = "6")
           Note
-        %td.top(rowspan = "4")= f.text_area(:note, cols: 80, rows: 5)
+        %td.top(rowspan = "6")= f.text_area(:note, cols: 80, rows: 5)
     %tr
       %td.right.bold.top
         Title
@@ -108,7 +108,7 @@
                   - else
                     No list 
                 %td.center
-                  n.a.
+                  = p.download_status
                 %td.center=p.id
                 %td
                   = link_to(user_edit_participation_path(@user, participation_id: p)) do
