@@ -120,7 +120,6 @@ class BetaAdmin
     #page = Nokogiri::HTML(open("NOVELL.html"))
     #doc = page.xpath(".//form//table//tbody//tr//td//table")
 
-    #doc = page.search(".//form//table//tbody//tr//td//table")
     doc = page.search(".//form//table//tr//td//table")
 
     customer_list = []
