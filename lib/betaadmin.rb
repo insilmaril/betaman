@@ -8,10 +8,6 @@ require 'optparse'
 require 'tempfile'
 require 'yaml'
 
-#
-# Version 0.1   2013-02-7   Initial version
-#
-
 class BetaAdmin
   def initialize( user, password, id )
     @user = user
@@ -28,23 +24,6 @@ class BetaAdmin
     @url_add = 'http://www.novell.com/beta/admin/GetAddCustomer.do?id=' 
     @url_list = 'http://www.novell.com/beta/admin/GetEditCustomerInfo.do?id='
   end
-
-
-  def select(beta_alias)
-    puts "Selecting beta with alias=#{beta_alias}" if $options[:debug]
-    @betatests.each do |b|
-      if b["alias"] == beta_alias
-        @selected_id = b["id"]
-        break
-      end
-    end
-
-    if @selected_id == 0 then
-      puts "Could not find beta test with alias=\"#{beta_alias}\""
-      exit
-    end
-  end
-
 
   def login
     page = @agent.get @url_login
