@@ -1,3 +1,5 @@
+require 'mail_helper'
+
 class UsersController < ApplicationController
 
 #  before_filter :employee_required
@@ -100,6 +102,16 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
 
+    new_email = params[:user][:email]
+    if new_email != @user.email
+      Blog.info "User changed mail: #{@user.email} -> #{new_email}", @current_user
+      UserMailer.admin_mail(
+        "Updated email address: #{@user.full_name}",
+        " Email old: #{@user.email}\n" +
+        " Email new: #{new_email}\n" +
+        "        ID: #{@user.id}"
+      ).deliver
+    end
     respond_to do |format|
       if @user.update_attributes(params[:user])
       msg = "#{@user.logname} has been updated"
