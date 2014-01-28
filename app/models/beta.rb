@@ -39,9 +39,9 @@ class Beta < ActiveRecord::Base
   def update_downloads
     admin = BetaAdmin.new( novell_user, novell_pass, novell_id)
     admin.login
-    email_list = admin.customers.map{ |c| c[:email] }
+    email_list = admin.customers.map{ |c| c[:email].downcase }
     participations.each do |p|
-      if email_list.include?(p.user.email)
+      if email_list.include?(p.user.email.downcase)
         p.downloads_act = true
       else
         p.downloads_act = false
