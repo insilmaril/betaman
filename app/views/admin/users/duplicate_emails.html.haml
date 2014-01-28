@@ -1,22 +1,24 @@
-%h5 Duplicate email addresses in user database
-
-%ul
-  - @duplicates.each do |email|
-    %li
-      =email
-      %table.table.table-bordered
-        %tr 
-          %th User
-          %th ID
-          %th Login
-          %th Betas
-          %th Lists
-          %th Groups
-        - User.where("lower(email) = ?", email).each do |user|
-          %tr
-            %td= link_to user.full_name, edit_user_path(user)
-            %td= link_to user.id, edit_user_path(user)
-            %td= user.accounts.map{|a| a.uid}.join(",")
-            %td= link_to user.betas.count, user_betas_path(user)
-            %td= user.lists.count
-            %td= user.groups.count
+%h5 Duplicate email addresses in user database:
+- if @duplicates.count == 0
+  None
+- else
+  %ul
+    - @duplicates.each do |email|
+      %li
+        =email
+        %table.table.table-bordered
+          %tr 
+            %th User
+            %th ID
+            %th Login
+            %th Betas
+            %th Lists
+            %th Groups
+          - User.where("lower(email) = ?", email).each do |user|
+            %tr
+              %td= link_to user.full_name, edit_user_path(user)
+              %td= link_to user.id, edit_user_path(user)
+              %td= user.accounts.map{|a| a.uid}.join(",")
+              %td= link_to user.betas.count, user_betas_path(user)
+              %td= user.lists.count
+              %td= user.groups.count
