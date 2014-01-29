@@ -36,6 +36,10 @@ class Beta < ActiveRecord::Base
     "#{id} (#{name})"
   end
 
+  def has_novell_download?
+    return !(novell_user.blank? || novell_pass.blank? || novell_id.blank?)
+  end
+
   def update_downloads
     admin = BetaAdmin.new( novell_user, novell_pass, novell_id)
     admin.login

@@ -6,7 +6,7 @@ class Participation < ActiveRecord::Base
   belongs_to :beta
   
   def download_status
-    if beta.novell_user.blank? || beta.novell_pass.blank? || beta.novell_id.blank?
+    if !beta.has_novell_download?
       return "n.a."
     else
       if downloads_act
