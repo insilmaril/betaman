@@ -18,7 +18,7 @@ class Admin::BetasController < ApplicationController
         @betas << beta
         @users_added[beta.id] = []
 
-        #FIXME beta.update_downloads
+        beta.update_downloads
         
         # Find beta users, who are external and should have download
         beta.users.external.each do |user|
