@@ -40,17 +40,35 @@ class Beta < ActiveRecord::Base
     return !(novell_user.blank? || novell_pass.blank? || novell_id.blank?)
   end
 
-  def update_downloads
-    admin = BetaAdmin.new( novell_user, novell_pass, novell_id)
-    admin.login
-    email_list = admin.customers.map{ |c| c[:email].downcase }
-    participations.each do |p|
-      if email_list.include?(p.user.email.downcase)
-        p.downloads_act = true
-      else
-        p.downloads_act = false
+  def sync_downloads_to_intern
+    total = 0
+    added = 0
+    dropped = 0
+    if has_novell_download?
+      Blog.info "Beta #{name}: Sync downloads to intern:"
+      admin = BetaAdmin.new( novell_user, novell_pass, novell_id)
+      admin.login
+      email_list = admin.customers.map{ |c| c[:email].downcase }
+      total = participations.count
+      participations.each do |p|
+        if email_list.include?(p.user.email.downcase)
+          if p.downloads_act.blank? 
+            Blog.info "  Adding download flag for #{p.user.id} #{p.user.email}"
+            p.downloads_act = true
+            p.save
+            added += 1
+          end
+        else
+          if p.downloads_act.nil? || p.downloads_act == true
+            Blog.info "  Removing download flag for #{p.user.id} #{p.user.email}"
+            p.downloads_act = false
+            p.save
+            dropped += 1
+          end
+        end
       end
-      p.save
+      Blog.info "  #{total} participations found."
     end
+    return total, added, dropped
   end
 end

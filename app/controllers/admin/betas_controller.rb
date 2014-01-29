@@ -7,6 +7,17 @@ class Admin::BetasController < ApplicationController
     @betas = Beta.all
   end
 
+  def sync_downloads
+    # Find betas with downloads
+    @betas_with_downloads = []
+    Beta.all.each do |b|
+      if b.has_novell_download?
+        ctotal, cadded, cdropped = b.sync_downloads_to_intern
+        @betas_with_downloads << { beta: b, total: ctotal, added: cadded, dropped: cdropped}
+      end
+    end
+  end
+
   def update_downloads
     # Find betas with downloads
     @betas = []
@@ -18,7 +29,7 @@ class Admin::BetasController < ApplicationController
         @betas << beta
         @users_added[beta.id] = []
 
-        beta.update_downloads
+        beta.sync_downloads_to_intern
         
         # Find beta users, who are external and should have download
         beta.users.external.each do |user|

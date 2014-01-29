@@ -1,0 +1,12 @@
+%h4 Updated internal download lists:
+
+%ul
+- @betas_with_downloads.each do |b|
+  %li
+    = link_to b[:beta].name, beta_path(b[:beta])
+    = "Participations: #{b[:total]} total, #{b[:added]} added, #{b[:dropped]} dropped"
+
+%br
+%br
+%p
+  =link_to "Back to admin dashboard", admin_path, class: 'btn'
