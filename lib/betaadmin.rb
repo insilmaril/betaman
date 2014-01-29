@@ -1,12 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'colorize'
-require 'csv'
-require 'logger'
 require 'mechanize'
-require 'optparse'
-require 'tempfile'
-require 'yaml'
 
 class BetaAdmin
   def initialize( user, password, id )
