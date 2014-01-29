@@ -24,35 +24,27 @@ class User < ActiveRecord::Base
   #validates :email, presence: true
 
   def admin?
-    self.roles.each do  |r| 
-      return true if r.name == 'Admin'
-    end
-    false
+    has_role?('Admin')
   end
 
   def make_admin
-    admin_role = Role.find_by_name('Admin')
-    if admin_role.nil?
-      raise "Role 'Admin' missing in DB!"
-    else
-      self.roles << admin_role
-    end
+    add_role('Admin')
+  end
+
+  def drop_admin
+    drop_role('Admin')
   end
 
   def employee?
-    self.roles.each do  |r| 
-      return true if r.name == 'Employee'
-    end
-    false
+    has_role?('Employee')
   end
 
   def make_employee
-    employee_role = Role.find_by_name('Employee')
-    if employee_role.nil?
-      raise "Role 'Employee' missing in DB!"
-    else
-      self.roles << employee_role
-    end
+    add_role('Employee')
+  end
+
+  def drop_employee
+    drop_role('Employee')
   end
 
   def full_name_reverse_comma
@@ -152,4 +144,34 @@ class User < ActiveRecord::Base
   scope :employees, lambda { User.joins(:roles).where('name = ?','Employee' ) }
   scope :testers, lambda { User.joins(:roles).where('name = ?','Tester' ) }
   scope :external, lambda {User.all - User.employees }
+
+private
+
+  def has_role?(name)
+    self.roles.each do  |r| 
+      return true if r.name == name
+    end
+    false
+  end
+
+  def add_role(name)
+    role = Role.find_by_name name
+    if role.nil?
+      raise "Role #{name} missing in DB!"
+    else
+      self.roles << role
+    end
+  end
+
+  def drop_role(name)
+    role = Role.find_by_name name
+    if role.nil?
+      raise "Role #{name} missing in DB!"
+    else
+      r = self.roles.find(role)
+      if r
+        self.roles.delete r
+      end
+    end
+  end
 end

@@ -1,0 +1,21 @@
+%h2 Update roles
+
+%h4 Employees roles added
+- if @users_employee_added.count == 0
+  None
+- else
+  %ul
+    - @users_employee_added.each do |u|
+      %li= link_to u.email, user_path(u)
+
+%h4 Employees roles dropped
+- if @users_employee_dropped.count == 0
+  None
+- else
+  %ul
+    - @users_employee_dropped.each do |u|
+      %li= u.full_name
+%br
+%br
+%p
+  =link_to "Back to admin dashboard", admin_path, class: 'btn'

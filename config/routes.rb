@@ -51,6 +51,7 @@ Betaman::Application.routes.draw do
 
   namespace :admin do
     get '/users/duplicate_emails', controller: 'duplicate_emails', as: 'duplicate_emails'
+    get '/users/update_roles', controller: 'update_roles', as: 'update_roles'
     get '', to: 'dashboard#index', as: '/'
     resources :users 
     resources :betas
