@@ -5,7 +5,7 @@
 
   %ul
     -@users_added[beta.id].each do |u|
-      %li= "Added: #{u.id} - #{u.email}"
+      %li= link_to "Added: #{u.id} - #{u.email}", edit_user_path(u)
 
 %br
 %br

@@ -22,7 +22,7 @@ class Admin::BetasController < ApplicationController
         
         # Find beta users, who are external and should have download
         beta.users.external.each do |user|
-          p = user.participations.where("beta_id = ? AND (downloads_act IS NULL OR downloads_act = true)", beta.id)
+          p = user.participations.where("beta_id = ? AND (downloads_act IS NULL OR downloads_act = false)", beta.id)
           if p.count > 0
             Blog.info "  #{user.id} #{user.email}: Download missing"
             @users_added[beta.id] << user
