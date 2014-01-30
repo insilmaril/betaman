@@ -19,13 +19,17 @@
       %b External users without list: 
       %ul
         - b[:ext_users_without_list].each do |u|
-          %li=link_to u.email, edit_user_path(u)
+          %li
+            =link_to u.full_name, edit_user_path(u)
+            = "- #{u.email}"
 
     %p
       %b Internal users without list: 
       %ul
         - b[:int_users_without_list].each do |u|
-          %li=link_to u.email, edit_user_path(u)
+          %li
+            =link_to u.full_name, edit_user_path(u)
+            = "- #{u.email}"
 %br
 %br
 %p
