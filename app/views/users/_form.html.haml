@@ -104,11 +104,16 @@
                     - if p.beta.list.users.include?(@user)
                       subscribed
                     - else
-                      missing subscription
+                      %font(color="FF0000")
+                        missing subscription
                   - else
                     No list 
                 %td.center
-                  = p.download_status
+                  - if p.download_status =~/missing/
+                    %font(color="FF0000")
+                      = p.download_status
+                  -else
+                    = p.download_status
                 %td.center=p.id
                 %td
                   = link_to(user_edit_participation_path(@user, participation_id: p)) do
