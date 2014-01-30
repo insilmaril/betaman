@@ -54,7 +54,7 @@ Betaman::Application.routes.draw do
     get '/users/update_roles', controller: 'update_roles', as: 'update_roles'
     get '/betas/sync_downloads', controller: 'sync_downloads', as: 'sync_downloads'
     get '/betas/sync_lists', controller: 'sync_lists', as: 'sync_lists'
-    get '/betas/update_lists', controller: 'update_lists', as: 'update_lists'
+    get '/betas/check', controller: 'check', as: 'check'
     get '', to: 'dashboard#index', as: '/'
     resources :users 
     resources :betas

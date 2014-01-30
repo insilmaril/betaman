@@ -12,8 +12,8 @@ class Admin::BetasController < ApplicationController
     @betas_with_downloads = []
     Beta.all.each do |b|
       if b.has_novell_download?
-        ctotal, cadded, cdropped = b.sync_downloads_to_intern
-        @betas_with_downloads << { beta: b, total: ctotal, added: cadded, dropped: cdropped}
+        r = b.sync_downloads_to_intern
+        @betas_with_downloads << { beta: b, added: r[:added], dropped: r[:dropped]}
       end
     end
   end
@@ -25,6 +25,40 @@ class Admin::BetasController < ApplicationController
       if !b.list.blank?
         r = b.list.sync_to_intern
         @betas_with_lists << { beta: b, added: r[:added], dropped: r[:dropped], created: r[:created] }
+      end
+    end
+  end
+
+  def check
+    # Find betas with downloads
+    @betas_with_downloads = []
+    Beta.all.each do |b|
+      if b.has_novell_download?
+        missing_dls = []
+        b.participations.each do |p|
+          if p.downloads_act.blank? && !p.user.employee?
+            missing_dls << p.user
+          end
+        end
+
+        ext_missing_lists = []
+        int_missing_lists = []
+        b.users.each do |u|
+          if !b.list.users.include? u
+            if u.employee?
+              int_missing_lists << u
+            else
+              ext_missing_lists << u
+            end
+          end
+        end
+
+        @betas_with_downloads << { 
+          beta: b, 
+          ext_users_without_downloads: missing_dls,
+          int_users_without_list: int_missing_lists,
+          ext_users_without_list: ext_missing_lists
+        }
       end
     end
   end

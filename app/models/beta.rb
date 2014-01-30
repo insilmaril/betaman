@@ -41,34 +41,34 @@ class Beta < ActiveRecord::Base
   end
 
   def sync_downloads_to_intern
-    total = 0
-    added = 0
-    dropped = 0
+    ptotal = 0
+    padded = 0
+    pdropped = 0
     if has_novell_download?
       Blog.info "Beta #{name}: Sync downloads to intern:"
       admin = BetaAdmin.new( novell_user, novell_pass, novell_id)
       admin.login
       email_list = admin.customers.map{ |c| c[:email].downcase }
-      total = participations.count
+      ptotal = participations.count
       participations.each do |p|
         if email_list.include?(p.user.email.downcase)
           if p.downloads_act.blank? 
             Blog.info "  Adding download flag for #{p.user.logname}"
             p.downloads_act = true
             p.save
-            added += 1
+            padded += 1
           end
         else
           if p.downloads_act.nil? || p.downloads_act == true
             Blog.info "  Removing download flag for #{p.user.logname}"
             p.downloads_act = false
             p.save
-            dropped += 1
+            pdropped += 1
           end
         end
       end
-      Blog.info "  #{total} participations found."
+      Blog.info "  #{participations.count} participations found."
     end
-    return total, added, dropped
+    return {added: padded, dropped: pdropped }
   end
 end

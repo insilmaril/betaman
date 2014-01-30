@@ -1,0 +1,27 @@
+%h4 Betas with downloads:
+
+%ul
+  - @betas_with_downloads.each do |b|
+    %li
+      %p
+        %b= link_to b[:beta].name, beta_path(b[:beta])
+    %p
+      %b External users without downloads: 
+      %ul
+        - b[:ext_users_without_downloads].each do |u|
+          %li=link_to u.email, edit_user_path(u)
+    %p
+      %b External users without list: 
+      %ul
+        - b[:ext_users_without_list].each do |u|
+          %li=link_to u.email, edit_user_path(u)
+
+    %p
+      %b Internal users without list: 
+      %ul
+        - b[:int_users_without_list].each do |u|
+          %li=link_to u.email, edit_user_path(u)
+%br
+%br
+%p
+  =link_to "Back to admin dashboard", admin_path, class: 'btn'
