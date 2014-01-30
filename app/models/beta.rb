@@ -51,7 +51,8 @@ class Beta < ActiveRecord::Base
       email_list = admin.customers.map{ |c| c[:email].downcase }
       ptotal = participations.count
       participations.each do |p|
-        if email_list.include?(p.user.email.downcase)
+        if email_list.include?(p.user.email.downcase) || 
+          (!p.user.alt_email.blank? && email_list.include?(p.user.alt_email.downcase) )
           if p.downloads_act.blank? 
             Blog.info "  Adding download flag for #{p.user.logname}"
             p.downloads_act = true

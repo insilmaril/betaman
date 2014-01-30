@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140129101134) do
+ActiveRecord::Schema.define(:version => 20140130122011) do
 
   create_table "accounts", :force => true do |t|
     t.string   "uid"
@@ -132,6 +132,7 @@ ActiveRecord::Schema.define(:version => 20140129101134) do
     t.string   "note"
     t.integer  "company_id"
     t.string   "title"
+    t.string   "alt_email"
   end
 
 end
