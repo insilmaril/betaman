@@ -4,32 +4,41 @@
   - @betas_with_downloads.each do |b|
     %li
       %p
-        %b= link_to b[:beta].name, beta_path(b[:beta])
+        %h4= link_to b[:beta].name, beta_path(b[:beta])
     %p
       %b External users without downloads: 
-      %ul
-        - b[:ext_users_without_downloads].each do |u|
-          %li
-            =link_to u.full_name, edit_user_path(u)
-            = "- #{u.email}"
-            - if !b[:ext_users_without_list].include? u
-              %font(color="FF0000")
-                Warning: already subscribed to list!
+      - if b[:ext_users_without_downloads].count == 0
+        None
+      - else
+        %ul
+          - b[:ext_users_without_downloads].each do |u|
+            %li
+              =link_to u.full_name, edit_user_path(u)
+              = "- #{u.email}"
+              - if !b[:ext_users_without_list].include? u
+                %font(color="FF0000")
+                  Warning: already subscribed to list!
     %p
       %b External users without list: 
-      %ul
-        - b[:ext_users_without_list].each do |u|
-          %li
-            =link_to u.full_name, edit_user_path(u)
-            = "- #{u.email}"
+      - if b[:ext_users_without_list].count ==0 
+        None
+      -else
+        %ul
+          - b[:ext_users_without_list].each do |u|
+            %li
+              =link_to u.full_name, edit_user_path(u)
+              = "- #{u.email}"
 
     %p
       %b Internal users without list: 
-      %ul
-        - b[:int_users_without_list].each do |u|
-          %li
-            =link_to u.full_name, edit_user_path(u)
-            = "- #{u.email}"
+      - if b[:int_users_without_list].count == 0
+        None
+      - else
+        %ul
+          - b[:int_users_without_list].each do |u|
+            %li
+              =link_to u.full_name, edit_user_path(u)
+              = "- #{u.email}"
 %br
 %br
 %p
