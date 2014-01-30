@@ -53,14 +53,14 @@ class Beta < ActiveRecord::Base
       participations.each do |p|
         if email_list.include?(p.user.email.downcase)
           if p.downloads_act.blank? 
-            Blog.info "  Adding download flag for #{p.user.id} #{p.user.email}"
+            Blog.info "  Adding download flag for #{p.user.logname}"
             p.downloads_act = true
             p.save
             added += 1
           end
         else
           if p.downloads_act.nil? || p.downloads_act == true
-            Blog.info "  Removing download flag for #{p.user.id} #{p.user.email}"
+            Blog.info "  Removing download flag for #{p.user.logname}"
             p.downloads_act = false
             p.save
             dropped += 1

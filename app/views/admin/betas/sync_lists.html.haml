@@ -1,0 +1,13 @@
+%h4 Updated internal mailing lists:
+
+%ul
+- @betas_with_lists.each do |b|
+  %li
+    = link_to b[:beta].name, beta_path(b[:beta])
+    %p
+      = "#{b[:added].count} added, #{b[:dropped].count} dropped, #{b[:created].count} created"
+
+%br
+%br
+%p
+  =link_to "Back to admin dashboard", admin_path, class: 'btn'

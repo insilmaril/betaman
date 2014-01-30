@@ -10,7 +10,7 @@ class List < ActiveRecord::Base
     "#{server}/admin/#{name}"
   end
 
-  def sync_extern_to_intern
+  def sync_to_intern
     # Sync the external represantation to the internal "real" list
     # (which leaves the external list untouched!)
     mech = Mailmech.new(server,name,pass)
@@ -45,35 +45,35 @@ class List < ActiveRecord::Base
       end
     end
 
-    users_removed = []
+    users_dropped = []
     users.each do |u|
       if !subscribers.include? u.email.downcase
-        users_removed << u
+        users_dropped << u
       end
 
     end
-    users_removed.each do |u|
+    users_dropped.each do |u|
       users.delete u
     end
 
-    Blog.info "#{logname} sync_extern_to_intern called:"
+    Blog.info "#{logname} sync_to_intern called:"
     Blog.info "    Added: #{users_added.map{|u| u.logname}.join(', ')}"
     Blog.info "  Created: #{users_created.map{|u| u.logname}.join(', ')}"
-    Blog.info "  Removed: #{users_removed.map{|u| u.logname}.join(', ')}"
-    return users_added, users_removed, users_created
+    Blog.info "  Dropped: #{users_dropped.map{|u| u.logname}.join(', ')}"
+    return {added: users_added, dropped: users_dropped, created: users_created}
   end
 
   def subscribe(user)
     mech = Mailmech.new(server,name,pass)
     mech.subscribe([user.email])
-    sync_extern_to_intern
+    sync_to_intern
   end
 
   def unsubscribe(user)
     mech = Mailmech.new(server,name,pass)
     mech.delete([user.email])
-    created, unsubscribed = sync_extern_to_intern
-    return unsubscribed
+    r = sync_to_intern
+    return r[:dropped]
   end
 
   def logname

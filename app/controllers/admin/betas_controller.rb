@@ -18,6 +18,17 @@ class Admin::BetasController < ApplicationController
     end
   end
 
+  def sync_lists
+    # Find betas with lists
+    @betas_with_lists = []
+    Beta.all.each do |b|
+      if !b.list.blank?
+        r = b.list.sync_to_intern
+        @betas_with_lists << { beta: b, added: r[:added], dropped: r[:dropped], created: r[:created] }
+      end
+    end
+  end
+
   def update_downloads
     # Find betas with downloads
     @betas = []

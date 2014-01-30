@@ -101,14 +101,14 @@ class ListsController < ApplicationController
     @users = @list.users.order :email
   end
 
-  def sync_extern_to_intern
+  def sync_to_intern
     list = List.find(params[:id])
-    added, removed, created = list.sync_extern_to_intern
-    if added.count > 0 || created.count > 0
-      flash[:success] = "#{added.count} users added to internal list, #{created.count} of them created new"
+    r = list.sync_to_intern
+    if r[:added].count > 0 || r[:created].count > 0
+      flash[:success] = "#{r[:added].count} users added to internal list, #{r[:created].count} of them created new"
     end
-    if removed.count > 0
-      flash[:warning] = "#{removed.count} users removed from internal list"
+    if r[:dropped].count > 0
+      flash[:warning] = "#{r[:removed].count} users dropped from internal list"
     end
 
     redirect_to :back

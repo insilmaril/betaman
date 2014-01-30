@@ -24,7 +24,7 @@ Betaman::Application.routes.draw do
   get '/betas/:id/join', to: 'betas#join', as: 'beta_join'
   get '/betas/:id/leave', to: 'betas#leave', as: 'beta_leave'
 
-  get '/lists/:id/sync_extern_to_intern', to: 'lists#sync_extern_to_intern', as: 'list_sync_extern_to_intern'
+  get '/lists/:id/sync_to_intern', to: 'lists#sync_to_intern', as: 'list_sync_to_intern'
   get '/lists/:id/users', to: 'lists#users', as: 'list_users'
   get '/lists/:id/add_select_users', to: 'lists#add_select_users', as: 'list_add_select_users'
   post '/lists/:id/add_multiple_users', to: 'lists#add_multiple_users', as: 'list_add_multiple_users'
@@ -53,6 +53,7 @@ Betaman::Application.routes.draw do
     get '/users/duplicate_emails', controller: 'duplicate_emails', as: 'duplicate_emails'
     get '/users/update_roles', controller: 'update_roles', as: 'update_roles'
     get '/betas/sync_downloads', controller: 'sync_downloads', as: 'sync_downloads'
+    get '/betas/sync_lists', controller: 'sync_lists', as: 'sync_lists'
     get '/betas/update_lists', controller: 'update_lists', as: 'update_lists'
     get '', to: 'dashboard#index', as: '/'
     resources :users 
