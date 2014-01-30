@@ -40,7 +40,9 @@ class BetasController < ApplicationController
 
     respond_to do |format|
       if @beta.save
-        flash[:success] = "Created beta #{@beta.name}"
+        msg = "Created beta #{@beta.name}"
+        flash[:success] = msg
+        Blog.info msg, @current_user
         format.html { redirect_to @beta }
         format.json { render json: @beta, status: :created, location: @beta }
       else
@@ -66,7 +68,10 @@ class BetasController < ApplicationController
 
     respond_to do |format|
       if @beta.update_attributes(params[:beta])
-        flash[:success] = "Updated beta #{@beta.name}"
+        msg = "Updated beta #{@beta.name}"
+        flash[:success] = msg
+        Blog.info msg, @current_user
+
         format.html { redirect_to @beta }
         format.json { head :no_content }
       else
@@ -80,6 +85,10 @@ class BetasController < ApplicationController
   def destroy
     if @current_user.admin?
       @beta = Beta.find(params[:id])
+      msg = "#{@beta.name} deleted"
+      flash[:success] = msg
+      Blog.info msg, @current_user
+
       @beta.destroy
 
       respond_to do |format|
@@ -121,7 +130,9 @@ class BetasController < ApplicationController
     if @current_user.admin?
       if !@beta.users.include? user
         @beta.users << user
-        flash[:success] = "Added #{user.full_name} to #{@beta.name}"
+        msg = "Added #{user.full_name} to #{@beta.name}"
+        flash[:success] = msg
+        Blog.info msg, @current_user
       else
         flash[:warning] = "#{user.full_name} is already member of #{@beta.name}"
       end
@@ -177,6 +188,8 @@ class BetasController < ApplicationController
         "  #{exist_count} already existing\n\n" +
         added.join("\n")
       ).deliver
+      Blog.info "Adding list subscribers from #{list.name} to #{@beta.name}:", @current_user
+      added.each do {|u| Blog.info "  Added: #{u.logname}"}
     end
     redirect_to beta_path(@beta)
   end
@@ -207,7 +220,9 @@ class BetasController < ApplicationController
         flash[:error] = "#{beta.name} already has a list named #{beta.list.name}"
       else
         beta.list = newlist
-        flash[:success] = "Added list #{newlist.name} to #{beta.name}"
+        msg = "Added list #{newlist.name} to #{beta.name}"
+        flash[:success] = msg
+        Blog.info msg, @current_user
       end
     end
     redirect_to :back
@@ -217,7 +232,9 @@ class BetasController < ApplicationController
     if @current_user.admin?
       beta = Beta.find(params[:id])
       if beta.list
-        flash[:success] = "Removed list #{beta.list.name} from  #{beta.name}"
+        msg = "Removed list #{beta.list.name} from  #{beta.name}"
+        flash[:success] = msg
+        Blog.info msg, @current_user
         beta.list = nil
       else
         flash[:error] = "#{beta.name} has no mailing list"
@@ -229,9 +246,12 @@ class BetasController < ApplicationController
   def join
     @beta = Beta.find(params[:id])
     if !@beta.users.include? @current_user
-      flash[:success] = "Added #{@current_user.full_name} to #{@beta.name}"
+      msg = "Added #{@current_user.full_name} to #{@beta.name}"
+      flash[:success] = msg
       @beta.users << @current_user
+      Blog.info msg, @current_user
 
+=begin
       if !@beta.list.nil?
         list =  @beta.list.users
         if list 
@@ -243,6 +263,7 @@ class BetasController < ApplicationController
           end
         end
       end
+=end
 
       redirect_to :back
     end
@@ -253,7 +274,9 @@ class BetasController < ApplicationController
     if @beta.users.include? @current_user
       flash[:success] = "Removed user #{@current_user.full_name} from #{@beta.name}"
       @beta.users.delete @current_user
+      Blog.info "#{@current_user.logname} left #{beta.name}", @current_user
 
+=begin
       if !@beta.list.nil?
         if list 
           if list.include?(@current_user)
@@ -264,6 +287,7 @@ class BetasController < ApplicationController
           end
         end
       end
+=end
       redirect_to :back
     end
   end

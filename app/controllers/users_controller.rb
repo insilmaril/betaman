@@ -131,6 +131,8 @@ class UsersController < ApplicationController
   def destroy
     if @current_user.admin?
       @user = User.find(params[:id])
+      msg = "Deleted #{@user.logname}"
+      flash[:success] = msg
       Blog.info "Deleted #{@user.logname}", @current_user
       @user.destroy
 
