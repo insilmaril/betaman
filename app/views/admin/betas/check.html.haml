@@ -19,7 +19,7 @@
                 %font(color="FF0000")
                   Warning: already subscribed to list!
     %p
-      %b External users without list: 
+      %b External users without list subscription: 
       - if b[:ext_users_without_list].count ==0 
         None
       -else
@@ -30,7 +30,7 @@
               = "- #{u.email}"
 
     %p
-      %b Internal users without list: 
+      %b Internal users without list subscription: 
       - if b[:int_users_without_list].count == 0
         None
       - else
