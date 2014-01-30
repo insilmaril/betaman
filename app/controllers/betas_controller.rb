@@ -189,7 +189,7 @@ class BetasController < ApplicationController
         added.join("\n")
       ).deliver
       Blog.info "Adding list subscribers from #{list.name} to #{@beta.name}:", @current_user
-      added.each do {|u| Blog.info "  Added: #{u.logname}"}
+      added.each {|u| Blog.info "  Added: #{u}"}
     end
     redirect_to beta_path(@beta)
   end
