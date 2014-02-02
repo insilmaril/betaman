@@ -67,9 +67,16 @@ class User < ActiveRecord::Base
 
   def set_full_name(s)
     a = s.split " "
-    self.last_name = a.pop
-    self.first_name = a.join " "
-    self.save!
+    last = a.pop
+    first = a.join " "
+    if last != self.last_name || first != self.first_name
+      self.last_name = last
+      self.first_name = first
+      self.save!
+      return true
+    else
+      return false
+    end
   end
 
   def copy(other)
