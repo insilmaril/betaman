@@ -14,4 +14,9 @@ class Address < ActiveRecord::Base
     self.phone    = other.phone if !other.phone.blank?
     self.save!
   end
+
+  def ==(other)
+    self.attributes.except('id','created_at','updated_at','user_id') ==
+      other.attributes.except('id','created_at','updated_at','user_id') 
+  end
 end
