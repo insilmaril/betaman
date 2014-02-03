@@ -17,6 +17,8 @@ class BetaAdmin
     @url_login = 'https://login.attachmategroup.com/nidp/idff/sso?id=15&sid=0&option=credential&sid=0'
     @url_add = 'http://www.novell.com/beta/admin/GetAddCustomer.do?id=' 
     @url_list = 'http://www.novell.com/beta/admin/GetEditCustomerInfo.do?id='
+
+    $options || $options = {}
   end
 
   def login
@@ -28,8 +30,14 @@ class BetaAdmin
   end
 
 
-  def add(beta, email, company)
-    puts "Get search page..." if $options[:debug]
+  def add( options = {})
+    email = options[:email]
+    elogin = options[:elogin]
+    company = options[:company]
+
+    email_used = ""
+
+    puts "Get search page..." if $debug
     # Search for email  
     page = @agent.get @url_add + @id.to_s
 
@@ -44,21 +52,57 @@ class BetaAdmin
 
     page = @agent.submit(form, form.buttons.first)
 
-    puts "debug: #{email},\"#{company}\"" if $options[:debug]
+    puts "debug: #{email},\"#{company}\"" if $debug
     
     # Process search results
     form = page.form('addCustomerForm')
 
     if form.radiobuttons_with(:name => 'optCustomer').count == 0 then
       puts "No customers found with email=\"#{email}\".".red
-      return false
+      if elogin.blank?
+        return nil
+      else
+        # Search for elogin
+        page = @agent.get @url_add + @id.to_s
+
+        form = page.form('searchCustomerForm')
+
+        # Criteria: 0-Username 1-Last Name 2-Email 3-Firstname
+        form.field_with(:name => 'selSearchCriteria').options[0].select
+        
+        # Conditions: 0-Starts with  1-Ends with 2-Contains
+        form.field_with(:name => 'selSearchCondition').options[0].select
+        form.txtSearchInput = elogin
+
+        puts "  Trying elogin: #{elogin}"
+        page = @agent.submit(form, form.buttons.first)
+
+        # Process search results
+        form = page.form('addCustomerForm')
+
+        if form.radiobuttons_with(:name => 'optCustomer').count == 0 then
+          puts "No customers found with elogin=\"#{elogin}\".".red
+          return nil
+        end
+        if form.radiobuttons_with(:name => 'optCustomer').count > 1 then
+          puts "Multiple customers found matching elogin=\"#{elogin}\".".red
+          return nil
+        end
+      end
     else
       if form.radiobuttons_with(:name => 'optCustomer').count > 1 then
         puts "Multiple customers found matching email=\"#{email}\".".red
-        return false
+        return nil
       end
     end
-    puts "One customer found matching email=\"#{email}\"." if $options[:debug]
+    puts "One customer found" if $debug
+
+    page.links.each do |l|
+      if !l.text.blank?
+        m = /(\S*@\S*)/.match(l.text)
+        email_used = m[1] if m[1] 
+      end
+    end
 
     # Search for company
     selectlist = form.field_with(:name => 'selCompany')
@@ -71,17 +115,19 @@ class BetaAdmin
       exit
     end
 
-    form.field_with(:name => 'txtOtherCompany').value = company if !company_exists
+    #form.field_with(:name => 'txtOtherCompany').value = company if !company_exists
 
     # Select found customer
     form.radiobuttons_with(:name => 'optCustomer').first.click
 
     # Finally submit
     if !$options[:dryrun]
-      puts "Submitting new customer..." if $options[:debug]
-      $log.info( logstring("Requesting access", beta, email, company, $options[:message]) )
+      puts "Submitting new customer..." if $debug
+      #$log.info( logstring("Requesting access", email, company, $options[:message]) )
       @agent.submit(form, form.button_with(:name => 'buttons.submit'))
     end
+
+    return email_used
   end
 
 
@@ -122,11 +168,10 @@ class BetaAdmin
   end
 end
 
-def logstring (action, beta, email, company, message)
+def logstring (action, email, company, message)
   ret = [] 
-  beta = " (#{beta})" if !beta.empty?
   ret << " \"#{email}\"" if !email.empty?
   ret << " \"#{company}\"" if !company.empty?
-  ret << " \"#{message}\"" if !message.empty?
-  return "#{action}#{beta}: #{ret.join(",")}"
+  ret << " \"#{message}\"" if !message.blank?
+  return "#{action}: #{ret.join(",")}"
 end

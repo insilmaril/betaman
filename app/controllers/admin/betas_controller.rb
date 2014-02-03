@@ -1,3 +1,5 @@
+require 'download_helper'
+
 class Admin::BetasController < ApplicationController
   def index
     if !@current_user.admin?
@@ -9,13 +11,7 @@ class Admin::BetasController < ApplicationController
 
   def sync_downloads
     # Find betas with downloads
-    @betas_with_downloads = []
-    Beta.all.each do |b|
-      if b.has_novell_download?
-        r = b.sync_downloads_to_intern
-        @betas_with_downloads << { beta: b, added: r[:added], dropped: r[:dropped]}
-      end
-    end
+    @betas_with_downloads = DownloadHelper.find_betas_with_downloads(true)
   end
 
   def sync_lists
@@ -31,39 +27,10 @@ class Admin::BetasController < ApplicationController
 
   def check
     # Find betas with downloads
-    @betas_with_downloads = []
-    Beta.all.each do |b|
-      if b.has_novell_download?
-        missing_dls = []
-        b.participations.each do |p|
-          if p.downloads_act.blank? && !p.user.employee?
-            missing_dls << p.user
-          end
-        end
-
-        ext_missing_lists = []
-        int_missing_lists = []
-        b.users.each do |u|
-          if !b.list.users.include? u
-            if u.employee?
-              int_missing_lists << u
-            else
-              ext_missing_lists << u
-            end
-          end
-        end
-
-        @betas_with_downloads << { 
-          beta: b, 
-          ext_users_without_downloads: missing_dls,
-          int_users_without_list: int_missing_lists,
-          ext_users_without_list: ext_missing_lists
-        }
-      end
-    end
+    @betas_with_downloads = DownloadHelper.find_betas_with_downloads
   end
 
-  def update_downloads
+  def update_downloads  # FIXME not used atm
     # Find betas with downloads
     @betas = []
     @users_added = {}

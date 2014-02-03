@@ -6,7 +6,7 @@
       %p
         %h4= link_to b[:beta].name, beta_path(b[:beta])
     %p
-      %b External users without downloads: 
+      %b= "#{b[:ext_users_without_downloads].count} external users without downloads:" 
       - if b[:ext_users_without_downloads].count == 0
         None
       - else
@@ -19,7 +19,7 @@
                 %font(color="FF0000")
                   Warning: already subscribed to list!
     %p
-      %b External users without list subscription: 
+      %b= "#{b[:ext_users_without_list].count} external users without list subscription:" 
       - if b[:ext_users_without_list].count ==0 
         None
       -else
@@ -30,7 +30,7 @@
               = "- #{u.email}"
 
     %p
-      %b Internal users without list subscription: 
+      %b= "#{b[:int_users_without_list].count} internal users without list subscription:" 
       - if b[:int_users_without_list].count == 0
         None
       - else
