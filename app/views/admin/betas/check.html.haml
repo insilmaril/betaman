@@ -10,36 +10,56 @@
       - if b[:ext_users_without_downloads].count == 0
         None
       - else
-        %ul
-          - b[:ext_users_without_downloads].each do |u|
-            %li
-              =link_to u.full_name, edit_user_path(u)
-              = "- #{u.email}"
-              - if !b[:ext_users_without_list].include? u
-                %font(color="FF0000")
-                  Warning: already subscribed to list!
+        <input id="toggle-dldetails-#{b[:beta].id}" type="button" value="Details" />
+        %div{:id => "dldetails-#{b[:beta].id}"}
+          %ul
+            - b[:ext_users_without_downloads].each do |u|
+              %li
+                =link_to u.full_name, edit_user_path(u)
+                = "- #{u.email}"
+                - if !b[:ext_users_without_list].include? u
+                  %font(color="FF0000")
+                    Warning: already subscribed to list!
+        :javascript
+          $(document).ready(function() {
+            $("#dldetails-#{b[:beta].id}").hide();
+            $("#toggle-dldetails-#{b[:beta].id}").click(function() {
+              $("#dldetails-#{b[:beta].id}").toggle("normal");
+            });
+          });
     %p
       %b= "#{b[:ext_users_without_list].count} external users without list subscription:" 
       - if b[:ext_users_without_list].count ==0 
         None
       -else
-        %ul
-          - b[:ext_users_without_list].each do |u|
-            %li
-              =link_to u.full_name, edit_user_path(u)
-              = "- #{u.email}"
+        <input id="toggle-listdetails-#{b[:beta].id}" type="button" value="Details" />
+        %div{:id => "listdetails-#{b[:beta].id}"}
+          %ul
+            - b[:ext_users_without_list].each do |u|
+              %li
+                =link_to u.full_name, edit_user_path(u)
+                = "- #{u.email}"
+        :javascript
+          $(document).ready(function() {
+            $("#listdetails-#{b[:beta].id}").hide();
+            $("#toggle-listdetails-#{b[:beta].id}").click(function() {
+              $("#listdetails-#{b[:beta].id}").toggle("normal");
+            });
+          });
 
     %p
       %b= "#{b[:int_users_without_list].count} internal users without list subscription:" 
       - if b[:int_users_without_list].count == 0
         None
       - else
-        %ul
-          - b[:int_users_without_list].each do |u|
-            %li
-              =link_to u.full_name, edit_user_path(u)
-              = "- #{u.email}"
+        %div{:id => "foobar"}
+          %ul
+            - b[:int_users_without_list].each do |u|
+              %li
+                =link_to u.full_name, edit_user_path(u)
+                = "- #{u.email}"
 %br
 %br
 %p
   =link_to "Back to admin dashboard", admin_path, class: 'btn'
+
