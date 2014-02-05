@@ -112,9 +112,9 @@
                       %font(color="FF0000")
                         missing subscription
                   - else
-                    No list 
+                    n.a. 
                 %td.center
-                  - if p.download_status =~/missing/
+                  - if p.download_status =~/missing/ && !@user.employee?
                     %font(color="FF0000")
                       = p.download_status
                   -else
