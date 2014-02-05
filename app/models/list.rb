@@ -66,14 +66,11 @@ class List < ActiveRecord::Base
   def subscribe(user)
     mech = Mailmech.new(server,name,pass)
     mech.subscribe([user.email])
-    sync_to_intern
   end
 
   def unsubscribe(user)
     mech = Mailmech.new(server,name,pass)
     mech.delete([user.email])
-    r = sync_to_intern
-    return r[:dropped]
   end
 
   def logname

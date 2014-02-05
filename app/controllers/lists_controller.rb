@@ -152,6 +152,7 @@ class ListsController < ApplicationController
       list = List.find(params[:id])
       user = User.find(params[:user_id])
       list.subscribe(user)
+      list.sync_to_intern
       if list.users.include? user
 
         msg = "Subscribed #{user.logname} to #{list.name}"
@@ -170,7 +171,8 @@ class ListsController < ApplicationController
     if @current_user.admin? 
       list = List.find(params[:id])
       user = User.find(params[:user_id])
-      unsubscribed = list.unsubscribe(user)
+      list.unsubscribe(user)
+      unsubscribed = list.sync_to_intern
       if unsubscribed.include? user
         msg = "Unsubscribed #{user.logname} from #{list.logname}"
         flash[:success] = msg
