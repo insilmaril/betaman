@@ -8,4 +8,10 @@ DATE=$(date +"%Y-%m-%d_%H:%M")
 
 DB=betaman
 
-pg_dump -F c -b -v $DB > betaman-prod-$DATE.dump
+pg_dump -F c -b -v $DB > backup/betaman-prod-$DATE.dump
+
+DEST="uwedr@salam.suse.de:/data/work/betaman/backup"
+
+echo "Copying DB dump and logfile..."
+cp log/production.log backup
+rsync -auv backup/ $DEST
