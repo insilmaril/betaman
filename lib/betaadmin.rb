@@ -124,7 +124,15 @@ class BetaAdmin
     if !$options[:dryrun]
       puts "Submitting new customer..." if $debug
       #$log.info( logstring("Requesting access", email, company, $options[:message]) )
-      @agent.submit(form, form.button_with(:name => 'buttons.submit'))
+      page = @agent.submit(form, form.button_with(:name => 'buttons.submit'))
+      m = /has been successfully added/.match(page.at(".bodyCopyRed").content)
+
+      if m
+        puts "        Added #{email} - #{elogin}".green
+      else
+        puts "Failed to add #{email} - #{elogin}".red
+        return nil
+      end
     end
 
     return email_used
