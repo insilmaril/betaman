@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
   end
 
   def employee_required
-    if current_user.employee?
+    if current_user && current_user.employee?
       return true
     else
       redirect_to root_path
@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
   end
 
   def admin_required
-    if current_user.admin?
+    if current_user && current_user.admin?
       return true
     else
       redirect_to root_path

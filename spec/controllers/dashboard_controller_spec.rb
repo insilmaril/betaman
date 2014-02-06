@@ -13,7 +13,7 @@ describe DashboardController do
     it 'should redirect to login' do
       get :index                                                                 
       respond_to do |format| 
-        response.should redirect_to '/session/login'   
+        response.should redirect_to root_path
       end
     end
   end

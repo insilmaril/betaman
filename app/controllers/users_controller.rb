@@ -21,7 +21,7 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    if @current_user.employee? || @current_user.admin?
+    if @current_user && (@current_user.employee? || @current_user.admin?)
       respond_to do |format|
         format.html # index.html.erb
         format.json { render json: UsersDatatable.new(view_context) }
