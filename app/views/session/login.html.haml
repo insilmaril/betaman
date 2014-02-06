@@ -12,24 +12,25 @@
 %h4 Notes:
 %ul
   %li
-    You will see more, if Betaman recognizes your email address to be
-    within one of the SUSE or Novell domains. You can also request
-    employee role by contacting 
+    Betaman will show more detailed information after you have logged in.
+
+  %li 
+    For login, you currently need an openID. You can use any openID provider, e.g.
+    %ul
+      %li 
+        %b Novell: 
+        The URL is 
+        %tt https://secure-www.novell.com/openid/user/{USERNAME}
+        The USERNAME can also be your BUGZILLANAME
+      %li 
+        %b Google: 
+        Find your URL after logging into your Google+ account. Then goto your 
+        =link_to('account/privacy settings', 'https://www.google.com/settings/privacy')
+        The URL looks 
+        %tt like https://plus.google.com/{RANDOM_NUMBER} 
+        where the random number is specific to your profile.
+
+  %li 
+    For questions please contact
     = mail_to 'uwedr@suse.com'
-
-  %li You can use any openID provider, e.g.
-  %ul
-    %li 
-      Google: Find your URL after logging into your Google+ account. Then goto your 
-      =link_to('account/privacy settings', 'https://www.google.com/settings/privacy')
-      The URL looks like https://plus.google.com/{RANDOM_NUMBER}, where
-      the random number is specific to your profile.
-    %li 
-      Novell: The URL is https://secure-www.novell.com/openid/user/{USERNAME}
-  %li You can also use your Bugzilla name, the URL is the same as above:
-  %p
-    https://secure-www.novell.com/openid/user/BUGZILLANAME
-  %li After login you can edit your user profile
-  %li This is a temporary server, ongoing work until beginning of SLE 12 Beta test
-
 
