@@ -96,6 +96,7 @@
               %th Name
               %th List
               %th Downloads
+              %th Support
               %th Note ID
               %th Note
               %th Action
@@ -105,6 +106,7 @@
                 %td.left
                   = link_to p.beta.name, beta_path(p.beta)
                 %td.center
+                  -# List subscription
                   - if p.beta.list
                     - if p.beta.list.users.include?(@user)
                       subscribed
@@ -114,11 +116,22 @@
                   - else
                     n.a. 
                 %td.center
+                  -# Download
                   - if p.download_status =~/missing/ && !@user.employee?
                     %font(color="FF0000")
                       = p.download_status
                   -else
                     = p.download_status
+                %td.center
+                  -# Support
+                  - if !p.support_req 
+                    - if !@user.employee?
+                      %font(color="FF0000")
+                        missing
+                    - else
+                      missing
+                  -else
+                    requested
                 %td.center=p.id
                 %td
                   = link_to(user_edit_participation_path(@user, participation_id: p)) do
