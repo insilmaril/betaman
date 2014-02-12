@@ -3,34 +3,39 @@
 require 'mechanize'
 
 class BetaAdmin
-  def initialize( user, password, id )
-    @user = user
-    @password = password
-    @id = id
-
+  def initialize
     @agent = Mechanize.new
+    @agent_iw = Mechanize.new
     # Uncommment below to enable logging while extending Mailman
     #@agent.log = Logger.new $stdout
     #@agent.agent.http.debug_output = $stdout
 
-    # URLs
-    @url_login = 'https://login.attachmategroup.com/nidp/idff/sso?id=15&sid=0&option=credential&sid=0'
-    @url_add = 'http://www.novell.com/beta/admin/GetAddCustomer.do?id=' 
-    @url_list = 'http://www.novell.com/beta/admin/GetEditCustomerInfo.do?id='
-
     $options || $options = {}
   end
 
-  def login
-    page = @agent.get @url_login
+  def login_innerweb(user,pass)
+    Blog.info "Logging into Innerweb as #{user}..."
+    page = @agent_iw.get 'https://innerweb.novell.com'
+
+    form = page.form
+    page = @agent_iw.submit(form, form.buttons.first)
+
     form = page.form('IDPLogin')
-    form.Ecom_User_ID = @user
-    form.Ecom_Password = @password
+    form.Ecom_User_ID = user
+    form.Ecom_Password = pass
+    page = @agent_iw.submit(form, form.buttons.first)
+  end
+
+  def login(user,pass)
+    page = @agent.get 'https://login.attachmategroup.com/nidp/idff/sso?id=15&sid=0&option=credential&sid=0'
+    form = page.form('IDPLogin')
+    form.Ecom_User_ID = user
+    form.Ecom_Password = pass
     @agent.submit(form, form.buttons.first)
   end
 
 
-  def add( options = {})
+  def add( beta, options = {})
     email = options[:email]
     elogin = options[:elogin]
     company = options[:company]
@@ -39,7 +44,7 @@ class BetaAdmin
 
     puts "Get search page..." if $debug
     # Search for email  
-    page = @agent.get @url_add + @id.to_s
+    page = @agent.get url_add + beta.id.to_s
 
     form = page.form('searchCustomerForm')
 
@@ -138,10 +143,13 @@ class BetaAdmin
     return email_used
   end
 
+  def customers(beta)
+    return nil if !beta.has_novell_download?
 
-  def customers
+    url_list = 'http://www.novell.com/beta/admin/GetEditCustomerInfo.do?id='
+
     # Search for email  
-    page = @agent.get(@url_list + @id.to_s)
+    page = @agent.get  url_list + beta.id.to_s
     #pp page
 
     #page = Nokogiri::HTML(open("NOVELL.html"))
@@ -170,16 +178,82 @@ class BetaAdmin
     return customer_list
   end
 
+  def sync_downloads(beta)
+    Blog.info "#{beta.name}: Check downloads of users"
 
-  def betas
-    return @betatests
+    page_csv = @agent_iw.get "https://innerweb.novell.com/beta/GetCustomerAddressBookPrint.do?id=#{beta.novell_id}"
+  
+    s = page_csv.body
+
+    #s = File.read  '/suse/uwedr/SUSE_Linux_Enterprise_Server_12__(Authorized)_.csv'
+
+    # Fix broken encoding
+    s.encode!("ISO-8859-1", "utf-8", :invalid => :replace)
+
+    csv = CSV.parse(s)
+
+    emails_found = []
+    users_created = []
+    companies_created = []
+
+    csv.drop(5).each do |r|  
+      changed = false
+
+      #Email is the mandatory field
+      email = r[2]
+      if !email.blank?
+        # Check for duplicate emails
+        if emails_found.include? email
+          Blog.warn "  Warning: Ignoring previously found #{email}"
+        else
+          emails_found << email.downcase
+         
+          # Find by email
+          user = User.find_by_email(email)
+          if !user
+            # Try to find by alt_email
+            user = User.find_by_alt_email(email)
+            if !user
+              user = User.new
+              user.email = email
+              users_created << user
+              user.betas << beta
+              user.save!
+              Blog.info "  Created #{user.logname} and added to beta."
+            end
+          end
+
+          # Add to beta, create participation
+          if !user.betas.include? beta
+            user.betas << beta
+          end
+
+        end # No duplicate email
+      end # email found
+    end  # CSV
+
+    padded = 0
+    pdropped = 0
+
+    Participation.where("beta_id = ?",beta.id).each do |p|
+      if emails_found.include?(p.user.email.downcase) || 
+        (!p.user.alt_email.blank? && emails_found.include?(p.user.alt_email.downcase) )
+        if p.downloads_act.blank? 
+          Blog.info "  Adding download flag for #{p.user.logname}"
+          p.downloads_act = true
+          p.save
+          padded += 1
+        end
+      else
+        if p.downloads_act.nil? || p.downloads_act == true
+          Blog.info "  Removing download flag for #{p.user.logname}"
+          puts "  Removing download flag for #{p.user.logname}"
+          p.downloads_act = false
+          p.save
+          pdropped += 1
+        end
+      end
+    end
+    return {added: padded, dropped: pdropped }
   end
-end
-
-def logstring (action, email, company, message)
-  ret = [] 
-  ret << " \"#{email}\"" if !email.empty?
-  ret << " \"#{company}\"" if !company.empty?
-  ret << " \"#{message}\"" if !message.blank?
-  return "#{action}: #{ret.join(",")}"
 end

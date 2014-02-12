@@ -1,3 +1,5 @@
+=link_to "#{@beta.name}", beta_path(@beta), class: 'btn'
+
 = form_for @beta do |f|
   - if @beta.errors.any?
     #error_explanation
@@ -5,6 +7,8 @@
       %ul
         - @beta.errors.full_messages.each do |msg|
           %li= msg
+
+  %h5 Beta data
   %table
     %tr
       %td
@@ -20,15 +24,30 @@
       %td
         = f.label :end
         = f.text_field :end
+
     %tr
       %td 
-        = f.label :novell_id, "Novell ID"
+        = f.label :novell_id, "Novell Beta ID"
         = f.text_field :novell_id
+
+  %h5 Sync participant data on Novell beta admin pages (slow!)
+  %table
+    %tr
       %td 
         = f.label :novell_user
         = f.text_field :novell_user
       %td 
         = f.label :novell_pass
         = f.password_field(:novell_pass,  class: "form_input", value: @beta.novell_pass)
+
+  %h5 Sync participant data on Novell Innerweb
+  %table
+    %tr
+      %td 
+        = f.label :novell_iw_user
+        = f.text_field :novell_iw_user
+      %td 
+        = f.label :novell_pass
+        = f.password_field(:novell_iw_pass,  class: "form_input", value: @beta.novell_iw_pass)
   .actions
     = f.submit 'Save', class: 'btn btn-success'

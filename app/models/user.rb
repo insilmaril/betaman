@@ -139,6 +139,10 @@ class User < ActiveRecord::Base
     User.where('lower(email) = ?', email.downcase ).first
   end
 
+  def self.find_by_alt_email(email)
+    User.where('lower(alt_email) = ?', email.downcase ).first
+  end
+
   def logname
     if email.nil? || email.empty? 
       return "User #{id}"
