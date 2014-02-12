@@ -8,10 +8,8 @@
 
     %p  
       -# External users without downloads
-      %b= "#{b[:ext_users_without_downloads].count} external users without downloads:" 
-      - if b[:ext_users_without_downloads].count == 0
-        None
-      - else
+      %b= "#{b[:ext_users_without_downloads].count} external users without downloads" 
+      - if b[:ext_users_without_downloads].count > 0
         <input id="toggle-dldetails-#{b[:beta].id}" type="button" value="Details" />
         %div{:id => "dldetails-#{b[:beta].id}"}
           %ul
@@ -32,10 +30,8 @@
 
     %p  
       -# External users without support requested
-      %b= "#{b[:ext_users_with_downloads_nosupport].count} external users with downloads, but missing support:" 
-      - if b[:ext_users_with_downloads_nosupport].count == 0
-        None
-      - else
+      %b= "#{b[:ext_users_with_downloads_nosupport].count} external users with downloads, but missing support" 
+      - if b[:ext_users_with_downloads_nosupport].count > 0
         <input id="toggle-support-details-#{b[:beta].id}" type="button" value="Details" />
         %div{:id => "support-details-#{b[:beta].id}"}
           %ul
@@ -53,10 +49,8 @@
 
     %p
       -# External users without mailing list subscription
-      %b= "#{b[:ext_users_without_list].count} external users without list subscription:" 
-      - if b[:ext_users_without_list].count ==0 
-        None
-      -else
+      %b= "#{b[:ext_users_without_list].count} external users without list subscription" 
+      - if b[:ext_users_without_list].count > 0 
         <input id="toggle-listdetails-#{b[:beta].id}" type="button" value="Details" />
         %div{:id => "listdetails-#{b[:beta].id}"}
           %ul
@@ -74,10 +68,8 @@
 
     %p
       -# Internal users without mailing list subscription
-      %b= "#{b[:int_users_without_list].count} internal users without list subscription:" 
-      - if b[:int_users_without_list].count == 0
-        None
-      - else
+      %b= "#{b[:int_users_without_list].count} internal users without list subscription" 
+      - if b[:int_users_without_list].count > 0
         %div{:id => "foobar"}
           %ul
             - b[:int_users_without_list].each do |u|
