@@ -48,21 +48,33 @@ class User < ActiveRecord::Base
   end
 
   def full_name_reverse_comma
-    ret = ""
-    if !title.blank?
-      ret = title + " "
-    end
+    a = []
+    a << title if !title.blank?
     if !last_name.blank?
-      ret = ret + last_name
+      if !first_name.blank?
+        a << last_name + ','
+      else
+        a << last_name
+      end
     end
-    if !first_name.blank?
-      ret += ', ' + first_name
+    a << first_name if !first_name.blank?
+    if a.count == 0
+      return 'n.a.' 
+    else
+      return a.join(' ')
     end
-    ret
   end
 
   def full_name
-    "#{title} #{first_name} #{last_name}"
+    a = []
+    a << title if !title.blank?
+    a << first_name if !first_name.blank?
+    a << last_name if !last_name.blank?
+    if a.count == 0
+      return 'n.a.' 
+    else
+      return a.join(' ')
+    end
   end
 
   def set_full_name(s)
