@@ -8,9 +8,12 @@
 
     %p  
       -# External users without downloads
-      %b= "#{b[:ext_users_without_downloads].count} external users without downloads" 
-      - if b[:ext_users_without_downloads].count > 0
-        <input id="toggle-dldetails-#{b[:beta].id}" type="button" value="Details" />
+      - if b[:ext_users_without_downloads].count == 0
+        %b= "#{b[:ext_users_without_downloads].count} external users without downloads" 
+      -else
+        %font(color="FF0000")
+          %b= "#{b[:ext_users_without_downloads].count} external users without downloads" 
+          <input id="toggle-dldetails-#{b[:beta].id}" type="button" value="Details" />
         %div{:id => "dldetails-#{b[:beta].id}"}
           %ul
             - b[:ext_users_without_downloads].each do |u|
@@ -30,8 +33,11 @@
 
     %p  
       -# External users without support requested
-      %b= "#{b[:ext_users_with_downloads_nosupport].count} external users with downloads, but missing support" 
-      - if b[:ext_users_with_downloads_nosupport].count > 0
+      - if b[:ext_users_with_downloads_nosupport].count == 0
+        %b= "#{b[:ext_users_with_downloads_nosupport].count} external users with downloads, but missing support" 
+      - else
+        %font(color="FF0000")
+          %b= "#{b[:ext_users_with_downloads_nosupport].count} external users with downloads, but missing support" 
         <input id="toggle-support-details-#{b[:beta].id}" type="button" value="Details" />
         %div{:id => "support-details-#{b[:beta].id}"}
           %ul
@@ -49,8 +55,11 @@
 
     %p
       -# External users without mailing list subscription
-      %b= "#{b[:ext_users_without_list].count} external users without list subscription" 
-      - if b[:ext_users_without_list].count > 0 
+      - if b[:ext_users_without_list].count == 0 
+        %b= "#{b[:ext_users_without_list].count} external users without list subscription" 
+      - else
+        %font(color="FF0000")
+          %b= "#{b[:ext_users_without_list].count} external users without list subscription" 
         <input id="toggle-listdetails-#{b[:beta].id}" type="button" value="Details" />
         %div{:id => "listdetails-#{b[:beta].id}"}
           %ul
@@ -68,14 +77,25 @@
 
     %p
       -# Internal users without mailing list subscription
-      %b= "#{b[:int_users_without_list].count} internal users without list subscription" 
-      - if b[:int_users_without_list].count > 0
-        %div{:id => "foobar"}
+      - if b[:int_users_without_list].count == 0
+        %b= "#{b[:int_users_without_list].count} internal users without list subscription" 
+      - else
+        %font(color="FF0000")
+          %b= "#{b[:int_users_without_list].count} internal users without list subscription" 
+        <input id="toggle-int-listdetails-#{b[:beta].id}" type="button" value="Details" />
+        %div{:id => "int-listdetails-#{b[:beta].id}"}
           %ul
             - b[:int_users_without_list].each do |u|
               %li
                 =link_to u.full_name, edit_user_path(u)
                 = "- #{u.email}"
+        :javascript
+          $(document).ready(function() {
+            $("#int-listdetails-#{b[:beta].id}").hide();
+            $("#toggle-int-listdetails-#{b[:beta].id}").click(function() {
+              $("#int-listdetails-#{b[:beta].id}").toggle("normal");
+            });
+          });
 %br
 %br
 %p
