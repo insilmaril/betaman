@@ -224,7 +224,11 @@
       %tr
         %td.right.top.bold Address
         %td
-          = link_to('Add address', user_add_address_path(@user), class: 'btn btn-mini' ) 
+          = link_to('Add address', user_add_address_path(@user), class: 'btn btn-mini btn-small' ) 
   .actions
-    = f.submit 'Save', class: 'btn btn-success'
+    = f.submit 'Save', class: 'btn btn-success btn-small'
 
+
+- if @current_user.admin? 
+  = link_to('Delete user', user_path(@user), :method => :delete, :data => { :confirm => 'Are you sure?' },  class: 'btn btn-danger btn-small' )
+  
