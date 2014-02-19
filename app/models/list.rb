@@ -31,17 +31,26 @@ class List < ActiveRecord::Base
           users_added << u
         end
       else
-        # puts "Create user for email #{s} !"
-        # FIXME add note, that user is created by list sync
-        u = User.new
-        u.email = s
-        u.note = "User created through\nList sync: #{name}"
-        s =~ /(.*)@/
-        u.last_name = $1 if $1
-        u.save
-        users_created << u
-        users_added << u
-        users << u
+        # Try alternate email
+        u = User.find_by_alt_email(s)
+        if  u
+          if !users.include? u
+            users << u
+            users_added << u
+          end
+        else
+          # puts "Create user for email #{s} !"
+          # FIXME add note, that user is created by list sync
+          u = User.new
+          u.email = s
+          u.note = "User created through\nList sync: #{name}"
+          s =~ /(.*)@/
+          u.last_name = $1 if $1
+          u.save
+          users_created << u
+          users_added << u
+          users << u
+        end
       end
     end
 
