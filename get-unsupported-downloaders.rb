@@ -14,18 +14,20 @@ begin
   betas_with_downloads = DownloadHelper.find_betas_with_downloads()
   betas_with_downloads.each do |b|
     b[:users_with_downloads].each do |u|
-      # Add hash with selected beta into hash, which containts user
-      # information
-      list[u.id] ||= {}
-      
-      list[u.id][:betas] ||= []
-      list[u.id][:betas] << b[:beta].alias
 
       # Mark that support has been requested
       u.participations.where("beta_id = ?",b[:beta].id).each do |p|
-        puts p
-        p.support_req = true
-        p.save!
+        if p.support_req.blank? 
+          # Add hash with selected beta into hash, which contains user
+          # information
+          list[u.id] ||= {}
+        
+          list[u.id][:betas] ||= []
+          list[u.id][:betas] << b[:beta].alias
+          
+          p.support_req = true
+          p.save!
+        end
       end
     end
   end
@@ -33,7 +35,7 @@ begin
   body = ""
   header = "ID,email,alt_email,Name,login,Betas,Company\n"
 
-  list.keys.sort.each do |k|
+  list.keys.sort.uniq.each do |k|
     u = User.find(k)
     body += "#{u.id}"
     body += ",#{u.email}"
@@ -48,6 +50,8 @@ begin
     body += "\n"
   end
 
+  puts body
+  
   # Write csv file
   File.open( filename, 'w') do |f|
     f.write header
