@@ -12,7 +12,7 @@ class Participation < ActiveRecord::Base
       if downloads_act
         return "activated"
       else
-        return "missing activation"
+        return "missing"
       end
     end
   end

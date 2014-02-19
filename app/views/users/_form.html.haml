@@ -120,6 +120,7 @@
                   - if p.download_status =~/missing/ && !@user.employee?
                     %font(color="FF0000")
                       = p.download_status
+                      = link_to "Add", 'https://www.novell.com/beta/admin/GetAddCustomer.do?id=' + p.beta.novell_id, class: 'btn btn-small'
                   -else
                     = p.download_status
                 %td.center
