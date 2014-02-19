@@ -18,35 +18,41 @@ if novell.nil?
 end
 
 User.all.each do |u|
+  a = []
+  changed = false
   if /suse\.(de|com|cz)$/.match(u.email)
-    puts "Internal: #{u.email} SUSE"
+    a << "Internal: #{u.email} SUSE"
     if u.company != suse
-      puts "  Setting company to #{suse.name}"
+      a << "  Setting company to #{suse.name}"
       u.company = suse
-
+      changed = true
     end
     if !u.roles.include?(employee)
-      puts "  Adding role #{employee.name}"
+      a << "  Adding role #{employee.name}"
       u.roles << employee
+      changed = true
     end
-    u.save!
   elsif /novell\.com$/.match(u.email)
-    puts "Internal: #{u.email} Novell"
+    a << "Internal: #{u.email} Novell"
     if u.company != novell
-      puts "  Setting company to #{novell.name}"
+      a << "  Setting company to #{novell.name}"
       u.company = novell
+      changed = true
     end
     if !u.roles.include?(employee)
-      puts "  Adding role #{employee.name}"
+      a << "  Adding role #{employee.name}"
       u.roles << employee
+      changed = true
     end
-    u.save!
   else
-    puts "External: #{u.email}"
+    a << "External: #{u.email}"
     if u.roles.include?(employee)
-      puts "Dropping role #{employee.name}"
+      a << "  Dropping role #{employee.name}"
       u.roles.delete(employee)
-      u.save!
+      changed = true
     end
+  end
+  if changed
+    puts a.join "\n"
   end
 end
