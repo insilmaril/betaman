@@ -40,7 +40,6 @@ class List < ActiveRecord::Base
           end
         else
           # puts "Create user for email #{s} !"
-          # FIXME add note, that user is created by list sync
           u = User.new
           u.email = s
           u.note = "User created through\nList sync: #{name}"
