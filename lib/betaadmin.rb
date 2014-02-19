@@ -43,8 +43,10 @@ class BetaAdmin
     email_used = ""
 
     puts "Get search page..." if $debug
+    
+    url_add = 'https://www.novell.com/beta/admin/GetAddCustomer.do?id=' + beta.novell_id
     # Search for email  
-    page = @agent.get url_add + beta.id.to_s
+    page = @agent.get url_add 
 
     form = page.form('searchCustomerForm')
 
@@ -68,7 +70,7 @@ class BetaAdmin
         return nil
       else
         # Search for elogin
-        page = @agent.get @url_add + @id.to_s
+        page = @agent.get url_add 
 
         form = page.form('searchCustomerForm')
 

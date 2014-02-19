@@ -32,12 +32,13 @@ begin
   exit
 =end
 
+  beta1=Beta.find(1)
+  admin = BetaAdmin.new
+  admin.login(beta1.novell_user, beta1.novell_pass)
+
   betas_with_downloads = DownloadHelper.find_betas_with_downloads
   betas_with_downloads.each do |b|
     puts "* #{b[:beta].name}"
-
-    admin = BetaAdmin.new( b[:beta].novell_user, b[:beta].novell_pass, b[:beta].novell_id)
-    admin.login
 
     n = 1
     b[:ext_users_without_downloads].each do |u|
@@ -56,7 +57,7 @@ begin
         umail = u.email
       end
      # puts "Trying to add #{umail}"
-      email_used = admin.add( {email: umail, elogin: u.login_name, company: u_company } )
+      email_used = admin.add( b[:beta], {email: umail, elogin: u.login_name, company: u_company } )
       if email_used != umail
         puts "Alternative email used: #{umail} -> #{email_used}"
         u.alt_email = email_used
