@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+require 'csv'
 require 'mechanize'
 
 class BetaAdmin
@@ -205,9 +206,7 @@ class BetaAdmin
       email = r[2]
       if !email.blank?
         # Check for duplicate emails
-        if emails_found.include? email
-          Blog.warn "  Warning: Ignoring previously found #{email}"
-        else
+        if !emails_found.include? email
           emails_found << email.downcase
          
           # Find by email
@@ -231,6 +230,8 @@ class BetaAdmin
           end
 
         end # No duplicate email
+        # else Blog.warn "  Warning: Ignoring previously found #{email}"
+
       end # email found
     end  # CSV
 
