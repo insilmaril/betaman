@@ -46,7 +46,7 @@ module DownloadHelper
         bdata[:ext_users_without_list] = ext_missing_lists
         bdata[:all_users_without_list] = ext_missing_lists + int_missing_lists
         bdata[:ext_users_without_downloads] = missing_dls
-        bdata[:ext_users_with_downloads_nosupport] = available_dls & missing_support
+        bdata[:ext_users_with_downloads_nosupport] = User.external & available_dls & missing_support
         bdata[:users_with_downloads] = available_dls
 
         @betas_with_downloads << bdata
