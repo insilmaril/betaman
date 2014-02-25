@@ -249,8 +249,10 @@ class BetaAdmin
         end
       else
         if p.downloads_act.nil? || p.downloads_act == true
-          Blog.info "  Removing download flag for #{p.user.logname}"
-          puts "  Removing download flag for #{p.user.logname}"
+          if p.downloads_act == true
+            Blog.info "  Removing download flag for #{p.user.logname}"
+            puts "  Removing download flag for #{p.user.logname}"
+          end
           p.downloads_act = false
           p.save
           pdropped += 1
