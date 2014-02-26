@@ -3,38 +3,43 @@
 require 'betaadmin'
 require 'download_helper'
 
-begin
-=begin
-  u = User.find 427
+def enable_user(admin, beta, user)
   u_login = ""
-  u_login = u.login_name if !u.login_name.blank?
+  u_login = user.login_name if !user.login_name.blank?
   u_company = ""
-  u_company = u.company.name if u.company
+  u_company = user.company.name if user.company
   
-  b = Beta.find 2
-  admin = BetaAdmin.new( b.novell_user, b.novell_pass, b.novell_id)
-  admin.login
-
   umail = "" 
-  if !u.alt_email.blank?
-    umail = u.alt_email
+  if !user.alt_email.blank?
+    umail = user.alt_email
   else
-    umail = u.email
+    umail = user.email
   end
 
-  puts "Trying to add #{umail}"
-  email_used = admin.add( {email: umail, elogin: u.login_name, company: u_company } )
-  puts "Added: #{email_used}"
-  if email_used != u.email
-    u.alt_email = email_used
-    u.save!
-  end
-  exit
-=end
+  email_used = admin.add( beta, {email: umail, elogin: user.login_name, company: u_company } )
 
+  return
+end
+
+begin
+  # Login to any beta hosted at Novell
   beta1=Beta.find(1)
   admin = BetaAdmin.new
   admin.login(beta1.novell_user, beta1.novell_pass)
+
+  # Enable downloads for all current betas in one group
+  group = Group.find(3)
+
+  [1,2,3].each do |i|
+    beta = Beta.find(i)
+    puts "Beta #{beta.name}:"
+    group.users.each do |user|
+      puts "  Enabling #{user.email}..."
+      enable_user(admin, beta, user)
+    end
+  end
+
+  exit
 
   betas_with_downloads = DownloadHelper.find_betas_with_downloads
   betas_with_downloads.each do |b|
