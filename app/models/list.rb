@@ -55,7 +55,9 @@ class List < ActiveRecord::Base
 
     users_dropped = []
     users.each do |u|
-      if !subscribers.include?(u.email.downcase) && !subscribers.include?(u.alt_email.downcase)
+      email = u.email ||= ""
+      alt_email = u.alt_email ||= ""
+      if !subscribers.include?(email.downcase) && !subscribers.include?(alt_email.downcase)
         users_dropped << u
       end
 
