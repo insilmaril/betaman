@@ -199,6 +199,15 @@
                       - @available_groups.each do |group|
                         %li= link_to group.name, add_user_admin_group_path(group, user_id: @user.id)
 
+    %tr
+      %td.right.top.bold Accounts
+      %td
+        %table{:border => 0}
+          -@user.accounts.each do |account|
+            %tr
+              %td=link_to account.uid
+
+
     - if @user.address
       = f.fields_for :address do |af|
         %tr
