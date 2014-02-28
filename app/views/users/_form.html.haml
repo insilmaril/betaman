@@ -97,7 +97,7 @@
               %th List
               %th Downloads
               %th Support
-              %th Note ID
+              %th Status
               %th Note
               %th Action
 
@@ -137,16 +137,15 @@
                       missing
                   -else
                     requested
-                %td.center=p.id
+                %td.center= p.status_to_s
                 %td
                   = link_to(user_edit_participation_path(@user, participation_id: p)) do
                     =p.note
                 %td
-                  = link_to(user_remove_beta_path(@user, beta_id: p.beta) ) do
+                  = link_to(user_remove_beta_path(@user, beta_id: p.beta), data: { :confirm => 'Are you sure?'} ) do
                     %i.icon-trash
                   = link_to(user_edit_participation_path(@user, participation_id: p)) do
                     %i.icon-pencil
-
 
         - if @current_user.admin?
           %table

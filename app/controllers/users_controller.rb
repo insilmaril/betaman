@@ -212,6 +212,7 @@ class UsersController < ApplicationController
         participation.note != note_new
         participation.note = note_new
       end
+      params[:active] ? participation.active = true : participation.active = false
       participation.support_req = params[:support_req]
       participation.support_act = params[:support_act]
       participation.save
