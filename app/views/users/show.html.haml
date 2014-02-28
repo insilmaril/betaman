@@ -1,19 +1,200 @@
-%p#notice= notice
+%table
+  %tr
+    %td.right.bold.top
+      Last name
+    %td
+      = @user.last_name
 
-%p
-  %b First name:
-  = @user.first_name
-%p
-  %b Last name:
-  = @user.last_name
-%p
-  %b Email:
-  = @user.email
-%p
-  %b Admin:
-  = @user.admin?
+      -#%td.right.bold.top
+        Login name
+        %td= @user.login_name
+
+  %tr
+    %td.right.bold.top
+      First name
+    %td
+      = @user.first_name
+    -# if @current_user.admin?
+      %td.right.bold.top(rowspan = "6")
+        Note
+      %td.top(rowspan = "6")= f.text_area(:note, cols: 80, rows: 5)
+  %tr
+    %td.right.bold.top
+      Title
+    %td
+      = @user.title
+  %tr
+    .field
+      %td.right.bold.top
+        Email
+      %td= @user.email
+  %tr
+    .field
+      %td.right.bold.top
+        alt. Email
+      %td= @user.alt_email
+  %tr
+    %td.right.bold.top
+      Company
+    %td
+      = @user.company.name if @user.company
+
+  %tr
+    %td.right.bold.top
+      User ID
+    %td= @user.id
+  %tr
+    %td.right.top.bold Roles
+    %td
+      %table
+        - @user.roles.each do |role|
+          %tr
+            %td=role.name
+
+  %tr
+    %td.right.top.bold Lists
+    %td
+      %table
+        - @user.lists.each do |list|
+          %tr
+            %td
+              =link_to(list.name, list_path(list) )
+              -#=link_to(list_unsubscribe_user_path(list, user_id: @user) ) do
+                %i.icon-trash
+        -# if @current_user.admin? && !@available_lists.empty?
+          - if !@user.id
+            n.a.
+          - else
+            %tr
+              %td
+                .btn-group
+                  %a{:class => "btn btn-mini dropdown-toggle", "data-toggle" => "dropdown", :href => "#"}
+                    Add list subscription
+                    %b.caret
+                  %ul.dropdown-menu
+                    - @available_lists.each do |list|
+                      %li= link_to list.name, list_subscribe_user_path(list, user_id: @user.id)
+
+  %tr 
+    %td.right.top.bold Betas
+    %td(colspan="3")
+      - if @user.participations.count > 0
+        %table(border="1")
+          %tr
+            %th Name
+            %th List
+            %th Downloads
+            %th Support
+            %th Status
+            %th Note
+            %th Action
+
+          - @user.participations.each do |p|
+            %tr
+              %td.left
+                = link_to p.beta.name, beta_path(p.beta)
+              %td.center
+                -# List subscription
+                - if p.beta.list
+                  - if p.beta.list.users.include?(@user)
+                    subscribed
+                  - else
+                    %font(color="FF0000")
+                      missing subscription
+                - else
+                  n.a. 
+              %td.center
+                -# Download
+                - if p.download_status =~/missing/ 
+                  - if !@user.employee? 
+                    %font(color="FF0000")
+                      = p.download_status
+                      = link_to "Add", 'https://www.novell.com/beta/admin/GetAddCustomer.do?id=' + p.beta.novell_id, class: 'btn btn-small'
+                  - else
+                    = p.download_status
+                    = link_to "Add", 'https://www.novell.com/beta/admin/GetAddCustomer.do?id=' + p.beta.novell_id, class: 'btn btn-small'
+                -else
+                  = p.download_status
+              %td.center
+                -# Support
+                - if !p.support_req 
+                  - if !@user.employee?
+                    %font(color="FF0000")
+                      missing
+                  - else
+                    missing
+                -else
+                  requested
+              %td.center= p.status_to_s
+              %td
+                = link_to(user_edit_participation_path(@user, participation_id: p)) do
+                  =p.note
+              %td
+                = link_to(user_remove_beta_path(@user, beta_id: p.beta), data: { :confirm => 'Are you sure?'} ) do
+                  %i.icon-trash
+                = link_to(user_edit_participation_path(@user, participation_id: p)) do
+                  %i.icon-pencil
+  %tr
+    %td.right.top.bold Groups
+    %td
+      %table
+        - @user.groups.each do |group|
+          %tr
+            %td
+              =link_to(group.name, admin_group_path(group) )
+              =link_to(remove_user_admin_group_path(group, user_id: @user) ) do
+                %i.icon-trash
+        - if @current_user.admin? && !@available_groups.empty?
+          - if !@user.id
+            n.a.
+          - else
+            %tr
+              %td
+                .btn-group
+                  %a{:class => "btn btn-mini dropdown-toggle", "data-toggle" => "dropdown", :href => "#"}
+                    Add to group 
+                    %b.caret
+                  %ul.dropdown-menu
+                    - @available_groups.each do |group|
+                      %li= link_to group.name, add_user_admin_group_path(group, user_id: @user.id)
+
+  -#%tr
+    %td.right.top.bold Accounts
+    %td
+      %table{:border => 0}
+        -@user.accounts.each do |account|
+          %tr
+            %td=link_to account.uid
+
+
+  - if @user.address
+    %tr
+      %td.right.top.bold Telephone
+      %td= @user.address.phone
+
+      %td.right.top.bold City
+      %td= @user.address.city
+    %tr
+      %td.right.top.bold Street Address
+      %td= @user.address.address1
+    
+      %td.right.top.bold Zip/Postal code
+      %td= @user.address.zip
+    %tr
+      %td.right.top.bold Adress 2
+      %td= @user.address.address2
+
+      %td.right.top.bold Country
+      %td= @user.address.country
+    %tr
+      %td.right.top.bold Adress 3
+      %td= @user.address.address3
+
+      %td.right.top.bold State/Province
+      %td= @user.address.state
 
 - if @current_user.admin?
   = link_to 'Edit', edit_user_path(@user)
   \|
 = link_to 'Back', users_path
+

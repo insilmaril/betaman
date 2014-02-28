@@ -1,9 +1,19 @@
 require 'spec_helper'
 
 describe "Authentication " do
+  it "should provide Novell" do
+    visit "/session/login/"
+    page.find(:css, "a[href$='auth/novell']")
+  end
+
   it "should provide OpenID" do
     visit "/session/login/"
-    page.should have_content "OpenID"
+    page.find(:css, "a[href$='auth/open_id']")
+  end
+
+  it "should provide Google" do
+    visit "/session/login/"
+    page.find(:css, "a[href$='auth/google']")
   end
 
   it "should login regular user" do

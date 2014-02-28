@@ -1,9 +1,11 @@
 class UsersDatatable
   delegate :params, :h, :link_to, :mail_to, :number_to_currency, to: :@view
 
-  def initialize(view, users_filtered = nil)
+  def initialize(view, param = {} )
       @view = view
-      @users_filtered = users_filtered
+      @users_filtered = nil
+      @users_filtered = param[:users] if param[:users]
+      @admin = param[:admin]
   end
 
   def as_json(options = {})
@@ -24,8 +26,14 @@ private
         betas = link_to betas, Rails.application.routes.url_helpers.user_betas_path(user)
       end
       cname = user.name 
+
+      if @admin
+        link = link_to(User.find(user.id).full_name_reverse_comma, Rails.application.routes.url_helpers.edit_user_path(user) )
+      else
+        link = link_to(User.find(user.id).full_name_reverse_comma, Rails.application.routes.url_helpers.user_path(user) )
+      end
       [
-        link_to(User.find(user.id).full_name_reverse_comma, Rails.application.routes.url_helpers.edit_user_path(user) ),
+        link,
         mail_to(user.email),
         cname,
         betas
@@ -51,7 +59,7 @@ private
       select("#{grouping}, COUNT (*) AS betas_count").
       group( grouping )
 
-    if @users_filtered
+    if @users_filtered 
       s = @users_filtered.map{|c| c.id}.join(',')
       users = users.where("users.id IN (#{s})")
     end
