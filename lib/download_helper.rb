@@ -16,30 +16,33 @@ module DownloadHelper
         missing_dls = []
         available_dls = []
         missing_support = []
-        b.participations.each do |p|
-          if p.downloads_act.blank? && !p.user.employee?
-            missing_dls << p.user
-          end
-
-          if !p.support_req
-            missing_support << p.user
-          end
-
-          if p.downloads_act 
-            available_dls << p.user
-          end
-        end
-
         ext_missing_lists = []
         int_missing_lists = []
-        b.users.each do |u|
-          if !b.list.users.include? u
-            if u.employee?
-              int_missing_lists << u
-            else
-              ext_missing_lists << u
+
+        b.participations.each do |p|
+          # Ignore inactive beta participations
+          if p.active
+            if p.downloads_act.blank? && !p.user.employee? 
+              missing_dls << p.user
             end
-          end
+
+            if !p.support_req 
+              missing_support << p.user
+            end
+
+            if p.downloads_act 
+              available_dls << p.user
+            end
+
+            if !b.list.users.include? p.user
+              if p.user.employee?
+                int_missing_lists << p.user
+              else
+                ext_missing_lists << p.user
+              end
+            end
+
+          end # p.active
         end
 
         bdata[:int_users_without_list] = int_missing_lists
