@@ -1,0 +1,18 @@
+%h4 Inactive participations
+%ul
+  - Beta.order(:id).each do |beta|
+    - participations =  beta.participations.where(:active => false)
+    - if participations.count > 0
+      %li
+        %h5= beta.name
+        %ul
+          - participations.each do |p|
+            %li 
+              = link_to p.user.full_name, user_path(p.user)
+              \-
+              = mail_to p.user.email
+        
+%br
+%br
+%p
+  =link_to "Back to admin dashboard", admin_path, class: 'btn'

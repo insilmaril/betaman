@@ -65,4 +65,7 @@ class Admin::BetasController < ApplicationController
     end
 
   end
+
+  def inactive_participations
+  end
 end
