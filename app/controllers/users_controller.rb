@@ -24,7 +24,9 @@ class UsersController < ApplicationController
     if @current_user && (@current_user.employee? || @current_user.admin?)
       respond_to do |format|
         format.html # index.html.erb
-        format.json { render json: UsersDatatable.new(view_context) }
+        param = {}
+        param[:admin] = true if @current_user.admin?
+        format.json { render json: UsersDatatable.new(view_context, param) }
       end
     else
       redirect_to root_path
