@@ -31,10 +31,3 @@ describe "GET /users" do
     
 end
 
-describe "Authentication" do
-  subject { page }
-  describe "login page" do
-    before { visit '/session/login' }
-    it {should have_content('OpenID') } 
-  end
-end
