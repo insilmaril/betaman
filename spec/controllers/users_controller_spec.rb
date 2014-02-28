@@ -11,7 +11,8 @@ describe UsersController do
 
   describe "for logged-in employees" do
     before(:each) do
-      assume_login
+      @employee = FactoryGirl.create(:user_employee)
+      test_login (@employee)
     end
 
     it "gets INDEX" do
@@ -38,6 +39,15 @@ describe UsersController do
         get :betas, { id: user.to_param}       
         assert_response :success
       assert_not_nil assigns(:betas)
+      end
+    end
+
+    describe 'remove beta participation' do
+      it 'flashes error message' do
+        user = FactoryGirl.create(:user_with_beta) #valid_attributes
+        request.env["HTTP_REFERER"] = root_path
+        get :remove_beta, { id:  user.to_param, beta_id: user.betas.first.to_param} 
+        flash[:error].should eql "Permission denied"
       end
     end
   end

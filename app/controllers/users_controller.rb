@@ -167,11 +167,17 @@ class UsersController < ApplicationController
 
   def remove_beta
     init_instance_variables
-    beta = Beta.find(params[:beta_id])
-    beta.users.delete(@user)
-    msg = "#{@user.logname} removed from #{beta.logname}" 
-    flash[:success] = msg
-    Blog.info msg, @current_user
+    if !@current_user.admin?
+      msg = 'Permission denied'
+      flash[:error] = msg
+      Blog.warn msg, @current_user
+    else
+      beta = Beta.find(params[:beta_id])
+      beta.users.delete(@user)
+      msg = "#{@user.logname} removed from #{beta.logname}" 
+      flash[:success] = msg
+      Blog.info msg, @current_user
+    end
     redirect_to :back
   end
 

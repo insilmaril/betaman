@@ -27,6 +27,15 @@ FactoryGirl.define do
       end
     end
 
+    factory :user_with_beta do
+      after_create do |user|
+        user.first_name = 'John with beta'
+        beta = FactoryGirl.create(:beta)
+        user.betas << beta
+        user.save!
+      end
+    end
+
     factory :user_admin do
       after_create do |user|
         user.add_account("a.provider", "http://admin.myopenid.com")
