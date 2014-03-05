@@ -250,6 +250,12 @@ class BetasController < ApplicationController
       flash[:success] = msg
       @beta.users << @current_user
       Blog.info msg, @current_user
+      UserMailer.admin_mail(
+        "User #{@current_user.logname} joined Beta #{@beta.name}",
+        "    email: #{@current_user.email}\n" +
+        "     name: #{@current_user.full_name}\n" +
+        "       ID: #{@current_user.id}\n" +
+        "Please adjust list subscriptions manually").deliver
 
 =begin
       if !@beta.list.nil?
@@ -264,9 +270,8 @@ class BetasController < ApplicationController
         end
       end
 =end
-
-      redirect_to :back
     end
+    redirect_to :back
   end
 
   def leave
@@ -274,8 +279,14 @@ class BetasController < ApplicationController
     if @beta.users.include? @current_user
       flash[:success] = "Removed user #{@current_user.full_name} from #{@beta.name}"
       @beta.users.delete @current_user
-      Blog.info "#{@current_user.logname} left #{beta.name}", @current_user
+      Blog.info "#{@current_user.logname} left #{@beta.name}", @current_user
 
+      UserMailer.admin_mail(
+        "User #{@current_user.logname} left Beta #{@beta.name}",
+        "    email: #{@current_user.email}\n" +
+        "     name: #{@current_user.full_name}\n" +
+        "       ID: #{@current_user.id}\n" +
+        "Please adjust list subscriptions manually").deliver
 =begin
       if !@beta.list.nil?
         if list 
@@ -288,7 +299,7 @@ class BetasController < ApplicationController
         end
       end
 =end
-      redirect_to :back
     end
+    redirect_to :back
   end
 end
