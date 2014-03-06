@@ -4,9 +4,24 @@
 - @betas_with_lists.each do |b|
   %li
     = link_to b[:beta].name, beta_path(b[:beta])
-    %p
-      = "#{b[:added].count} added, #{b[:dropped].count} dropped, #{b[:created].count} created"
-
+    - if b[:added].count > 0
+      %p 
+        Added:
+        %ul
+          - b[:added].each do |u|
+            %li= link_to( u.logname, user_path(u))
+    - if b[:dropped].count > 0
+      %p
+        Dropped:
+        %ul
+          - b[:dropped].each do |u|
+            %li= link_to( u.logname, user_path(u))
+    - if b[:created].count > 0
+      %p 
+        Created:
+        %ul
+          - b[:created].each do |u|
+            %li= link_to( u.logname, user_path(u))
 %br
 %br
 %p
