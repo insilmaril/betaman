@@ -1,9 +1,12 @@
 %h4 Users:
 
-=render partial: 'shared/user_list'
-
-
 - if @current_user.admin?
   %br
   %i.icon-plus
   = link_to 'Add new user', new_user_path
+  %br
+  %br
+
+=render partial: 'shared/user_list'
+
+
