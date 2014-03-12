@@ -10,13 +10,23 @@
       = @beta.end
 
   %tr
-    %td.right.bold.top
-      Participants:
+    %td.right.bold.top Participants:
     %td
-      = "#{@users.count} total, #{pluralize(@users.admins.count, 'admin')}, "
-      = "#{pluralize(@users.employees.count, 'employee')}, "
-      = "#{pluralize(@users.testers.count, 'tester')},"
+      = link_to "#{@users.count} total", beta_users_path(@beta)
+  %tr
+    %td
+    %td
       = link_to "#{pluralize(@users.external.count, 'external')}", beta_users_external_path(@beta)
+  %tr
+    %td
+    %td= "#{pluralize(@users.employees.count, 'employee')}"
+  -#%tr
+    %td
+    %td
+      = "#{pluralize(@users.testers.count, 'tester')}"
+  %tr
+    %td
+    %td="#{pluralize(@users.admins.count, 'admin')}"
 
   %tr
     %td.right.bold.top
@@ -37,12 +47,29 @@
               - List.all.each do |list|
                 %li= link_to list.name, beta_add_list_path(@beta, list_id: list.id)
 
+  %tr
+    %td.right.bold.top
+      Milestones:
+    %td
+      - if !@milestones.empty?
+        %table
+          - @milestones.each do |milestone|
+            %tr
+              %td= "#{milestone.date}:" 
+              %td
+                - if @current_user.admin?
+                  = link_to milestone.name, admin_milestone_path(milestone)
+                - else  
+                  = milestone.name
+            - if !milestone.comment.empty?
+              %tr
+                %td
+                %td= milestone.comment
+      
 
 %div{ class: 'btn-group'}
   - if @current_user.admin?
     = link_to 'Edit', edit_beta_path(@beta),  class: 'btn btn-info' 
-  - if @current_user.employee?
-    = link_to 'Show participants', beta_users_path(@beta), class: 'btn btn-info' 
   - if @current_user.admin?
     = link_to 'Add participants', beta_add_select_users_path,  class: 'btn btn-info' 
   - if !@beta.users.include?(@current_user)
