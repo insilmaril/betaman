@@ -11,14 +11,14 @@
           - b[:added].each do |u|
             %li= link_to( u.logname, user_path(u))
     - if b[:dropped].count > 0
-      %br
-        %b Dropped:
+      %p
+        Dropped:
         %ul
           - b[:dropped].each do |u|
             %li= link_to( u.logname, user_path(u))
     - if b[:created].count > 0
-      %br
-        %b Created:
+      %p 
+        Created:
         %ul
           - b[:created].each do |u|
             %li= link_to( u.logname, user_path(u))

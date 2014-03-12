@@ -2,7 +2,7 @@ class Admin::MilestonesController < ApplicationController
   before_filter :admin_required
 
   def index
-    @milestones = Milestone.all
+    @milestones = Milestone.order('date DESC')
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @milestones }
@@ -12,6 +12,8 @@ class Admin::MilestonesController < ApplicationController
   def edit
     if @current_user.admin?
       @milestone = Milestone.find(params[:id])
+      @available_betas  = Beta.not_finished - @milestone.betas
+      @available_finished_betas = Beta.finished - @milestone.betas
     else
       flash[:error] = "Access denied: Editing Milestone"
       redirect_to root_path
@@ -22,9 +24,15 @@ class Admin::MilestonesController < ApplicationController
     if @current_user.admin?
       @milestone = Milestone.new
 
-      respond_to do |format|
-        format.html 
-        format.json { render json: @milestone }
+      if @milestone.save!
+        Blog.info "Created new milestone #{@milestone.id}", @current_user
+        @available_betas  = Beta.not_finished 
+        @available_finished_betas = Beta.finished 
+
+        respond_to do |format|
+          format.html 
+          format.json { render json: @milestone }
+        end
       end
     else
       flash[:error] = "Access denied: New Milestone"
@@ -34,6 +42,8 @@ class Admin::MilestonesController < ApplicationController
 
   def create
     @milestone = Milestone.new(params[:milestone])
+    @available_betas  = Beta.not_finished 
+    @available_finished_betas = Beta.finished 
 
     respond_to do |format|
       if @milestone.save
@@ -89,4 +99,33 @@ class Admin::MilestonesController < ApplicationController
     end
   end
 
+  def add_beta
+    milestone = Milestone.find(params[:id])
+    beta = Beta.find(params[:beta_id])
+    if !milestone.betas.include? beta
+      milestone.betas << beta
+      msg = "Added beta #{beta.name} to milestone #{milestone.name}"
+      flash[:success] = msg
+      Blog.info msg, @current_user
+    else
+      flash[:warning] = "#{@user.full_name} is already participant of #{beta.name}"
+    end
+
+    redirect_to :back
+  end
+
+  def remove_beta
+    milestone = Milestone.find(params[:id])
+    beta = Beta.find(params[:beta_id])
+    if milestone.betas.include? beta
+      milestone.betas.delete(beta)
+      msg = "Removed beta #{beta.name} from milestone #{milestone.name}"
+      flash[:success] = msg
+      Blog.info msg, @current_user
+    else
+      flash[:warning] = "#{beta.name} #{beta.id} is not associated with milestone #{milestone.name}"
+    end
+
+    redirect_to :back
+  end
 end

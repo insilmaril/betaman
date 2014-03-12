@@ -28,7 +28,38 @@
 
     %tr
       %td.right.bold.top
-        Milestones
+        Betas
+      %td
+        %table
+          - @milestone.betas.each do |beta|
+            %tr
+              %td
+                = link_to beta.name, beta
+                = link_to(remove_beta_admin_milestone_path(@milestone, beta_id: beta) ) do
+                  %i.icon-trash
+          - if !@available_betas.empty?
+            %tr
+              %td 
+                .btn-group
+                  %a{:class => "btn btn-mini dropdown-toggle", "data-toggle" => "dropdown", :href => "#"}
+                    Add available beta
+                    %b.caret
+                  %ul.dropdown-menu
+                    - @available_betas.each do |beta|
+                      %li
+                        = link_to beta.name, add_beta_admin_milestone_path(@milestone, beta_id: beta)
+
+          - if !@available_finished_betas.empty?
+            %tr
+              %td 
+                .btn-group
+                  %a{:class => "btn btn-mini dropdown-toggle", "data-toggle" => "dropdown", :href => "#"}
+                    Add finished beta 
+                    %b.caret
+                  %ul.dropdown-menu
+                    - @available_finished_betas.each do |beta|
+                      %li= link_to beta.name, add_beta_admin_milestone_path(@milestone, beta_id: beta)
+
       %td
         %table
           %tr
