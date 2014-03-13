@@ -5,7 +5,13 @@
       %ul
         - @user.errors.full_messages.each do |msg|
           %li= msg
-  %table
+
+  %table{width: "100%"}
+    %tr
+      %th{width: "10%"}
+      %th{width: "40%"}
+      %th{width: "10%"}
+      %th{width: "40%"}
     %tr
       %td.right.bold.top
         Last name
@@ -47,7 +53,7 @@
         %table
           %tr
             %td
-              = collection_select(:user, :company_id, Company.order('name ASC'), :id, :name, prompt: true )
+              = collection_select(:user, :company_id, Company.order('name ASC'), :id, :name, prompt: true, width: "100%" )
           %tr
             %td= link_to 'Add company', new_company_path, class: 'btn btn-mini'  
 
@@ -91,7 +97,7 @@
       %td.right.top.bold Betas
       %td(colspan="3")
         - if @user.participations.count > 0
-          %table(border="1")
+          %table{border: 1, width: "100%"}
             %tr
               %th Name
               %th List
