@@ -65,14 +65,14 @@
               %tr
                 %td
                 %td= milestone.comment
-              -if !milestone.url.blank?
-                %tr
-                  %td
-                  %td= link_to milestone.url
-              -if @current_user.employee?
-                %tr
-                  %td
-                  %td= milestone.comment_internal
+            -if !milestone.url.blank?
+              %tr
+                %td
+                %td= link_to milestone.url
+            -if @current_user.employee?
+              %tr
+                %td
+                %td= milestone.comment_internal
 
       
 
