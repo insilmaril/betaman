@@ -68,13 +68,12 @@
                 %td
                 %td
                   %pre= milestone.comment
-            -if @current_user.employee?
+            -if @current_user.employee? && !milestone.comment_internal.blank?
               %tr
                 %td
                 %td
                   %pre= milestone.comment_internal
-
-      
+                %td.left.bold.top Confidential!
 
 %div{ class: 'btn-group'}
   - if @current_user.admin?
