@@ -55,24 +55,25 @@
         %table
           - @milestones.each do |milestone|
             %tr
-              %td= "#{milestone.date}:" 
-              %td
-                - if @current_user.admin?
-                  = link_to milestone.name, edit_admin_milestone_path(milestone)
-                - else  
-                  = milestone.name
-            - if !milestone.comment.empty?
-              %tr
-                %td
-                %td= milestone.comment
+              - if @current_user.admin?
+                %td= link_to milestone.date.to_s, edit_admin_milestone_path(milestone)
+                %td= link_to milestone.name, edit_admin_milestone_path(milestone)
+              - else  
             -if !milestone.url.blank?
               %tr
                 %td
                 %td= link_to milestone.url
-            -if @current_user.employee?
+            - if !milestone.comment.empty?
               %tr
                 %td
-                %td= milestone.comment_internal
+                %td
+                  %pre= milestone.comment
+            -if @current_user.employee? && !milestone.comment_internal.blank?
+              %tr
+                %td
+                %td
+                  %pre= milestone.comment_internal
+                %td.left.bold.top Confidential!
 
       
 
