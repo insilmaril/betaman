@@ -6,12 +6,15 @@
         - @milestone.errors.full_messages.each do |msg|
           %li= msg
 
-  %table
+  %table{width: "100%"}
+    %tr
+      %th{width: "20%"}
+      %th{width: "80%"}
     %tr
       %td.right.bold.top
         Name
       %td
-        = f.text_field :name
+        = f.text_field :name, width: 580
 
     %tr
       %td.right.bold.top
@@ -25,6 +28,18 @@
         Comment
       %td
         = f.text_area(:comment, cols: 80, rows: 5)
+
+    %tr
+      %td.right.bold.top{width: "800px"}
+        Public URL
+      %td
+        = f.text_field(:url, size: 180)
+
+    %tr
+      %td.right.bold.top
+        Internal comment
+      %td
+        = f.text_area(:comment_internal, cols: 80, rows: 5)
 
     %tr
       %td.right.bold.top

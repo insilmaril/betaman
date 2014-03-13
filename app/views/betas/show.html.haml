@@ -58,13 +58,22 @@
               %td= "#{milestone.date}:" 
               %td
                 - if @current_user.admin?
-                  = link_to milestone.name, admin_milestone_path(milestone)
+                  = link_to milestone.name, edit_admin_milestone_path(milestone)
                 - else  
                   = milestone.name
             - if !milestone.comment.empty?
               %tr
                 %td
                 %td= milestone.comment
+              -if !milestone.url.blank?
+                %tr
+                  %td
+                  %td= link_to milestone.url
+              -if @current_user.employee?
+                %tr
+                  %td
+                  %td= milestone.comment_internal
+
       
 
 %div{ class: 'btn-group'}
