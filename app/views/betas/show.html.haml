@@ -1,6 +1,6 @@
 =link_to "Beta: #{@beta.name}", beta_path(@beta), class: 'btn'
 
-%table
+%table{width: "100%"}
   %tr
     %td.right.bold.top
       Time:
@@ -56,9 +56,17 @@
           - @milestones.each do |milestone|
             %tr
               - if @current_user.admin?
-                %td= link_to milestone.date.to_s, edit_admin_milestone_path(milestone)
-                %td= link_to milestone.name, edit_admin_milestone_path(milestone)
+                %td
+                  %b
+                    = link_to "#{milestone.date.to_s}: ", edit_admin_milestone_path(milestone) 
+                %td
+                  %b= link_to milestone.name, edit_admin_milestone_path(milestone)
               - else  
+                %td{style: "white-space:nowrap" }
+                  %b= "#{milestone.date.to_s}: "
+                %td
+                  %b= milestone.name
+
             -if !milestone.url.blank?
               %tr
                 %td
