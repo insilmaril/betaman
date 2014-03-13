@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140313105628) do
+ActiveRecord::Schema.define(:version => 20140313134044) do
 
   create_table "accounts", :force => true do |t|
     t.string   "uid"
@@ -56,14 +56,14 @@ ActiveRecord::Schema.define(:version => 20140313105628) do
 
   create_table "groups", :force => true do |t|
     t.string   "name"
-    t.string   "comment"
+    t.text     "comment"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
 
   create_table "lists", :force => true do |t|
     t.string   "name"
-    t.string   "comment"
+    t.text     "comment"
     t.string   "pass"
     t.string   "server"
     t.datetime "created_at", :null => false
@@ -88,10 +88,10 @@ ActiveRecord::Schema.define(:version => 20140313105628) do
   create_table "milestones", :force => true do |t|
     t.string   "name"
     t.date     "date"
-    t.string   "comment"
+    t.text     "comment"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
-    t.string   "comment_internal"
+    t.text     "comment_internal"
     t.string   "url"
   end
 
@@ -101,7 +101,7 @@ ActiveRecord::Schema.define(:version => 20140313105628) do
     t.integer  "beta_id"
     t.datetime "created_at",                      :null => false
     t.datetime "updated_at",                      :null => false
-    t.string   "note"
+    t.text     "note"
     t.boolean  "downloads_act"
     t.boolean  "support_req"
     t.boolean  "support_act"
@@ -134,7 +134,7 @@ ActiveRecord::Schema.define(:version => 20140313105628) do
     t.datetime "updated_at", :null => false
     t.string   "login_name"
     t.integer  "address_id"
-    t.string   "note"
+    t.text     "note"
     t.integer  "company_id"
     t.string   "title"
     t.string   "alt_email"
