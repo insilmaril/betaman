@@ -17,11 +17,17 @@ section {
 
 input[type="text"] {
   padding: 0px;
+  width: 100%;
 }
 
 textarea {
   resize: vertical;
   padding: 0px;
+  width: 100%;
+}
+
+select {
+  width: 100%;
 }
 
 .center {
@@ -97,9 +103,6 @@ table {
     font-weight: normal;
   }
 }
-
-/* No empty table cells */
-table { empty-cells: show; }
 
 
 .btn-group{
