@@ -12,21 +12,23 @@
   %tr
     %td.right.bold.top Participants:
     %td
-      = link_to "#{@users.count} total", beta_users_path(@beta)
-  %tr
-    %td
-    %td
-      = link_to "#{pluralize(@users.external.count, 'external')}", beta_users_external_path(@beta)
-  %tr
-    %td
-    %td= "#{pluralize(@users.employees.count, 'employee')}"
+      %table
+        %tr
+          %td.right= link_to "#{@users.count}", beta_users_path(@beta)
+          %td= link_to "total", beta_users_path(@beta)
+        %tr
+          %td= link_to @users.external.count, beta_users_external_path(@beta)
+          %td= link_to "external".pluralize(@users.external.count), beta_users_external_path(@beta)
+        %tr
+          %td.right= @users.employees.count
+          %td= "employee".pluralize(@users.employees.count)
+        %tr
+          %td.right= @users.admins.count
+          %td= "admin".pluralize(@users.admins.count)
   -#%tr
     %td
     %td
       = "#{pluralize(@users.testers.count, 'tester')}"
-  %tr
-    %td
-    %td="#{pluralize(@users.admins.count, 'admin')}"
 
   %tr
     %td.right.bold.top
@@ -80,14 +82,30 @@
               %tr
                 %td
                 %td
-                  %pre= milestone.comment_internal
-                %td.left.bold.top Confidential!
+                  .confidential
+                    %pre= milestone.comment_internal
+                %td.left.bold.top 
+                  .confidential
+                    Confidential!
+  - if @current_user.employee?
+    %tr
+      %td
+      %td
+        <input id="toggle-confidential" type="button" value="Toggle confidential details" />
+
+    :javascript
+      $(document).ready(function() {
+        $('.confidential').hide();
+        $("#toggle-confidential").click(function() {
+          $(".confidential").toggle("normal");
+        });
+      });
 
 %div{ class: 'btn-group'}
   - if @current_user.admin?
-    = link_to 'Edit', edit_beta_path(@beta),  class: 'btn btn-info' 
+    = link_to 'Edit', edit_beta_path(@beta),  class: 'btn btn-info btn-small' 
   - if @current_user.admin?
-    = link_to 'Add participants', beta_add_select_users_path,  class: 'btn btn-info' 
+    = link_to 'Add participants', beta_add_select_users_path,  class: 'btn btn-info btn-small' 
   - if !@beta.users.include?(@current_user)
-    = link_to 'Join', beta_add_user_path(@beta, user_id: @current_user), class: 'btn-success' 
+    = link_to 'Join', beta_add_user_path(@beta, user_id: @current_user), class: 'btn-success btn-small' 
 
