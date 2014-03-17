@@ -14,21 +14,22 @@ begin
   betas_with_downloads = DownloadHelper.find_betas_with_downloads()
   betas_with_downloads.each do |b|
     b[:users_with_downloads].each do |u|
-
-      # Mark that support has been requested
-      u.participations.where("beta_id = ?",b[:beta].id).each do |p|
-        if p.support_req.blank? 
-          # Add hash with selected beta into hash, which contains user
-          # information
-          list[u.id] ||= {}
-        
-          list[u.id][:betas] ||= []
-          list[u.id][:betas] << b[:beta].alias
+      if !u.employee?
+        # Mark that support has been requested
+        u.participations.where("beta_id = ?",b[:beta].id).each do |p|
+          if p.support_req.blank? 
+            # Add hash with selected beta into hash, which contains user
+            # information
+            list[u.id] ||= {}
           
-          p.support_req = true
-          p.save!
+            list[u.id][:betas] ||= []
+            list[u.id][:betas] << b[:beta].alias
+            
+            p.support_req = true
+            p.save!
+          end
         end
-      end
+      end # u.external?
     end
   end
 
