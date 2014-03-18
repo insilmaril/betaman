@@ -75,6 +75,7 @@ Betaman::Application.routes.draw do
         get '/groups/:id/add_user/:user_id', to: 'groups#add_user', as: 'add_user'
         get '/groups/:id/remove_user/:user_id', to: 'groups#remove_user', as: 'remove_user'
         get '/groups/:id/add_select_users',  to: 'groups#add_select_users', as: 'select_users'
+        get '/groups/:id/add_to_beta',  to: 'groups#add_to_beta', as: 'add_to_beta'
         post '/groups/:id/add_multiple_users',  to: 'groups#add_multiple_users', as: 'add_multiple_users'
       end
     end

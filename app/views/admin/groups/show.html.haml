@@ -42,4 +42,13 @@
   Data like betas and lists from the original group member not be copied and thus lost!
 
 %br
-= link_to 'Merge members', merge_users_admin_group_path(@group),  class: 'btn btn-warning btn-mini' 
+= link_to 'Merge group members into user DB', merge_users_admin_group_path(@group),  class: 'btn btn-warning btn-mini' 
+
+.btn-group
+  %a{:class => "btn btn-warning btn-mini dropdown-toggle", "data-toggle" => "dropdown", :href => "#"}
+    Add group members to beta
+    %b.caret
+  %ul.dropdown-menu
+    - Beta.all.each do |beta|
+      %li= link_to beta.name, add_to_beta_admin_group_path(@group, beta_id: beta.id)
+

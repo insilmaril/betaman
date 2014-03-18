@@ -202,16 +202,46 @@ class Admin::GroupsController < ApplicationController
     end
 
     update_users.each do |user|
+      Blog.info "Merge group DB: Updated #{guser.logname}", @current_user
       group.users << user
     end
 
     delete_members.each do |guser|
+      Blog.info "Merge group to DB: Deleted #{guser.logname}", @current_user
       guser.delete
     end
     group.reload
 
     flash[:success] = "Finished merge: Deleted #{delete_members.count} and updated #{update_users.count} users"
 
+    redirect_to admin_group_path(group)
+  end
+
+  def add_to_beta
+    group = Group.find(params[:id])
+    beta  = Beta.find(params[:beta_id])
+    existing_users = []
+    added_users = []
+    group.users.each do |user|
+      if beta.users.include?(user)
+        existing_users << user
+      else
+        added_users << user
+        beta.users << user
+      end
+    end
+
+    Blog.info "Add group #{group.name}  to beta #{beta.name}:", @current_user
+    existing_users.each do |user|
+      Blog.info "  Already in beta: #{user.logname}:"
+    end
+    added_users.each do |user|
+      Blog.info "    Added to beta: #{user.logname}:"
+    end
+      
+
+
+    flash[:success] = "Found #{existing_users.count} users in #{beta.name}, added #{added_users.count} users."
     redirect_to admin_group_path(group)
   end
 end
