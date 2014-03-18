@@ -13,7 +13,8 @@ class Admin::UsersController < ApplicationController
   end
 
   def duplicate_emails
-    @duplicates = User.select("email, count(email) as cnt").group(:email).having("count(email) >1").map {|u| u.email}
+    a = User.select(:email).map{|u| u.email.downcase}
+    @duplicates = a.select{|e| a.count(e) > 1}.uniq
   end
 
   def update_roles
