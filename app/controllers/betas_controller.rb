@@ -23,11 +23,17 @@ class BetasController < ApplicationController
 
   def new
     if @current_user.admin?
-      @beta = Beta.new
+      beta = Beta.new
+      beta.name  = "New beta"
+      beta.begin = Date.today
+      beta.end   = Date.today
 
-      respond_to do |format|
-        format.html # new.html.erb
-        format.json { render json: @beta }
+      if beta.save!
+        Blog.info "Created new beta #{beta.id}", @current_user
+        redirect_to edit_beta_path(beta)
+      else
+        Blog.error "Creating new beta failed", @current_user
+        redirect_to root_path(beta)
       end
     else
       flash[:error] = "Access denied: New Beta test"
