@@ -202,12 +202,12 @@ class Admin::GroupsController < ApplicationController
     end
 
     update_users.each do |user|
-      Blog.info "Merge group DB: Updated #{guser.logname}", @current_user
+      Blog.info "Merge group DB: Updated #{user.logname}", @current_user
       group.users << user
     end
 
     delete_members.each do |guser|
-      Blog.info "Merge group to DB: Deleted #{guser.logname}", @current_user
+      Blog.info "Merge group to DB: Deleted #{user.logname}", @current_user
       guser.delete
     end
     group.reload
