@@ -48,7 +48,7 @@ class SessionController < ApplicationController
       if user.nil?
         # No account and no user with this email => Create user
 
-        logger.info("* Couldn't find user, creating new")
+        Blog.info("Session controller: Couldn't find user, creating new")
         user = User.new
         user.last_name  = name.split.last unless name.blank?
         user.first_name = name.split.first unless name.blank?
@@ -61,13 +61,14 @@ class SessionController < ApplicationController
           "  Email: #{email}\n" +
           "Account: #{uid}"
         ).deliver
-        flash[:success] = "New account created for #{user.full_name}"
+        msg = "New account created for #{user.logname}"
+        flash[:success] = msg
         # UserMailer.welcome_mail(user)
-        Blog.info "Session controller: New account created for #{user.logname}" 
+        Blog.info msg
 
         if MailHelper.internal_domain?(email) # FIXME remove this automatism
           user.make_employee
-          msg = "Session controller Added role 'employee' for #{user.logname}"
+          msg = "Session controller: Added role 'employee' for #{user.logname}"
           flash[:info] = msg
           Blog.info msg
         end

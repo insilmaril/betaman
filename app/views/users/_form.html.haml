@@ -206,8 +206,8 @@
 
     %tr
       %td.right.top.bold Accounts
-      %td
-        %table{:border => 0}
+      %td(colspan = 3)
+        %table{border: 0}
           -@user.accounts.each do |account|
             %tr
               %td=link_to account.uid
