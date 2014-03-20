@@ -91,7 +91,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  def copy(other)
+  def copy_contact_info(other)
     # Quick hack to merge the record itself, not the betas and lists
     self.first_name = other.first_name if !other.first_name.blank?
     self.last_name = other.last_name if !other.last_name.blank?
@@ -99,13 +99,10 @@ class User < ActiveRecord::Base
     self.login_name = other.login_name if !other.login_name.blank?
     self.note = other.note if !other.note.blank?
     if !other.address.nil?
-      if self.address.nil?
-        a = Address.new
-        a.copy(other.address)
-        self.address = a
-      else
-        self.address.copy other.address
-      end
+      a = Address.new
+      a.copy other.address
+      a.save
+      self.address = a
     end
     
     #company

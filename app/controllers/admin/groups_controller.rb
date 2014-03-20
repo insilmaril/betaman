@@ -179,40 +179,75 @@ class Admin::GroupsController < ApplicationController
   end
 
   def merge_users
+    # Check if group user has a similar user in DB 
+    # out of group, with same email
+    #
+    # In that case
+    #  - update that DB user with the contact info of group user
+    #  - replace group user by DB user
+
+
     group = Group.find(params[:id])
-    update_users = []
-    delete_members = []
-    untouched_count = 0
+    Blog.info "Merge group #{group.name} to DB:", @current_user
+
+    group_users_added = []
+    group_users_deleted = []
+    group_users_unchanged = []
+    group_users_duplicates = []
+
     group.users.each do |guser|
-      email = guser.email || ''
-      existing_users = User.where("lower(email) = ?", email)
+      group_user_email = guser.email.downcase || ''
+      existing_users = User.where("lower(email) = ?", group_user_email)
       existing_users.each do |user|
-        if user && ! group.users.include?(user)
-          user.copy guser
-          user.save!
-          update_users << user
-          # In theory there should be no more than one existing 
-          # user in the DB (outside of group). So only delete guser
-          # once...
-          if !delete_members.include?(guser)
-            delete_members << guser
+        if !group.users.include?(user)
+
+          # The group might have duplicate users
+          if group_users_added.include?(user)
+            Blog.info "  Duplicate user in group: #{guser.logname}"
+            group_users_duplicates << guser
+          else
+            user.copy_contact_info guser   
+            user.save!
+            group_users_added << user
+            # In theory there should be no more than one existing 
+            # user in the DB (outside of group). So only delete guser
+            # once...
+            if !group_users_deleted.include?(guser)
+              group_users_deleted << guser
+            end
           end
         end
       end
     end
 
-    update_users.each do |user|
-      Blog.info "Merge group DB: Updated #{user.logname}", @current_user
+    # Don't delete duplicates for now, better do that manually
+    # to edit contact info
+    group_users_delete = group_users_deleted - group_users_duplicates
+
+    group_users_unchanged = group.users - group_users_deleted - group_users_added
+
+    group_users_added.each do |user|
+      Blog.info "      Added: #{user.logname}"
       group.users << user
     end
 
-    delete_members.each do |guser|
-      Blog.info "Merge group to DB: Deleted #{user.logname}", @current_user
+    group_users_deleted.each do |guser|
+      Blog.info "    Deleted: #{guser.logname}"
       guser.delete
+    end
+
+    group_users_unchanged.each do |guser|
+      Blog.info "  Unchanged: #{guser.logname}"
+    end
+
+    group_users_duplicates.each do |guser|
+      Blog.info " Duplicates: #{guser.logname}"
     end
     group.reload
 
-    flash[:success] = "Finished merge: Deleted #{delete_members.count} and updated #{update_users.count} users"
+    flash[:success] = "Finished merge: Deleted #{group_users_deleted.count} and updated #{group_users_added.count} users in group #{group.name}. Unchanged #{group_users_unchanged.count} users in group."
+
+    flash[:warning] = "Found duplicates within group: #{group_users_duplicates.map{|u| u.logname}.join(',')}"
 
     redirect_to admin_group_path(group)
   end

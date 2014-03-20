@@ -10,9 +10,10 @@ class Group < ActiveRecord::Base
     companies_created = 0
     users_created = 0
 
+    Blog.info "Import users from #{file.path}:"
+
     CSV.foreach(file.path, headers: true) do |row|  
       h = row.to_hash
-      logger.info "########## #{h}"
 
       #Email is the mandatory field
       email = h['Email'] if h['Email']
@@ -55,6 +56,8 @@ class Group < ActiveRecord::Base
         self.users << user
         self.save!
         users_created += 1
+
+        Blog.info "  Imported: #{user.logname}"
       end
     end  
 

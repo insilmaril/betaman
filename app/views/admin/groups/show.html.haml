@@ -37,12 +37,19 @@
   Group members will be merged by email address in order to copy address information
 
 %p
-  Existing users will get the contact information of group members. 
-  The duplicate members afterwards will be replaced by the user. 
+  Existing users will get the contact information of the group members, 
+  if that the group has this information. 
+  The obsoleted duplicate members in group afterwards will be replaced by the regular users.
+
+%p
+  Note:
   Data like betas and lists from the original group member not be copied and thus lost!
 
 %br
-= link_to 'Merge group members into user DB', merge_users_admin_group_path(@group),  class: 'btn btn-warning btn-mini' 
+  = link_to 'Merge group members into user DB', merge_users_admin_group_path(@group),  class: 'btn btn-warning btn-mini' 
+
+%h5 Add group to beta 
+After merging group members into DB, you can add all group members to a beta:
 
 .btn-group
   %a{:class => "btn btn-warning btn-mini dropdown-toggle", "data-toggle" => "dropdown", :href => "#"}
