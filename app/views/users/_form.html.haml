@@ -119,6 +119,8 @@
                     - else
                       %font(color="FF0000")
                         missing subscription
+                        - if @current_user.admin?
+                          = link_to "Subscribe", list_subscribe_user_path(p.beta.list, user_id: @user.id), class: 'btn btn-small'
                   - else
                     n.a. 
                 %td.center
@@ -127,12 +129,12 @@
                     - if !@user.employee? 
                       %font(color="FF0000")
                         = p.download_status
-                        = link_to "Add", 'https://www.novell.com/beta/admin/GetAddCustomer.do?id=' + p.beta.novell_id, class: 'btn btn-small'
+                        - if @current_user.admin?
+                          = link_to "Add", 'https://www.novell.com/beta/admin/GetAddCustomer.do?id=' + p.beta.novell_id, class: 'btn btn-small'
                     - else
                       = p.download_status
-                      = link_to "Add", 'https://www.novell.com/beta/admin/GetAddCustomer.do?id=' + p.beta.novell_id, class: 'btn btn-small'
-                  -else
-                    = p.download_status
+                      - if @current_user.admin?
+                        = link_to "Add", 'https://www.novell.com/beta/admin/GetAddCustomer.do?id=' + p.beta.novell_id, class: 'btn btn-small'
                 %td.center
                   -# Support
                   - if !p.support_req 

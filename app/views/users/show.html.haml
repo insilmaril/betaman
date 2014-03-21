@@ -72,7 +72,8 @@
             %th Support
             %th Status
             %th Note
-            %th Action
+            - if @current_user.admin?
+              %th Action
 
           - @user.participations.each do |p|
             %tr
@@ -94,12 +95,8 @@
                   - if !@user.employee? 
                     %font(color="FF0000")
                       = p.download_status
-                      - if @current_user.admin?
-                        = link_to "Add", 'https://www.novell.com/beta/admin/GetAddCustomer.do?id=' + p.beta.novell_id, class: 'btn btn-small'
                   - else
                     = p.download_status
-                    - if @current_user.admin?
-                      = link_to "Add", 'https://www.novell.com/beta/admin/GetAddCustomer.do?id=' + p.beta.novell_id, class: 'btn btn-small'
                 -else
                   = p.download_status
               %td.center
@@ -114,13 +111,17 @@
                   requested
               %td.center= p.status_to_s
               %td
-                = link_to(user_edit_participation_path(@user, participation_id: p)) do
-                  =p.note
-              %td
-                = link_to(user_remove_beta_path(@user, beta_id: p.beta), data: { :confirm => 'Are you sure?'} ) do
-                  %i.icon-trash
-                = link_to(user_edit_participation_path(@user, participation_id: p)) do
-                  %i.icon-pencil
+                - if @current_user.admin?
+                  = link_to(user_edit_participation_path(@user, participation_id: p)) do
+                    = p.note
+                - else
+                  = p.note
+              - if @current_user.admin?
+                %td
+                  = link_to(user_remove_beta_path(@user, beta_id: p.beta), data: { :confirm => 'Are you sure?'} ) do
+                    %i.icon-trash
+                  = link_to(user_edit_participation_path(@user, participation_id: p)) do
+                    %i.icon-pencil
   %tr
     %td.right.top.bold Groups
     %td
@@ -144,15 +145,6 @@
                   %ul.dropdown-menu
                     - @available_groups.each do |group|
                       %li= link_to group.name, add_user_admin_group_path(group, user_id: @user.id)
-
-  -#%tr
-    %td.right.top.bold Accounts
-    %td
-      %table{:border => 0}
-        -@user.accounts.each do |account|
-          %tr
-            %td=link_to account.uid
-
 
   - if @user.address
     %tr
