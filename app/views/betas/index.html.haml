@@ -1,9 +1,3 @@
 =render partial: "shared/beta_list", locals:{ show_actions: false, betas: @planned_betas, title: 'Planned' }
 =render partial: "shared/beta_list", locals:{ show_actions: false, betas: @active_betas, title: 'Active' }
 =render partial: "shared/beta_list", locals:{ show_actions: false, betas: @finished_betas, title: 'Finished' }
-%br
-
-- if @current_user && @current_user.admin?
-  = link_to(new_beta_path) do
-    %i{class: ["icon-plus", " icon-large"]}
-    Add new beta test

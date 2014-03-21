@@ -14,8 +14,6 @@
       -if @current_user && defined?(show_actions) && show_actions
         %th Action
       %th{:align => "center"} Participants
-      - if @current_user && @current_user.admin?
-        %th Admin
 
     - betas.each do |beta|
       %tr
@@ -36,9 +34,3 @@
           = link_to("#{beta.users.count} total / ",beta_users_path(beta) )
           = link_to("#{beta.users.external.count} ext",beta_users_external_path(beta) )
 
-        - if @current_user && @current_user.admin?
-          %td
-            = link_to(edit_beta_path(beta), :title => 'Edit') do
-              %i{:class => ['icon-red', 'icon-pencil']}
-            = link_to(beta, :title => 'Delete', :method => :delete, :data => { :confirm => 'Are you sure?' }) do
-              %i.icon-trash

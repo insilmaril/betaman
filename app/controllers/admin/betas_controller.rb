@@ -8,6 +8,9 @@ class Admin::BetasController < ApplicationController
     end
     
     @betas = Beta.all
+    @active_betas = Beta.active
+    @planned_betas = Beta.planned
+    @finished_betas = Beta.finished
   end
 
   def sync_downloads
