@@ -1,4 +1,5 @@
 require 'mail_helper'
+require 'diary'
 
 class SessionController < ApplicationController
   before_filter :current_user
@@ -6,13 +7,8 @@ class SessionController < ApplicationController
 
   protect_from_forgery :except => :callback
 
-  def index
-  end
-
-  def login
-  end
-
   def logout
+    Diary.logged_out @current_user
     clear_login
     redirect_to root_path
   end
@@ -23,6 +19,7 @@ class SessionController < ApplicationController
     email = auth_hash[:info][:email]
     provider = auth_hash[:provider]
 
+    # Debug only:
     #raise request.env["omniauth.auth"].to_yaml
 
     logger.info("*   uid: #{uid}")
@@ -106,6 +103,7 @@ class SessionController < ApplicationController
 
           user.accounts << Account.new(uid: uid)
           user.save!
+          Diary.account_created(user)
           UserMailer.admin_mail(
             "Account created for existing user",
             "    email: #{user.email}\n" +
@@ -115,14 +113,15 @@ class SessionController < ApplicationController
       end
     end
     # sign in
-    logger.info("* Signed in: #{user.accounts.first.uid} URL: #{@url} Cookies: #{@_cookies}")
-    flash[:success] = "You are signed in."
 
     # For the time being tell admin
     UserMailer.admin_mail("Signed in #{user.email}","User ID: #{user.id}").deliver
-    Blog.info "Signed in", user
+    Diary.logged_in(user)
+    Blog.info "Signed in #{user.logname} with #{uid}"
     
     session[:user_id] = user.id
+    flash[:success] = "You are signed in."
+
     redirect_to dashboard_path
   end
 

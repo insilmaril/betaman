@@ -1,5 +1,7 @@
 %h2 Admin Dashboard
 %hr
+%h4= link_to 'Diary', admin_diary_path
+
 %h4= "#{User.count} Users"
 %ul
   %li= link_to "List users", admin_users_path

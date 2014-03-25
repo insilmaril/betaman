@@ -55,6 +55,8 @@ Betaman::Application.routes.draw do
     get '/betas/sync_lists', controller: 'sync_lists', as: 'sync_lists'
     get '/betas/check', controller: 'check', as: 'check'
     get '/betas/inactive_participations', controller: 'inactive_participations', as: 'inactive_participations'
+    get '/diary/user/:user_id', to: 'diary#user', as: 'diary_user'
+    get '/diary', to: 'diary#index', as: 'diary'
     get '', to: 'dashboard#index', as: '/'
     resources :users 
     resources :betas

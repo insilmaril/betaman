@@ -1,0 +1,13 @@
+%table{border: 1}
+  %tr
+    %th Date
+    %th User
+    %th Event
+    %th Text
+
+  - @diary_entries.each do |d|
+    %tr
+      %td= d.created_at
+      %td= link_to d.user.logname, edit_user_path(d.user)
+      %td= d.event
+      %td= d.text

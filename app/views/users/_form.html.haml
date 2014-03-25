@@ -251,5 +251,6 @@
 
 
 - if @current_user.admin? 
+  = link_to('View diary', admin_diary_user_path(@user),  class: 'btn btn-info btn-small' )
   = link_to('Delete user', user_path(@user), :method => :delete, :data => { :confirm => 'Are you sure?' },  class: 'btn btn-danger btn-small' )
   
