@@ -85,7 +85,7 @@
                   - if p.beta.list.users.include?(@user)
                     subscribed
                   - else
-                    %font(color="FF0000")
+                    .warning-red
                       missing subscription
                 - else
                   n.a. 
@@ -93,7 +93,7 @@
                 -# Download
                 - if p.download_status =~/missing/ 
                   - if !@user.employee? 
-                    %font(color="FF0000")
+                    .warning-red
                       = p.download_status
                   - else
                     = p.download_status
@@ -103,7 +103,7 @@
                 -# Support
                 - if !p.support_req 
                   - if !@user.employee?
-                    %font(color="FF0000")
+                    .warning-red
                       missing
                   - else
                     missing

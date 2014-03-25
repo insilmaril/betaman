@@ -117,7 +117,7 @@
                     - if p.beta.list.users.include?(@user)
                       subscribed
                     - else
-                      %font(color="FF0000")
+                      .warning-red
                         missing subscription
                         - if @current_user.admin?
                           = link_to "Subscribe", list_subscribe_user_path(p.beta.list, user_id: @user.id), class: 'btn-small btn-warning'
@@ -127,7 +127,7 @@
                   -# Download
                   - if p.download_status =~/missing/ 
                     - if !@user.employee? 
-                      %font(color="FF0000")
+                      .warning-red
                         = p.download_status
                         - if @current_user.admin?
                           = link_to "Add", 'https://www.novell.com/beta/admin/GetAddCustomer.do?id=' + p.beta.novell_id, class: 'btn-small btn-success' 
@@ -139,7 +139,7 @@
                   -# Support
                   - if !p.support_req 
                     - if !@user.employee?
-                      %font(color="FF0000")
+                      .warning-red
                         missing
                     - else
                       missing
