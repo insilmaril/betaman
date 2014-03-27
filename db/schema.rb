@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140325084107) do
+ActiveRecord::Schema.define(:version => 20140327135943) do
 
   create_table "accounts", :force => true do |t|
     t.string   "uid"
@@ -60,6 +60,8 @@ ActiveRecord::Schema.define(:version => 20140325084107) do
     t.integer  "user_id"
     t.text     "text"
     t.string   "event"
+    t.integer  "beta_id"
+    t.integer  "actor_id"
   end
 
   create_table "groups", :force => true do |t|

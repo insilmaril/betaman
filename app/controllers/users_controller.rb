@@ -160,6 +160,7 @@ class UsersController < ApplicationController
       msg = "#{@user.id} (#{@user.email}) added to Beta #{beta.name}"
       flash[:success] = msg
       Blog.info msg, @current_user
+      Diary.added_user_to_beta @user, beta, @current_user
     else
       flash[:warning] = "#{@user.full_name} is already participant of #{beta.name}"
     end
