@@ -12,6 +12,10 @@
       %td= d.created_at
       %td= link_to d.user.logname, edit_user_path(d.user)
       %td= d.event
-      %td= d.beta.try(:name)
-      %td= d.actor
+      %td
+        - if !d.beta.nil?
+          = link_to d.beta.name, beta_path(d.beta)
+      %td
+        - if !d.actor.nil?
+          = link_to d.actor.try(:logname), edit_user_path(d.actor)
       %td= d.text

@@ -23,6 +23,10 @@ class Diary
     write "User #{user.id} added to beta #{beta.id} by actor #{actor.id}", user: user, event: 'added_user_to_beta', beta: beta, actor: actor
   end
 
+  def self.removed_user_from_beta user, beta, actor
+    write "User #{user.id} removed from beta #{beta.id} by actor #{actor.id}", user: user, event: 'removed_user_from_beta', beta: beta, actor: actor
+  end
+
   def self.write text, args = {}
     d = DiaryEntry.new
     d.text    = text

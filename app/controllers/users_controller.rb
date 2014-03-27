@@ -180,6 +180,7 @@ class UsersController < ApplicationController
       msg = "#{@user.logname} removed from #{beta.logname}" 
       flash[:success] = msg
       Blog.info msg, @current_user
+      Diary.removed_user_from_beta @user, beta, @current_user
     end
     redirect_to :back
   end
