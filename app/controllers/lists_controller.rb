@@ -158,6 +158,7 @@ class ListsController < ApplicationController
         msg = "Subscribed #{user.logname} to #{list.name}"
         flash[:success] = msg
         Blog.info msg, @current_user
+        Diary.subscribed_user_to_list user, list, @current_user
       else
         msg = "Subscribing #{user.email} to #{list.name} failed"
         flash[:error] = msg
@@ -181,6 +182,7 @@ class ListsController < ApplicationController
         msg = "Unsubscribing #{user.email} from #{list.logname} failed"
         flash[:error] = msg
         Blog.warn msg, @current_user
+        Diary.unsubscribed_user_from_list user, list, @current_user
       end
     end
     redirect_to :back
