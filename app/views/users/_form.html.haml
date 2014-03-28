@@ -150,7 +150,7 @@
                   = link_to(user_edit_participation_path(@user, participation_id: p)) do
                     =p.note
                 %td
-                  = link_to(user_remove_beta_path(@user, beta_id: p.beta), data: { :confirm => 'Are you sure?'} ) do
+                  = link_to(beta_remove_user_path(p.beta, user_id: @user), data: { :confirm => 'Are you sure?'} ) do
                     %i.icon-trash
                   = link_to(user_edit_participation_path(@user, participation_id: p)) do
                     %i.icon-pencil
@@ -169,7 +169,7 @@
                           %b.caret
                         %ul.dropdown-menu
                           - @available_betas.each do |beta|
-                            %li= link_to beta.name, user_add_beta_path(@user, beta_id: beta)
+                            %li= link_to beta.name, beta_add_user_path(beta, user_id: @user)
 
                 - if !@available_finished_betas.empty?
                   %tr
@@ -180,7 +180,7 @@
                           %b.caret
                         %ul.dropdown-menu
                           - @available_finished_betas.each do |beta|
-                            %li= link_to beta.name, user_add_beta_path(@user, beta_id: beta)
+                            %li= link_to beta.name, beta_add_user_path(beta, user_id: @user)
 
     %tr
       %td.right.top.bold Groups

@@ -167,6 +167,7 @@ class BetasController < ApplicationController
           if (u)
             @beta.users << u
             ulist << "#{u.id} (#{u.email})"
+            Diary.added_user_to_beta u, @beta, @current_user
           end
         end
         flash[:success] = "Added #{s} to #{@beta.name}"
@@ -213,6 +214,7 @@ class BetasController < ApplicationController
         msg = "Removed #{user.full_name} from #{@beta.name}"
         flash[:success] = msg
         Blog.info msg, @current_user
+        Diary.removed_user_from_beta user, @beta, @current_user
       else
         flash[:warning] = "User #{user.full_name} is not a member of beta #{@beta.logname}!"
       end

@@ -152,39 +152,6 @@ class UsersController < ApplicationController
     init_instance_variables
   end
 
-  def add_beta
-    init_instance_variables
-    beta = Beta.find(params[:beta_id])
-    if !@betas.include? beta
-      @betas << beta
-      msg = "#{@user.id} (#{@user.email}) added to Beta #{beta.name}"
-      flash[:success] = msg
-      Blog.info msg, @current_user
-      Diary.added_user_to_beta @user, beta, @current_user
-    else
-      flash[:warning] = "#{@user.full_name} is already participant of #{beta.name}"
-    end
-
-    redirect_to :back
-  end
-
-  def remove_beta
-    init_instance_variables
-    if !@current_user.admin?
-      msg = 'Permission denied'
-      flash[:error] = msg
-      Blog.warn msg, @current_user
-    else
-      beta = Beta.find(params[:beta_id])
-      beta.users.delete(@user)
-      msg = "#{@user.logname} removed from #{beta.logname}" 
-      flash[:success] = msg
-      Blog.info msg, @current_user
-      Diary.removed_user_from_beta @user, beta, @current_user
-    end
-    redirect_to :back
-  end
-
   def add_address
     user = User.find(params[:id])
     if user.address
