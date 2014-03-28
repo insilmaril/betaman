@@ -135,6 +135,8 @@
                       = p.download_status
                       - if @current_user.admin?
                         = link_to "Add", 'https://www.novell.com/beta/admin/GetAddCustomer.do?id=' + p.beta.novell_id, class: 'btn-small btn-success'
+                  - else
+                    available
                 %td.center
                   -# Support
                   - if !p.support_req 
