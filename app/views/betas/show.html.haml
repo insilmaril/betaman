@@ -98,8 +98,9 @@
   - if @current_user.admin?
     = link_to 'Edit', edit_beta_path(@beta),  class: 'btn-info btn-small' 
     = link_to 'Add participants', beta_add_select_users_path,  class: 'btn-info btn-small' 
-    = link_to('Delete beta', @beta, :method => :delete, :confirm => 'Are you sure?', class: 'btn-warning btn-small' ) 
+    = link_to('Delete beta', @beta, :method => :delete, :confirm => 'Are you sure?', class: 'btn-danger btn-small' ) 
 
   - if !@beta.users.include?(@current_user)
-    = link_to 'Join', beta_add_user_path(@beta, user_id: @current_user), class: 'btn-success btn-small' 
-
+    = link_to 'Join', beta_join_path(@beta), class: 'btn-success btn-small' 
+  - else
+    = link_to 'Leave', beta_leave_path(@beta), class: 'btn-warning btn-small' 
