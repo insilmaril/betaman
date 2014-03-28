@@ -27,6 +27,14 @@ class Diary
     write "User #{user.id} removed from beta #{beta.id} by actor #{actor.id}", user: user, event: 'removed_user_from_beta', beta: beta, actor: actor
   end
 
+  def self.subscribe_user_to_list user, list, actor
+    write "User #{user.id} subscribed to list #{list.id} by actor #{actor.id}", user: user, event: 'subscribe_user_to_list', list: list, actor: actor
+  end
+
+  def self.unsubscribe_user_from_list user, list, actor
+    write "User #{user.id} unsubscribed from list #{list.id} by actor #{actor.id}", user: user, event: 'unsubscribe_user_from_list', list: list, actor: actor
+  end
+
   def self.write text, args = {}
     d = DiaryEntry.new
     d.text    = text
