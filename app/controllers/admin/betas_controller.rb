@@ -41,34 +41,6 @@ class Admin::BetasController < ApplicationController
     @betas_with_downloads = DownloadHelper.find_betas_with_downloads
   end
 
-  def update_downloads  # FIXME not used atm
-    # Find betas with downloads
-    @betas = []
-    @users_added = {}
-    Beta.all.each do |beta|
-      if beta.has_novell_download?
-        Blog.info "Beta #{beta.name} - Update downloads:"
-
-        @betas << beta
-        @users_added[beta.id] = []
-
-        beta.sync_downloads_to_intern
-        
-        # Find beta users, who are external and should have download
-        beta.users.external.each do |user|
-          p = user.participations.where("beta_id = ? AND (downloads_act IS NULL OR downloads_act = false)", beta.id)
-          if p.count > 0
-            Blog.info "  #{user.id} #{user.email}: Download missing"
-            @users_added[beta.id] << user
-          else
-            Blog.info "  #{user.id} #{user.email}: Download ok"
-          end
-        end
-      end
-    end
-
-  end
-
   def inactive_participations
   end
 end
