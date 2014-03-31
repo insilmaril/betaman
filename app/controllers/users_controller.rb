@@ -136,6 +136,7 @@ class UsersController < ApplicationController
       msg = "Deleted #{@user.logname}"
       flash[:success] = msg
       Blog.info "Deleted #{@user.logname}", @current_user
+      Diary.user_deleted @user, @current_user
       @user.destroy
 
       respond_to do |format|

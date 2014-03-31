@@ -44,6 +44,10 @@ class Diary
   end
 
 
+  def self.user_deleted user, actor
+    write "User #{user.id} deleted by actor #{actor.id}", user: user, event: 'user_deleted', actor: actor
+  end
+
   def self.write text, args = {}
     d = DiaryEntry.new
     d.text    = text
