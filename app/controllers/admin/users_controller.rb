@@ -47,6 +47,7 @@ class Admin::UsersController < ApplicationController
           u.save
           @users_employee_added << u
           Blog.info "Update roles: Added to employees: #{u.id} - #{u.email}"
+          Diary.got_employee_role u, @current_user
         end
       else
         #User is external according to email domain
@@ -55,6 +56,7 @@ class Admin::UsersController < ApplicationController
           u.save
           @users_employee_dropped << u
           Blog.info "Update roles: Dropped from employees: #{u.id} - #{u.email}"
+          Diary.dropped_employee_role u, @current_user
         end
       end
     end

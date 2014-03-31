@@ -35,6 +35,15 @@ class Diary
     write "User #{user.id} unsubscribed from list #{list.id} by actor #{actor.id}", user: user, event: 'unsubscribe_user_from_list', list: list, actor: actor
   end
 
+  def self.got_employee_role user, actor
+    write "User #{user.id} got employee role by actor #{actor.id}", user: user, event: 'got_employee_role', actor: actor
+  end
+
+  def self.dropped_employee_role user, actor
+    write "User #{user.id} dropped employee role by actor #{actor.id}", user: user, event: 'dropped_employee_role', actor: actor
+  end
+
+
   def self.write text, args = {}
     d = DiaryEntry.new
     d.text    = text
