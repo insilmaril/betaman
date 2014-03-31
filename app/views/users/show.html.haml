@@ -132,7 +132,7 @@
               =link_to(group.name, admin_group_path(group) )
               =link_to(remove_user_admin_group_path(group, user_id: @user) ) do
                 %i.icon-trash
-        - if @current_user.admin? && !@available_groups.empty?
+        - if @current_user.admin? && !@available_groups.nil?
           - if !@user.id
             n.a.
           - else
