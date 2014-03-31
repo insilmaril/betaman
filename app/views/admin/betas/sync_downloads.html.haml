@@ -8,10 +8,25 @@
       %td= b[:beta].participations.count
     %tr
       %td.right Downloads added:
-      %td= b[:added]
+      - if b[:added].count == 0
+        %td -
+      - else
+        %td
+          %table
+            - b[:added].each do |u|
+              %tr
+                %td= link_to u.logname, user_path(u)
+
     %tr
       %td.right Downloads dropped:
-      %td= b[:dropped]
+      - if b[:dropped].count == 0
+        %td -
+      - else
+        %td
+          %table
+            - b[:dropped].each do |u|
+              %tr
+                %td= link_to u.logname, user_path(u)
 
 %br
 %br

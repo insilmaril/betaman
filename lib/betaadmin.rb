@@ -195,9 +195,11 @@ class BetaAdmin
 
     csv = CSV.parse(s)
 
-    emails_found = []
-    users_created = []
+    emails_found      = []
+    users_created     = []
     companies_created = []
+    downloads_added   = []
+    downloads_dropped = []
 
     csv.drop(5).each do |r|  
       changed = false
@@ -235,9 +237,6 @@ class BetaAdmin
       end # email found
     end  # CSV
 
-    padded = 0
-    pdropped = 0
-
     Participation.where("beta_id = ?",beta.id).each do |p|
       if emails_found.include?(p.user.email.downcase) || 
         (!p.user.alt_email.blank? && emails_found.include?(p.user.alt_email.downcase) )
@@ -245,20 +244,19 @@ class BetaAdmin
           Blog.info "  Adding download flag for #{p.user.logname}"
           p.downloads_act = true
           p.save
-          padded += 1
+          downloads_added << p.user
         end
       else
-        if p.downloads_act.nil? || p.downloads_act == true
-          if p.downloads_act == true
-            Blog.info "  Removing download flag for #{p.user.logname}"
-            puts "  Removing download flag for #{p.user.logname}"
-          end
+        if p.downloads_act.nil? 
+          # Initialize download flag
           p.downloads_act = false
           p.save
-          pdropped += 1
+        elsif p.downloads_act == true
+          Blog.info "  Removing download flag for #{p.user.logname}"
+          downloads_dropped << p.user
         end
       end
     end
-    return {added: padded, dropped: pdropped }
+    return {added: downloads_added, dropped: downloads_dropped }
   end
 end
