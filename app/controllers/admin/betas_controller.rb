@@ -31,7 +31,13 @@ class Admin::BetasController < ApplicationController
     Beta.all.each do |b|
       if !b.list.blank?
         r = b.list.sync_to_intern
-        @betas_with_lists << { beta: b, added: r[:added], dropped: r[:dropped], created: r[:created] }
+        @betas_with_lists << { 
+          beta: b, 
+          added_to_list: r[:added_to_list], 
+          dropped_from_list: r[:dropped_from_list], 
+          created: r[:created],
+          added_to_beta: r[:added_to_beta]
+        }
       end
     end
   end

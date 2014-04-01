@@ -17,18 +17,23 @@ class List < ActiveRecord::Base
 
     subscribers = mech.subscribers
 
-    users_created = []
-    users_added   = []
-
+    r = { 
+      created: [],
+      added_to_list: [],
+      added_to_beta: [],
+      dropped_from_list: []
+    }
+      
     # Eliminate duplicates
     users.uniq!
 
     subscribers.map{|s| s.downcase }.each do |s|
       u = User.find_by_email(s)
       if  u
+        # Try to add to list
         if !users.include? u
           users << u
-          users_added << u
+          r[:added_to_list] << u
         end
       else
         # Try alternate email
@@ -36,7 +41,7 @@ class List < ActiveRecord::Base
         if  u
           if !users.include? u
             users << u
-            users_added << u
+            r[:added_to_list] << u
           end
         else
           # puts "Create user for email #{s} !"
@@ -46,31 +51,37 @@ class List < ActiveRecord::Base
           s =~ /(.*)@/
           u.last_name = $1 if $1
           u.save
-          users_created << u
-          users_added << u
           users << u
+          r[:created] << u
+          r[:added_to_list] << u
         end
+      end
+        
+      # Try to add to beta
+      if beta && beta.add_user(u)
+        r[:added_to_beta] << u 
       end
     end
 
-    users_dropped = []
     users.each do |u|
       email = u.email ||= ""
       alt_email = u.alt_email ||= ""
       if !subscribers.include?(email.downcase) && !subscribers.include?(alt_email.downcase)
-        users_dropped << u
+        r[:dropped_from_list] << u
       end
 
     end
-    users_dropped.each do |u|
+    r[:dropped_from_list].each do |u|
       users.delete u
     end
 
     Blog.info "#{logname} sync_to_intern called:"
-    Blog.info "    Added: #{users_added.map{|u| u.logname}.join(', ')}"
-    Blog.info "  Created: #{users_created.map{|u| u.logname}.join(', ')}"
-    Blog.info "  Dropped: #{users_dropped.map{|u| u.logname}.join(', ')}"
-    return {added: users_added, dropped: users_dropped, created: users_created}
+    Blog.info "          Created: #{r[:created].map{|u| u.logname}.join(', ')}"
+    Blog.info "    Added to list: #{r[:added_to_list].map{|u| u.logname}.join(', ')}"
+    Blog.info "    Added to beta: #{r[:added_to_beta].map{|u| u.logname}.join(', ')}"
+    Blog.info "          Dropped: #{r[:dropped_from_list].map{|u| u.logname}.join(', ')}"
+
+    return r
   end
 
   def subscribe(user)

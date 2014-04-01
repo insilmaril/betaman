@@ -19,8 +19,9 @@ class Diary
     write 'left beta', user: user, event: 'left_beta', beta: beta
   end
 
-  def self.added_user_to_beta user, beta, actor
-    write "User #{user.id} added to beta #{beta.id} by actor #{actor.id}", user: user, event: 'added_user_to_beta', beta: beta, actor: actor
+  def self.added_user_to_beta param = {} 
+    # write "User #{user.id} added to beta #{beta.id}", param
+    write 'User added to beta', event: 'added_user_to_beta', user: param[:user], beta: param[:beta]
   end
 
   def self.removed_user_from_beta user, beta, actor
@@ -52,13 +53,13 @@ class Diary
     write "User #{user.id} company changed by actor #{actor.id}", user: user, event: 'company_changed', actor: actor
   end
 
-  def self.write text, args = {}
+  def self.write text, param = {}
     d = DiaryEntry.new
     d.text    = text
-    d.event   = args[:event]
-    d.user_id = args[:user].try(:id)
-    d.beta_id = args[:beta].try(:id)
-    d.actor_id = args[:actor].try(:id)
+    d.event   = param[:event]
+    d.user_id = param[:user].try(:id)
+    d.beta_id = param[:beta].try(:id)
+    d.actor_id = param[:actor].try(:id)
     d.save
   end
 end

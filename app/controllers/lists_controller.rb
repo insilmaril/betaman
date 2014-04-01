@@ -104,11 +104,11 @@ class ListsController < ApplicationController
   def sync_to_intern
     list = List.find(params[:id])
     r = list.sync_to_intern
-    if r[:added].count > 0 || r[:created].count > 0
-      flash[:success] = "#{r[:added].count} users added to internal list, #{r[:created].count} of them created new"
+    if r[:added_to_list].count > 0 || r[:created].count > 0
+      flash[:success] = "#{r[:added_to_list].count} users added to internal list, #{r[:created].count} of them created new"
     end
-    if r[:dropped].count > 0
-      flash[:warning] = "#{r[:removed].count} users dropped from internal list"
+    if r[:dropped_from_list].count > 0
+      flash[:warning] = "#{r[:dropped_from_list].count} users dropped from internal list"
     end
 
     redirect_to :back
