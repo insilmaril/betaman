@@ -42,14 +42,6 @@ describe UsersController do
       end
     end
 
-    describe 'remove beta participation' do
-      it 'flashes error message' do
-        user = FactoryGirl.create(:user_with_beta) #valid_attributes
-        request.env["HTTP_REFERER"] = root_path
-        get :remove_beta, { id:  user.to_param, beta_id: user.betas.first.to_param} 
-        flash[:error].should eql "Permission denied"
-      end
-    end
   end
 end
 

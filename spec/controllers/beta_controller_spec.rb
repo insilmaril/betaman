@@ -31,6 +31,27 @@ describe BetasController do
       assert_not_nil assigns(:beta)
       assert_not_nil assigns(:users)
     end
+
+    describe "adding users" do
+      it "add user to beta has flash messages" do
+        beta = FactoryGirl.create(:beta)
+        user = FactoryGirl.create(:user)
+        request.env["HTTP_REFERER"] = root_path
+        get :add_user, {id: beta.to_param, user_id: user.to_param}
+        flash[:success].should have_content "Added"
+      end
+    end
+
+=begin
+    it 'removes beta participation' do
+      it 'flashes error message' do
+        user = FactoryGirl.create(:user_with_beta) #valid_attributes
+        request.env["HTTP_REFERER"] = root_path
+        get :remove_beta, { id:  user.to_param, beta_id: user.betas.first.to_param} 
+        flash[:error].should eql "Permission denied"
+      end
+    end
+=end
   end
 end
 

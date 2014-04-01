@@ -64,7 +64,7 @@ describe Admin::GroupsController do
         user = @group.users.first
         user.id.should_not  == @user_group_id
 
-        flash[:success].should eql "Finished merge: Deleted 1 and updated 1 users"
+        flash[:success].should have_content "Finished merge: Deleted 1 and updated 1 users"
 
       end
     end

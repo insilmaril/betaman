@@ -17,8 +17,6 @@ describe "GET /users" do
     employee = FactoryGirl.create(:user_employee)
     test_login(employee)
     visit users_path
-    puts "\nPage employee:"
-    print page.html
     current_path.should == users_path
   end
     
