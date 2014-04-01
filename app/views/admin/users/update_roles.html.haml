@@ -6,7 +6,7 @@
 - else
   %ul
     - @users_employee_added.each do |u|
-      %li= link_to u.email, user_path(u)
+      %li= link_to u.logname, edit_user_path(u)
 
 %h4 Employees roles dropped
 - if @users_employee_dropped.count == 0
@@ -14,7 +14,16 @@
 - else
   %ul
     - @users_employee_dropped.each do |u|
-      %li= u.full_name
+      %li= link_to u.logname, user_path(u)
+
+%h4 Company changed
+- if @users_company_changed.count == 0
+  None
+- else
+  %ul
+    - @users_company_changed.each do |u|
+      %li= link_to u.logname, user_path(u)
+
 %br
 %br
 %p

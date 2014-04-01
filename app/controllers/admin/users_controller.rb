@@ -18,8 +18,9 @@ class Admin::UsersController < ApplicationController
   end
 
   def update_roles
-    @users_employee_added = []
+    @users_employee_added   = []
     @users_employee_dropped = []
+    @users_company_changed  = []
 
     suse = Company.where( name: "SUSE").first
     if suse.nil?
@@ -38,24 +39,28 @@ class Admin::UsersController < ApplicationController
         # User is employee according to email domain
         if !u.employee?
           u.make_employee
-          if /suse\.(de|com|cz)$/.match(u.email)
-            u.company = suse
-          elsif /novell\.com$/.match(u.email)
-            u.company = suse
-          end
-
-          u.save
           @users_employee_added << u
-          Blog.info "Update roles: Added to employees: #{u.id} - #{u.email}"
+          Blog.info "Update roles: Added to employees: #{u.logname}"
           Diary.got_employee_role u, @current_user
         end
+        if /suse\.(de|com|cz)$/.match(u.email) && u.company != suse
+          u.company = suse
+          @users_company_changed << u
+          Diary.company_changed u, @current_user
+          Blog.info "Update roles:    Company changed: #{u.logname}"
+        elsif /novell\.com$/.match(u.email) && u.company != novell
+          u.company = novell
+          @users_company_changed << u
+          Diary.company_changed u, @current_user
+        end
+        u.save
       else
         #User is external according to email domain
         if u.employee?
           u.drop_employee
           u.save
           @users_employee_dropped << u
-          Blog.info "Update roles: Dropped from employees: #{u.id} - #{u.email}"
+          Blog.info "Update roles: Dropped from employees: #{u.logname}"
           Diary.dropped_employee_role u, @current_user
         end
       end

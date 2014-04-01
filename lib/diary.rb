@@ -48,6 +48,10 @@ class Diary
     write "User #{user.id} deleted by actor #{actor.id}", user: user, event: 'user_deleted', actor: actor
   end
 
+  def self.company_changed user, actor
+    write "User #{user.id} company changed by actor #{actor.id}", user: user, event: 'company_changed', actor: actor
+  end
+
   def self.write text, args = {}
     d = DiaryEntry.new
     d.text    = text
