@@ -41,17 +41,17 @@ class Admin::UsersController < ApplicationController
           u.make_employee
           @users_employee_added << u
           Blog.info "Update roles: Added to employees: #{u.logname}"
-          Diary.got_employee_role u, @current_user
+          Diary.got_employee_role user: u, actor: @current_user
         end
         if /suse\.(de|com|cz)$/.match(u.email) && u.company != suse
           u.company = suse
           @users_company_changed << u
-          Diary.company_changed u, @current_user
+          Diary.company_changed user: u, actor: @current_user
           Blog.info "Update roles:    Company changed: #{u.logname}"
         elsif /novell\.com$/.match(u.email) && u.company != novell
           u.company = novell
           @users_company_changed << u
-          Diary.company_changed u, @current_user
+          Diary.company_changed user: u, actor: @current_user
         end
         u.save
       else
@@ -61,7 +61,7 @@ class Admin::UsersController < ApplicationController
           u.save
           @users_employee_dropped << u
           Blog.info "Update roles: Dropped from employees: #{u.logname}"
-          Diary.dropped_employee_role u, @current_user
+          Diary.dropped_employee_role user: u, actor: @current_user
         end
       end
     end

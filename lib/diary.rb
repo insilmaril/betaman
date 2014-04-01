@@ -11,46 +11,45 @@ class Diary
     write 'logged out', user: user, event: 'logged_out'
   end
 
-  def self.joined_beta user, beta
-    write 'joined beta', user: user, event: 'joined_beta', beta: beta
+  def self.joined_beta param = {}
+    write 'joined beta', param.merge({event: 'joined_beta'})
   end
 
-  def self.left_beta user, beta
-    write 'left beta', user: user, event: 'left_beta', beta: beta
+  def self.left_beta param = {}
+    write 'left beta', param.merge({event: 'left_beta'})
   end
 
   def self.added_user_to_beta param = {} 
-    # write "User #{user.id} added to beta #{beta.id}", param
-    write 'User added to beta', event: 'added_user_to_beta', user: param[:user], beta: param[:beta]
+    write 'Added to beta', param.merge({event: 'added_user_to_beta'})
   end
 
-  def self.removed_user_from_beta user, beta, actor
-    write "User #{user.id} removed from beta #{beta.id} by actor #{actor.id}", user: user, event: 'removed_user_from_beta', beta: beta, actor: actor
+  def self.removed_user_from_beta param = {}
+    write 'Removed from beta', param.merge({event: 'removed_user_from_beta'})
   end
 
-  def self.subscribed_user_to_list user, list, actor
-    write "User #{user.id} subscribed to list #{list.id} by actor #{actor.id}", user: user, event: 'subscribe_user_to_list', list: list, actor: actor
+  def self.subscribed_user_to_list param = {}
+    write "User subscribed to list", param.merge({event: 'subscribed_user_to_list'})
   end
 
-  def self.unsubscribed_user_from_list user, list, actor
-    write "User #{user.id} unsubscribed from list #{list.id} by actor #{actor.id}", user: user, event: 'unsubscribe_user_from_list', list: list, actor: actor
+  def self.unsubscribed_user_from_list param = {}
+    write "User unsubscribed from list", param.merge({event: 'unsubscribed_user_from_list'})
   end
 
-  def self.got_employee_role user, actor
-    write "User #{user.id} got employee role by actor #{actor.id}", user: user, event: 'got_employee_role', actor: actor
+  def self.got_employee_role param = {} 
+    write "got role employee", param.merge({event: 'got_employee_role'})
   end
 
-  def self.dropped_employee_role user, actor
-    write "User #{user.id} dropped employee role by actor #{actor.id}", user: user, event: 'dropped_employee_role', actor: actor
+  def self.dropped_employee_role param = {}
+    write "dropped employee role", param.merge({event: 'dropped_employee_role'})
   end
 
 
-  def self.user_deleted user, actor
-    write "User #{user.id} deleted by actor #{actor.id}", user: user, event: 'user_deleted', actor: actor
+  def self.user_deleted param = {}
+    write "User deleted", param.merge({event: 'user_deleted'})
   end
 
-  def self.company_changed user, actor
-    write "User #{user.id} company changed by actor #{actor.id}", user: user, event: 'company_changed', actor: actor
+  def self.company_changed param = {}
+    write "Company changed", param.merge({event: 'company_changed'})
   end
 
   def self.write text, param = {}
@@ -60,6 +59,7 @@ class Diary
     d.user_id = param[:user].try(:id)
     d.beta_id = param[:beta].try(:id)
     d.actor_id = param[:actor].try(:id)
+    d.list_id = param[:list].try(:id)
     d.save
   end
 end

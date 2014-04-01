@@ -140,7 +140,7 @@ class BetasController < ApplicationController
         msg = "Added #{user.full_name} to #{@beta.name}"
         flash[:success] = msg
         Blog.info msg, @current_user
-        Diary.added_user_to_beta user, @beta, @current_user
+        Diary.added_user_to_beta user: user, beta: @beta, actor: @current_user
       else
         flash[:warning] = "#{user.full_name} is already member of #{@beta.name}"
       end
@@ -167,7 +167,7 @@ class BetasController < ApplicationController
           if (u)
             @beta.users << u
             ulist << "#{u.id} (#{u.email})"
-            Diary.added_user_to_beta u, @beta, @current_user
+            Diary.added_user_to_beta user: u, beta: @beta, actor: @current_user
           end
         end
         flash[:success] = "Added #{s} to #{@beta.name}"
@@ -214,7 +214,7 @@ class BetasController < ApplicationController
         msg = "Removed #{user.full_name} from #{@beta.name}"
         flash[:success] = msg
         Blog.info msg, @current_user
-        Diary.removed_user_from_beta user, @beta, @current_user
+        Diary.removed_user_from_beta user: user, beta: @beta, actor: @current_user
       else
         flash[:warning] = "User #{user.full_name} is not a member of beta #{@beta.logname}!"
       end
@@ -267,7 +267,7 @@ class BetasController < ApplicationController
         "       ID: #{@current_user.id}\n" +
         "Please adjust list subscriptions manually").deliver
     end
-    Diary.joined_beta @current_user, @beta
+    Diary.joined_beta user: @current_user, beta: @beta
 
     redirect_to :back
   end
@@ -287,7 +287,7 @@ class BetasController < ApplicationController
         "Please adjust list subscriptions manually").deliver
     end
 
-    Diary.left_beta @current_user, @beta
+    Diary.left_beta user: @current_user, beta: @beta
 
     redirect_to :back
   end
