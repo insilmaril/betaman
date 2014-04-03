@@ -1,7 +1,5 @@
 class DashboardController < ApplicationController
   def index
-    @betas = Beta.where( id: -1)
-
     @betas = @current_user.betas if @current_user
     @available_betas = Beta.not_finished - @betas
 
