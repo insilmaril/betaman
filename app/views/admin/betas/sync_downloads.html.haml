@@ -7,7 +7,7 @@
       %td.right Participations:
       %td= b[:beta].participations.count
     %tr
-      %td.right Downloads added:
+      %td.right.top Downloads added:
       - if b[:added].count == 0
         %td -
       - else
@@ -18,7 +18,7 @@
                 %td= link_to u.logname, user_path(u)
 
     %tr
-      %td.right Downloads dropped:
+      %td.right.top Downloads dropped:
       - if b[:dropped].count == 0
         %td -
       - else
