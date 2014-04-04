@@ -135,12 +135,10 @@ class BetasController < ApplicationController
     user = User.find(params[:user_id])
 
     if @current_user.admin?
-      if !@beta.users.include? user
-        @beta.users << user
+      if @beta.add_user user, @current_user
         msg = "Added #{user.full_name} to #{@beta.name}"
         flash[:success] = msg
         Blog.info msg, @current_user
-        Diary.added_user_to_beta user: user, beta: @beta, actor: @current_user
       else
         flash[:warning] = "#{user.full_name} is already member of #{@beta.name}"
       end

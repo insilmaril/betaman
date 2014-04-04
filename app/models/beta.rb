@@ -18,10 +18,10 @@ class Beta < ActiveRecord::Base
   scope :finished, where('betas.end < ?', Date.today)
   scope :not_finished, where('betas.end >= ?', Date.today)
 
-  def add_user(user)
+  def add_user(user, actor = nil)
     if !self.users.include? user
       self.users << user
-      Diary.added_user_to_beta user: user, beta: self
+      Diary.added_user_to_beta user: user, beta: self, actor: actor
       return true
     end
     return false
