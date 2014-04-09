@@ -1,61 +1,129 @@
-= form_for @user do |f|
-  - if @user.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@user.errors.count, "error")} prohibited this user from being saved:"
-      %ul
-        - @user.errors.full_messages.each do |msg|
-          %li= msg
+- if @current_user.admin? 
+  %p
+    = link_to('View diary', admin_diary_user_path(@user),  class: 'btn btn-info btn-mini' )
+    = link_to('Delete user', user_path(@user), :method => :delete, :data => { :confirm => 'Are you sure?' },  class: 'btn btn-danger btn-mini' )
 
+.border
+  = form_for @user do |f|
+    - if @user.errors.any?
+      #error_explanation
+        %h2= "#{pluralize(@user.errors.count, "error")} prohibited this user from being saved:"
+        %ul
+          - @user.errors.full_messages.each do |msg|
+            %li= msg
+
+    %ul.nav.nav-tabs{ :id => 'myTab'}
+      %li.active 
+        %a{"data-toggle" => "tab", :href => "#general"}
+          User
+      %li
+        %a{"data-toggle" => "tab", :href => "#address"}
+          Address
+
+    .tab-content#myTabContent
+      %div{:class => 'tab-pane active', :id => 'general'}
+        %table{width: "100%"}
+          %tr
+            %th{width: "10%"}
+            %th{width: "40%"}
+            %th{width: "10%"}
+            %th{width: "40%"}
+          %tr
+            %td.right.bold.top
+              Last name
+            %td
+              = f.text_field :last_name
+
+            %td.right.bold.top
+              Login name
+            %td
+              = f.text_field 'login_name'
+
+          %tr
+            %td.right.bold.top
+              First name
+            %td
+              = f.text_field :first_name
+            - if @current_user.admin?
+              %td.right.bold.top(rowspan = "3")
+                Note
+              %td.top(rowspan = "6")
+                = f.text_area(:note, cols: 80, rows: 5)
+          %tr
+            %td.right.bold.top
+              Title
+            %td
+              = f.text_field :title
+          %tr
+            .field
+              %td.right.bold.top
+                Email
+              %td
+                = f.text_field :email
+          %tr
+            .field
+              %td.right.bold.top
+                alt. Email
+              %td
+                = f.text_field :alt_email
+          %tr
+            %td.right.bold.top
+              Company
+            %td.middle
+              = collection_select(:user, :company_id, Company.order('name ASC'), :id, :name, prompt: true, width: "100%" )
+            %td.top
+              = link_to 'Add', new_company_path, class: 'btn btn-mini'  
+
+
+      %div{:class => 'tab-pane', :id => 'address'}
+        - if @user.address
+          %table{width: "100%"}
+            %tr
+              %th{width: "10%"}
+              %th{width: "40%"}
+              %th{width: "10%"}
+              %th{width: "40%"}
+            = f.fields_for :address do |af|
+              %tr
+                %td.right.top.bold Telephone
+                %td= af.text_field :phone
+
+                %td.right.top.bold City
+                %td= af.text_field :city
+              %tr
+                %td.right.top.bold Street Address
+                %td= af.text_field :address1
+              
+                %td.right.top.bold Zip/Postal code
+                %td= af.text_field :zip
+              %tr
+                %td.right.top.bold Adress 2
+                %td= af.text_field :address2
+
+                %td.right.top.bold Country
+                %td= af.text_field :country
+              %tr
+                %td.right.top.bold Adress 3
+                %td= af.text_field :address3
+
+                %td.right.top.bold State/Province
+                %td= af.text_field :state
+        - else
+          %tr
+            %td.right.top.bold Address
+          %td
+            = link_to('Add address', user_add_address_path(@user), class: 'btn btn-mini btn-mini' ) 
+
+    .actions
+      = f.submit 'Save', class: 'btn btn-success btn-mini'
+
+.border
   %table{width: "100%"}
     %tr
       %th{width: "10%"}
       %th{width: "40%"}
       %th{width: "10%"}
       %th{width: "40%"}
-    %tr
-      %td.right.bold.top
-        Last name
-      %td
-        = f.text_field :last_name
-
-        %td.right.bold.top
-          Login name
-        %td= f.text_field 'login_name'
-
-    %tr
-      %td.right.bold.top
-        First name
-      %td
-        = f.text_field :first_name
-      - if @current_user.admin?
-        %td.right.bold.top(rowspan = "6")
-          Note
-        %td.top(rowspan = "6")= f.text_area(:note, cols: 80, rows: 5)
-    %tr
-      %td.right.bold.top
-        Title
-      %td
-        = f.text_field :title
-    %tr
-      .field
-        %td.right.bold.top
-          Email
-        %td= f.text_field :email
-    %tr
-      .field
-        %td.right.bold.top
-          alt. Email
-        %td= f.text_field :alt_email
-    %tr
-      %td.right.bold.top
-        Company
-      %td
-        %table
-          %tr
-            %td
-              = collection_select(:user, :company_id, Company.order('name ASC'), :id, :name, prompt: true, width: "100%" )
-          %tr
-            %td= link_to 'Add company', new_company_path, class: 'btn btn-mini'  
 
     %tr
       %td.right.bold.top
@@ -130,42 +198,10 @@
             %tr
               %td=link_to account.uid
 
-    - if @user.address
-      = f.fields_for :address do |af|
-        %tr
-          %td.right.top.bold Telephone
-          %td= af.text_field :phone
 
-          %td.right.top.bold City
-          %td= af.text_field :city
-        %tr
-          %td.right.top.bold Street Address
-          %td= af.text_field :address1
-        
-          %td.right.top.bold Zip/Postal code
-          %td= af.text_field :zip
-        %tr
-          %td.right.top.bold Adress 2
-          %td= af.text_field :address2
+:javascript
+  $('#myTab a').click(function (e) {
+    e.preventDefault()
+    $(this).tab('show')
+  })
 
-          %td.right.top.bold Country
-          %td= af.text_field :country
-        %tr
-          %td.right.top.bold Adress 3
-          %td= af.text_field :address3
-
-          %td.right.top.bold State/Province
-          %td= af.text_field :state
-    - else
-      %tr
-        %td.right.top.bold Address
-        %td
-          = link_to('Add address', user_add_address_path(@user), class: 'btn btn-mini btn-small' ) 
-  .actions
-    = f.submit 'Save', class: 'btn btn-success btn-small'
-
-
-- if @current_user.admin? 
-  = link_to('View diary', admin_diary_user_path(@user),  class: 'btn btn-info btn-small' )
-  = link_to('Delete user', user_path(@user), :method => :delete, :data => { :confirm => 'Are you sure?' },  class: 'btn btn-danger btn-small' )
-  

@@ -2,8 +2,9 @@
 
 - if @current_user.admin?
   %br
-  %i.icon-plus
-  = link_to 'Add new user', new_user_path
+  = link_to new_user_path, class: 'btn btn-success btn-mini' do
+    %i.icon-plus
+    Create user
   %br
   %br
 

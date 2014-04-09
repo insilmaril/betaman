@@ -1,4 +1,3 @@
-.xheader { color: #FF0000 }
 @import "bootstrap";
 
 /* universal */
@@ -32,6 +31,10 @@ select {
 
 .center {
   text-align: center;
+}
+
+.middle {
+  vertical-align: middle;
 }
 
 .center h1 {
@@ -99,13 +102,13 @@ p {
   vertical-align: top;
 }
 
-.bold{
-  font-weight: bold;
-}
 
 table {
   .th {
     font-weight: normal;
+  }
+  .bold{
+    font-weight: bold;
   }
 }
 
@@ -115,6 +118,13 @@ table {
   text-shadow:none; 
   color: #000;
   }
+}
+
+.border { 
+  border-width: 1;
+  border-color: #ccc;
+  border-style: solid;
+  padding: 5px 5px;
 }
 
 .navbar{
