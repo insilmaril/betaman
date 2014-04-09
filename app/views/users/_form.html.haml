@@ -152,6 +152,7 @@
           - else
             %tr
               %td
+              %td
                 .btn-group
                   %a{:class => "btn btn-mini dropdown-toggle", "data-toggle" => "dropdown", :href => "#"}
                     Add list subscription
@@ -165,6 +166,33 @@
       %td(colspan="3")
         - if @user.participations.count > 0
           = render 'participations'
+        - if @current_user.admin?
+          %table
+            %tr
+              %td
+              %td
+                - if !@available_betas.empty?
+                  %tr
+                    %td 
+                      .btn-group
+                        %a{:class => "btn btn-mini dropdown-toggle", "data-toggle" => "dropdown", :href => "#"}
+                          Add available beta
+                          %b.caret
+                        %ul.dropdown-menu
+                          - @available_betas.each do |beta|
+                            %li= link_to beta.name, user_add_beta_path(@user, beta_id: beta), id: "add_beta_#{beta.id}", remote: true
+
+                - if !@available_finished_betas.empty?
+                  %tr
+                    %td 
+                      .btn-group
+                        %a{:class => "btn btn-mini dropdown-toggle", "data-toggle" => "dropdown", :href => "#"}
+                          Add finished beta 
+                          %b.caret
+                        %ul.dropdown-menu
+                          - @available_finished_betas.each do |beta|
+                            %li= link_to beta.name, user_add_beta_path(@user, beta_id: beta), id: "add_beta_#{beta.id}", remote: true
+
 
     %tr
       %td.right.top.bold Groups
