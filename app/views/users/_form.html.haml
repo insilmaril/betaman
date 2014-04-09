@@ -1,3 +1,5 @@
+= javascript_include_tag "tabs.js"
+
 - if @current_user.admin? 
   %p
     = link_to('View diary', admin_diary_user_path(@user),  class: 'btn btn-info btn-mini' )
