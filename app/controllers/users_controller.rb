@@ -48,6 +48,18 @@ class UsersController < ApplicationController
   def select
   end
 
+  def add_beta
+    @user = User.find(params[:id])
+    beta = Beta.find(params[:beta_id])
+    beta.add_user @user, @current_user
+    @betas = @user.betas
+    @available_betas  = Beta.not_finished - @betas
+    @available_finished_betas = Beta.finished - @betas
+    respond_to do |format|
+      format.js
+    end
+  end
+
   # GET /users/new
   # GET /users/new.json
   def new
