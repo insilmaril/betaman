@@ -140,12 +140,15 @@
     %tr
       %td.right.top.bold Lists
       %td(colspan="3")
-        - @user.lists.each do |list|
-          =link_to(list.name, list_path(list) )
-          =link_to(list_unsubscribe_user_path(list, user_id: @user) ) do
-            %i.icon-trash
-          - if list != @user.lists.last
-            ,
+        - if @user.lists.empty?
+          None
+        - else
+          - @user.lists.each do |list|
+            =link_to(list.name, list_path(list) )
+            =link_to(list_unsubscribe_user_path(list, user_id: @user) ) do
+              %i.icon-trash
+            - if list != @user.lists.last
+              ,
         - if @current_user.admin? && !@available_lists.empty?
           - if !@user.id
             n.a.
