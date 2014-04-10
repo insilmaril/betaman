@@ -45,7 +45,11 @@ class Diary
 
 
   def self.user_deleted param = {}
-    write "User deleted", param.merge({event: 'user_deleted'})
+    # Special case: Because user is deleted soon,
+    # write to actors diary instead
+    username = param[:user].logname
+    param[:user] = param[:actor]
+    write "Deleted #{username}", param.merge({event: 'user_deleted'})
   end
 
   def self.company_changed param = {}
