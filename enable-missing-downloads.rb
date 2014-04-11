@@ -17,6 +17,11 @@ def enable_user(admin, beta, user)
   end
 
   email_used = admin.add( beta, {email: umail, elogin: user.login_name, company: u_company } )
+  if email_used != umail
+    puts "Alternative email used: #{umail} -> #{email_used}"
+    user.alt_email = email_used
+    user.save!
+  end
 
   return
 end
@@ -27,6 +32,7 @@ begin
   admin = BetaAdmin.new
   admin.login(beta1.novell_user, beta1.novell_pass)
 
+=begin
   # Enable downloads for all current betas in one group
   group = Group.find(3)
 
@@ -38,37 +44,26 @@ begin
       enable_user(admin, beta, user)
     end
   end
-
   exit
+=end
+
+=begin
+  # Enable downloads for spefici user and beta
+  user = User.find 1035
+  beta = Beta.find 1
+  enable_user admin, beta, user
+=end
 
   betas_with_downloads = DownloadHelper.find_betas_with_downloads
   betas_with_downloads.each do |b|
     puts "* #{b[:beta].name}"
 
     n = 1
-    b[:ext_users_without_downloads].each do |u|
-      puts "    Enbabling (#{n}/#{b[:ext_users_without_downloads].count}): #{u.logname}"
+    b[:ext_users_without_downloads].each do |user|
+      puts "    Enbabling (#{n}/#{b[:ext_users_without_downloads].count}): #{user.logname}"
       n += 1
-
-      u_login = ""
-      u_login = u.login_name if !u.login_name.blank?
-      u_company = ""
-      u_company = u.company.name if u.company
-      
-      umail = "" 
-      if !u.alt_email.blank?
-        umail = u.alt_email
-      else
-        umail = u.email
-      end
-     # puts "Trying to add #{umail}"
-      email_used = admin.add( b[:beta], {email: umail, elogin: u.login_name, company: u_company } )
-      if email_used != umail
-        puts "Alternative email used: #{umail} -> #{email_used}"
-        u.alt_email = email_used
-        u.save!
-      end
-
+      enable_user(admin, b[:beta], user)
     end
   end
+
 end
