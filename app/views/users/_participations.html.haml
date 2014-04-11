@@ -19,10 +19,15 @@
           - if p.beta.list.users.include?(@user)
             subscribed
           - else
-            .warning-red
+            -if p.active
               missing subscription
               - if @current_user.admin?
                 = link_to "Subscribe", list_subscribe_user_path(p.beta.list, user_id: @user.id), class: 'btn-small btn-warning'
+            -else
+              .warning-red
+                missing subscription
+                - if @current_user.admin?
+                  = link_to "Subscribe", list_subscribe_user_path(p.beta.list, user_id: @user.id), class: 'btn-small btn-warning'
         - else
           n.a. 
       %td.center
