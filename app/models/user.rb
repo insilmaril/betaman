@@ -1,11 +1,14 @@
 class User < ActiveRecord::Base
-  attr_accessible :email, :alt_email,
+  attr_accessible :address_attributes, 
+    :alt_email,
+    :email, 
     :first_name, 
     :last_name, 
-    :title,
     :login_name, 
-    :address_attributes, 
-    :note
+    :note,
+    :support_contact,
+    :support_id, 
+    :title
 
   has_many :accounts, :dependent => :destroy
   has_many :diary_entries, :dependent => :destroy

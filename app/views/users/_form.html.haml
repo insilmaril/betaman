@@ -46,22 +46,35 @@
               First name
             %td
               = f.text_field :first_name
-            - if @current_user.admin?
-              %td.right.bold.top(rowspan = "3")
-                Note
-              %td.top(rowspan = "6")
-                = f.text_area(:note, cols: 80, rows: 5)
+
+            %td.right.bold.top
+              Support ID
+            %td
+              = f.text_field :support_id
+
           %tr
             %td.right.bold.top
               Title
             %td
               = f.text_field :title
+
+            %td.right.bold.top
+              Support contact
+            %td
+              = f.text_field :support_contact
+
           %tr
             .field
               %td.right.bold.top
                 Email
               %td
                 = f.text_field :email
+
+            - if @current_user.admin?
+              %td.right.bold.top(rowspan = "2")
+                Note
+              %td.top(rowspan = "4")
+                = f.text_area(:note, cols: 80, rows: 4)
           %tr
             .field
               %td.right.bold.top

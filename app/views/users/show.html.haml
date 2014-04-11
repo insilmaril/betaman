@@ -1,3 +1,8 @@
+%h4= @user.logname
+
+- if @current_user.admin?
+  = link_to 'Edit', edit_user_path(@user),  class: 'btn btn-info btn-mini' 
+
 %table
   %tr
     %td.right.bold.top
@@ -43,6 +48,25 @@
     %td.right.bold.top
       User ID
     %td= @user.id
+
+  %tr
+    %td.right.bold.top
+      Login
+    %td.top
+      = @user.login_name
+
+  %tr
+    %td.right.bold.top
+      Support ID
+    %td
+      = @user.support_id
+
+  %tr
+    %td.right.bold.top
+      Support contact
+    %td.top
+      = @user.support_contact
+
   %tr
     %td.right.top.bold Roles
     %td
@@ -172,8 +196,4 @@
       %td.right.top.bold State/Province
       %td= @user.address.state
 
-- if @current_user.admin?
-  = link_to 'Edit', edit_user_path(@user)
-  \|
-= link_to 'Back', users_path
 
