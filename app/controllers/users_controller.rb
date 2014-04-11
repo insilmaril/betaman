@@ -165,21 +165,6 @@ class UsersController < ApplicationController
     init_instance_variables
   end
 
-  def add_address
-    user = User.find(params[:id])
-    if user.address
-      flash[:error] = "#{user.full_name} already has address #{user.address.id}"
-    else
-      a = Address.create
-      user.address = a
-      user.save
-      msg = "Created address #{a.id} for user #{user.logname}"
-      flash[:success] = msg
-      Blog.info msg, @current_user
-      redirect_to :back
-    end
-  end
-
   def edit_participation
     @user = User.find(params[:id])
     @participation = Participation.find(params[:participation_id] )

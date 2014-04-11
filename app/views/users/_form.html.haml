@@ -78,43 +78,37 @@
 
 
       %div{:class => 'tab-pane', :id => 'address'}
-        - if @user.address
-          %table{width: "100%"}
-            %tr
-              %th{width: "10%"}
-              %th{width: "40%"}
-              %th{width: "10%"}
-              %th{width: "40%"}
-            = f.fields_for :address do |af|
-              %tr
-                %td.right.top.bold Telephone
-                %td= af.text_field :phone
-
-                %td.right.top.bold City
-                %td= af.text_field :city
-              %tr
-                %td.right.top.bold Street Address
-                %td= af.text_field :address1
-              
-                %td.right.top.bold Zip/Postal code
-                %td= af.text_field :zip
-              %tr
-                %td.right.top.bold Adress 2
-                %td= af.text_field :address2
-
-                %td.right.top.bold Country
-                %td= af.text_field :country
-              %tr
-                %td.right.top.bold Adress 3
-                %td= af.text_field :address3
-
-                %td.right.top.bold State/Province
-                %td= af.text_field :state
-        - else
+        %table{width: "100%"}
           %tr
-            %td.right.top.bold Address
-          %td
-            = link_to('Add address', user_add_address_path(@user), class: 'btn btn-mini btn-mini' ) 
+            %th{width: "10%"}
+            %th{width: "40%"}
+            %th{width: "10%"}
+            %th{width: "40%"}
+          = f.fields_for :address do |af|
+            %tr
+              %td.right.top.bold Telephone
+              %td= af.text_field :phone
+
+              %td.right.top.bold City
+              %td= af.text_field :city
+            %tr
+              %td.right.top.bold Street Address
+              %td= af.text_field :address1
+            
+              %td.right.top.bold Zip/Postal code
+              %td= af.text_field :zip
+            %tr
+              %td.right.top.bold Adress 2
+              %td= af.text_field :address2
+
+              %td.right.top.bold Country
+              %td= af.text_field :country
+            %tr
+              %td.right.top.bold Adress 3
+              %td= af.text_field :address3
+
+              %td.right.top.bold State/Province
+              %td= af.text_field :state
 
     .actions
       = f.submit 'Save', class: 'btn btn-success btn-mini'

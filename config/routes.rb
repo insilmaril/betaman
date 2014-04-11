@@ -7,7 +7,6 @@ Betaman::Application.routes.draw do
   get '/users/:id/betas', to: 'users#betas', as: 'user_betas'
   get '/users/:id/add_beta/:beta_id', to: 'users#add_beta', as: 'user_add_beta'
   get '/users/:id/remove_beta/:beta_id', to: 'users#remove_beta', as: 'user_remove_beta'
-  get '/users/:id/add_address', to: 'users#add_address', as: 'user_add_address'
 
   get '/users/:id/edit_participation/:participation_id', to: 'users#edit_participation', as: 'user_edit_participation'
   post '/users/:id/edit_participation/:participation_id', to: 'users#update_participation', as: 'user_edit_participation'

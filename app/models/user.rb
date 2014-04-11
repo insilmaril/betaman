@@ -22,6 +22,8 @@ class User < ActiveRecord::Base
   has_one :address, :dependent => :destroy
   accepts_nested_attributes_for :address
 
+  after_create :create_address
+  
   #validates :email, presence: true
 
   def admin?
