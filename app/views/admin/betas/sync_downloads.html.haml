@@ -15,7 +15,7 @@
           %table
             - b[:added].each do |u|
               %tr
-                %td= link_to u.logname, user_path(u)
+                %td= link_to u.logname, edit_user_path(u)
 
     %tr
       %td.right.top Downloads dropped:
@@ -26,7 +26,7 @@
           %table
             - b[:dropped].each do |u|
               %tr
-                %td= link_to u.logname, user_path(u)
+                %td= link_to u.logname, edit_user_path(u)
 
 %br
 %br
