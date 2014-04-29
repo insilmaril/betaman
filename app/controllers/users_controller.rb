@@ -1,3 +1,4 @@
+require 'diary'
 require 'mail_helper'
 
 class UsersController < ApplicationController
@@ -68,6 +69,7 @@ class UsersController < ApplicationController
 
       if user.save!
         Blog.info "Created new user #{user.logname}", @current_user
+        Diary.user_created user: user, actor: @current_user
         redirect_to edit_user_path(user)
       else
         respond_to do |format|

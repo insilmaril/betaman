@@ -43,6 +43,9 @@ class Diary
     write "dropped employee role", param.merge({event: 'dropped_employee_role'})
   end
 
+  def self.user_created param = {}
+    write "Created user", param.merge({event: 'user_created'})
+  end
 
   def self.user_deleted param = {}
     # Special case: Because user is deleted soon,

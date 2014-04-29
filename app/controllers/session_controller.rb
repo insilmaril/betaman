@@ -52,6 +52,8 @@ class SessionController < ApplicationController
         user.email = email 
         user.accounts << Account.new(uid: uid)
         user.save!
+
+        Diary.user_created user: user 
         UserMailer.admin_mail(
           "Created #{user.full_name}",
           "User ID: #{user.id}\n" +
