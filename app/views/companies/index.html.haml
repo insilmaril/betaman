@@ -1,4 +1,11 @@
-%h2 Companies
+%h4 Companies
+
+- if @current_user.admin?
+  = link_to new_company_path, class: 'btn btn-mini btn-success ' do
+    %i.icon-plus
+    Create company
+  %br
+  %br
 
 %table.table.table-bordered
   %tr
@@ -18,8 +25,3 @@
           = link_to(company, :title => 'Delete', :method => :delete, :data => { :confirm => 'Are you sure?' }) do
             %i.icon-trash
 
-%br
-- if @current_user.admin?
-  = link_to(new_company_path) do
-    %i{class: ["icon-plus", " icon-large"]}
-    Add new company

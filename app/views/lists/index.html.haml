@@ -1,5 +1,12 @@
 %h4 Lists:
 
+- if @current_user.admin?
+  = link_to new_list_path, class: 'btn btn-mini btn-success ' do
+    %i.icon-plus
+    Create list
+  %br
+  %br
+
 %table.table.table-bordered
   %tr
     %th Name
@@ -30,5 +37,3 @@
           = link_to(list, :title => 'Delete', :method => :delete, :data => { :confirm => 'Are you sure?' }) do
             %i.icon-trash
 
-- if @current_user.admin?
-  = link_to 'Add list', new_list_path, class: 'btn btn-info '

@@ -1,5 +1,12 @@
 %h4 Groups:
 
+- if @current_user.admin?
+  = link_to new_admin_group_path, class: 'btn btn-mini btn-success ' do
+    %i.icon-plus
+    Create group
+  %br
+  %br
+
 %table.table.table-bordered
   %tr
     %th Name
@@ -27,5 +34,3 @@
           = link_to(admin_group_path(group), :title => 'Delete', :method => :delete, :data => { :confirm => 'Are you sure?' }) do
             %i.icon-trash
 
-- if @current_user.admin?
-  = link_to 'Add group', new_admin_group_path, class: 'btn btn-info '
