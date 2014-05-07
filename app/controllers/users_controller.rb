@@ -61,6 +61,18 @@ class UsersController < ApplicationController
     end
   end
 
+  def remove_beta
+    @user = User.find(params[:id])
+    beta = Beta.find(params[:beta_id])
+    beta.remove_user @user, @current_user
+    @betas = @user.betas
+    @available_betas  = Beta.not_finished - @betas
+    @available_finished_betas = Beta.finished - @betas
+    respond_to do |format|
+      format.js
+    end
+  end
+
   # GET /users/new
   # GET /users/new.json
   def new

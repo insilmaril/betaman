@@ -40,6 +40,15 @@ class Beta < ActiveRecord::Base
     return added, existing
   end
 
+  def remove_user(user, actor = nil)
+    if self.users.include? user
+      self.users.delete  user
+      Diary.removed_user_from_beta user: user, beta: self, actor: actor
+      return true
+    end
+    return false
+  end
+
   def logname
     "#{id} (#{name})"
   end
