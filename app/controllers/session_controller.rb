@@ -124,7 +124,7 @@ class SessionController < ApplicationController
     session[:user_id] = user.id
     flash[:success] = "You are signed in."
 
-    redirect_to dashboard_path
+    session[:return_to] ? redirect_to(session[:return_to]) : redirect_to(dashboard_path)
   end
 
   def failure
