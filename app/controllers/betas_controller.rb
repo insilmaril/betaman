@@ -207,12 +207,10 @@ class BetasController < ApplicationController
     user = User.find(params[:user_id])
 
     if @current_user.admin?
-      if @beta.users.include? user
-        @beta.users.delete(user)
+      if @beta.remove_user user, @current_user
         msg = "Removed #{user.full_name} from #{@beta.name}"
         flash[:success] = msg
         Blog.info msg, @current_user
-        Diary.removed_user_from_beta user: user, beta: @beta, actor: @current_user
       else
         flash[:warning] = "User #{user.full_name} is not a member of beta #{@beta.logname}!"
       end
