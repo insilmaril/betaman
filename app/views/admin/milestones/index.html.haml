@@ -1,4 +1,11 @@
-%h2 Admin view: Milestones
+%h4 Milestones
+
+- if @current_user.admin?
+  = link_to new_admin_milestone_path, class: 'btn btn-mini btn-success ' do
+    %i.icon-plus
+    Create milestone
+  %br
+  %br
 
 %table.table.table-bordered
   %tr
@@ -19,9 +26,5 @@
       %td
         = link_to(edit_admin_milestone_path(ms)) do
           .i.icon-pencil
-        = link_to(admin_milestone_path(ms), :method => :delete  ) do
+        = link_to(admin_milestone_path(ms), :title => 'Delete', :method => :delete, :data => { :confirm => 'Are you sure?' }) do
           .i.icon-trash
-
-= link_to(new_admin_milestone_path) do
-  %i{class: ["icon-plus", " icon-large"]}
-  Add new milestone
