@@ -57,7 +57,7 @@ class UsersController < ApplicationController
     @available_betas  = Beta.not_finished - @betas
     @available_finished_betas = Beta.finished - @betas
     respond_to do |format|
-      format.js
+      format.js { render  'reload_betas' }
     end
   end
 
@@ -69,7 +69,7 @@ class UsersController < ApplicationController
     @available_betas  = Beta.not_finished - @betas
     @available_finished_betas = Beta.finished - @betas
     respond_to do |format|
-      format.js
+      format.js { render  'reload_betas' }
     end
   end
 
