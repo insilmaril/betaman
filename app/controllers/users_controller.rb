@@ -140,13 +140,25 @@ class UsersController < ApplicationController
         "        ID: #{@user.id}"
       ).deliver
     end
+
+    # Cannot mass assign company_name, do it explicitely here
+    if params[:user][:company_name]
+      if !@user.company 
+        @user.company = Company.new
+        Blog.info "Company '#{params[:user][:company_name]}' created", @current_user
+      end
+      @user.company.name = params[:user][:company_name]
+      @user.save
+      params[:user].delete :company_name
+    end
+
     respond_to do |format|
       if @user.update_attributes(params[:user])
-      msg = "#{@user.logname} has been updated"
-      Blog.info msg, @current_user
-      flash[:success] = msg
-        format.html { redirect_to edit_user_path(@user) }
-        format.json { head :no_content }
+        msg = "#{@user.logname} has been updated"
+        Blog.info msg, @current_user
+        flash[:success] = msg
+          format.html { redirect_to edit_user_path(@user) }
+          format.json { head :no_content }
       else
         format.html { render action: "edit" }
         format.json { render json: @user.errors, status: :unprocessable_entity }

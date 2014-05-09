@@ -85,9 +85,7 @@
             %td.right.bold.top
               Company
             %td.middle
-              = collection_select(:user, :company_id, Company.order('name ASC'), :id, :name, prompt: true, width: "100%" )
-            %td.top
-              = link_to 'Add', new_company_path, class: 'btn btn-mini'  
+              = f.text_field :company_name, data: {autocomplete_source: companies_path}
 
 
       %div{:class => 'tab-pane', :id => 'address'}

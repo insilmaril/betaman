@@ -1,11 +1,12 @@
 class CompaniesController < ApplicationController
   def index
-    @companies = Company.order('name ASC')
+    @companies = Company.where("name ILIKE ?","%#{params[:term]}%").order('name ASC')
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @companies }
+      format.json { render json: @companies.map(&:name) }
     end
+    #render json: @companies.map(&:name) 
   end
 
   def edit
