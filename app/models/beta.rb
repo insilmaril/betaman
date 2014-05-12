@@ -13,10 +13,10 @@ class Beta < ActiveRecord::Base
 
   default_scope -> { order('begin DESC') }
 
-  scope :active, where('? BETWEEN betas.begin AND betas.end', Date.current)
-  scope :planned, where('betas.begin >= ?', Date.today)
-  scope :finished, where('betas.end < ?', Date.today)
-  scope :not_finished, where('betas.end >= ?', Date.today)
+  scope :active, lambda { where('? BETWEEN betas.begin AND betas.end', Date.today ) }
+  scope :planned, lambda { where('betas.begin > ?', Date.today) }
+  scope :finished, lambda { where('betas.end < ?', Date.today) }
+  scope :not_finished, lambda { where('betas.end >= ?', Date.today) }
 
   def add_user(user, actor = nil)
     if !self.users.include? user
