@@ -1,3 +1,4 @@
+require 'diary'
 require 'mail_helper'
 
 class Admin::UsersController < ApplicationController
@@ -34,24 +35,48 @@ class Admin::UsersController < ApplicationController
       redirect_to admin_path
     end
 
+    attachmate = Company.where( name: "Attachmate").first
+    if attachmate.nil?
+      flash[:error] = "Couldn't find company 'Attachmate' in database"
+      redirect_to admin_path
+    end
+
+    netiq = Company.where( name: "NetIQ").first
+    if netiq.nil?
+      flash[:error] = "Couldn't find company 'NetIQ' in database"
+      redirect_to admin_path
+    end
+
     User.all.each do |u|
       if MailHelper.internal_domain?(u.email)
-        # User is employee according to email domain
+        # Set user role
         if !u.employee?
           u.make_employee
           @users_employee_added << u
           Blog.info "Update roles: Added to employees: #{u.logname}"
           Diary.got_employee_role user: u, actor: @current_user
         end
+
+        # Set users company
+        company_changed = false
         if /suse\.(de|com|cz)$/.match(u.email) && u.company != suse
           u.company = suse
+          company_changed = true
+          @users_company_changed << u
+        elsif /novell\.com$/.match(u.email) && u.company != novell
+          u.company = novell
+          company_changed = true
+        elsif /attachmate\.com$/.match(u.email) && u.company != attachmate
+          u.company = attachmate
+          company_changed = true
+        elsif /netiq\.com$/.match(u.email) && u.company != netiq
+          u.company = netiq
+          company_changed = true
+        end
+        if company_changed
           @users_company_changed << u
           Diary.company_changed user: u, actor: @current_user
           Blog.info "Update roles:    Company changed: #{u.logname}"
-        elsif /novell\.com$/.match(u.email) && u.company != novell
-          u.company = novell
-          @users_company_changed << u
-          Diary.company_changed user: u, actor: @current_user
         end
         u.save
       else

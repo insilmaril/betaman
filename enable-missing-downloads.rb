@@ -48,7 +48,7 @@ begin
 =end
 
 =begin
-  # Enable downloads for spefici user and beta
+  # Enable downloads for speficic user and beta
   user = User.find 1035
   beta = Beta.find 1
   enable_user admin, beta, user

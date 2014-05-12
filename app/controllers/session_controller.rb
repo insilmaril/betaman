@@ -70,6 +70,7 @@ class SessionController < ApplicationController
           msg = "Session controller: Added role 'employee' for #{user.logname}"
           flash[:info] = msg
           Blog.info msg
+          Diary.got_employee_role user: user
         end
 
       else
