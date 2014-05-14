@@ -35,6 +35,10 @@ class Diary
     write "User unsubscribed from list", param.merge({event: 'unsubscribed_user_from_list'})
   end
 
+  def self.updated_user param = {}
+    write "User updated", param.merge({event: 'user_updated'})
+  end
+
   def self.got_employee_role param = {} 
     write "got role employee", param.merge({event: 'got_employee_role'})
   end

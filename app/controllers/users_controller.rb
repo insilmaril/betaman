@@ -143,11 +143,14 @@ class UsersController < ApplicationController
 
     # Cannot mass assign company_name, do it explicitely here
     if params[:user][:company_name]
-      if !@user.company 
-        @user.company = Company.new
-        Blog.info "Company '#{params[:user][:company_name]}' created", @current_user
+      company = Company.find_by_name params[:user][:company_name]
+      if !company 
+        company = Company.new
+        company.name = params[:user][:company_name]
+        company.save!
+        Blog.info "Company '#{company.name}' created", @current_user
       end
-      @user.company.name = params[:user][:company_name]
+      @user.company = company
       @user.save
       params[:user].delete :company_name
     end
@@ -156,6 +159,7 @@ class UsersController < ApplicationController
       if @user.update_attributes(params[:user])
         msg = "#{@user.logname} has been updated"
         Blog.info msg, @current_user
+        Diary.updated_user user: @user, actor: @current_user
         flash[:success] = msg
           format.html { redirect_to edit_user_path(@user) }
           format.json { head :no_content }
