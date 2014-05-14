@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'csv'
+require 'diary'
 require 'mechanize'
 
 class BetaAdmin
@@ -220,15 +221,17 @@ class BetaAdmin
               user = User.new
               user.email = email
               users_created << user
-              user.betas << beta
               user.save!
-              Blog.info "  Created #{user.logname} and added to beta."
+              Blog.info "  Created #{user.logname}"
+              Diary.user_created user: user, text: "User found in downloads"
             end
           end
 
           # Add to beta, create participation
           if !user.betas.include? beta
             user.betas << beta
+            Blog.info "  Added #{user.logname} to beta #{beta.name}"
+            Diary.added_user_to_beta user: user, beta: beta, text: "User found in downloads beta id: #{beta.id}"
           end
 
         end # No duplicate email

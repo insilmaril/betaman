@@ -65,7 +65,7 @@ class Diary
 
   def self.write text, param = {}
     d = DiaryEntry.new
-    d.text    = text
+    d.text    = param[:text] || text
     d.event   = param[:event]
     d.user_id = param[:user].try(:id)
     d.beta_id = param[:beta].try(:id)
