@@ -254,6 +254,8 @@ class BetaAdmin
         elsif p.downloads_act == true
           Blog.info "  Removing download flag for #{p.user.logname}"
           downloads_dropped << p.user
+          p.downloads_act = false
+          p.save!
         end
       end
     end
