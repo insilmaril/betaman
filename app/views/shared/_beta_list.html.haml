@@ -18,10 +18,7 @@
     - betas.each do |beta|
       %tr
         %td
-          - if @current_user && @current_user.admin? 
-            = link_to(beta.name, edit_beta_path(beta) ) 
-          - else
-            = link_to(beta.name, beta ) 
+          = link_to(beta.name, beta ) 
         %td 
           - if beta.list
             = link_to(beta.list.name, list_path(beta.list))
