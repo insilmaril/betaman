@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   before_filter :current_user
-  before_filter :login_required, :except => [:index] 
+  before_filter :login_required  
  
   private
 
@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
     else
       store_location
       flash.keep
-      redirect_to :controller=>"/session", :action =>"login"
+      redirect_to :controller=>"session", :action =>"login"
       return false
     end
   end
