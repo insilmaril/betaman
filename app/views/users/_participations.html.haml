@@ -7,6 +7,7 @@
         %th Downloads
         %th Support
         %th Status
+        %th Requester
         %th Note
         %th Action
 
@@ -56,6 +57,9 @@
             -else
               requested
           %td.center= p.status_to_s
+          %td.center
+            - if p.participation_request
+              = link_to p.participation_request.user.email, user_path(p.participation_request.user)
           %td
             = link_to(user_edit_participation_path(@user, participation_id: p)) do
               =p.note
