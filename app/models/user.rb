@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   has_many :accounts, :dependent => :destroy
   has_many :diary_entries, :dependent => :destroy
   has_many :participations, :dependent => :destroy
+  has_many :participation_requests, :dependent => :destroy
   has_many :betas, :through => :participations
   has_many :groups, :through => :memberships
   has_many :memberships, :dependent => :destroy

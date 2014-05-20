@@ -1,9 +1,10 @@
 class Participation < ActiveRecord::Base
   attr_accessible :status
-  attr_accessible :beta_id, :user_id
+  attr_accessible :beta_id, :user_id, :participation_request_id
 
   belongs_to :user
   belongs_to :beta
+  has_one :participation_request
   
   def download_status
     if !beta.has_novell_download?

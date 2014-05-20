@@ -14,3 +14,7 @@ jQuery ->
 jQuery -> 
   $('#user_company_name').autocomplete
     source: $('#user_company_name').data('autocomplete-source')
+
+jQuery -> 
+  $('#user_requester').autocomplete
+    source: $('#user_requester').data('autocomplete-source')

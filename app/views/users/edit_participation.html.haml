@@ -10,6 +10,9 @@
     %tr
       %td.right.top.bold ID
       %td=@participation.id
+    %tr
+      %td.right.top.bold Email requester
+      %td=text_field_tag :user_requester, @participation.participation_request.try(:user).try(:logname), data: {autocomplete_source: users_emails_path}  
     %tr 
       %td.right.top.bold Note
       %td

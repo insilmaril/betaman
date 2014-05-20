@@ -34,6 +34,14 @@ class UsersController < ApplicationController
     end
   end
 
+  def emails
+    @users = User.where("email ILIKE ?","%#{params[:term]}%").order('email ASC')
+    respond_to do |format|
+      format.json { render json: @users.map(&:email) }
+    end
+    #render json: @companies.map(&:name) 
+  end
+
   # GET /users/1
   # GET /users/1.json
   def show
@@ -208,16 +216,24 @@ class UsersController < ApplicationController
   end
 
   def update_participation
-    Blog.info "BM: params: #{params}"
     user = User.find(params[:id])
     note_new = params[:note_new]
     participation = Participation.find(params[:participation_id] )
     if participation 
-      if
-        participation.note != note_new
+      if participation.note != note_new
         participation.note = note_new
       end
       params[:active] ? participation.active = true : participation.active = false
+
+      if params[:user_requester]
+        requester = User.find_by_email(params[:user_requester])        
+        if requester
+          pr = participation.participation_request ||= ParticipationRequest.new
+          pr.user = requester
+          pr.save!
+          participation.participation_request = pr
+        end
+      end
       participation.support_req = params[:support_req]
       participation.support_act = params[:support_act]
       participation.save
