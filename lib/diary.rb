@@ -63,6 +63,18 @@ class Diary
     write "Company changed", param.merge({event: 'company_changed'})
   end
 
+  def self.list_created param = {}
+    write "Created list", param.merge({event: 'list_created'})
+  end
+
+  def self.list_deleted param = {}
+    write "Deleted list", param.merge({event: 'list_deleted'})
+  end
+
+  def self.list_updated param = {}
+    write "Updated list", param.merge({event: 'list_updated'})
+  end
+
   def self.write text, param = {}
     d = DiaryEntry.new
     d.text    = param[:text] || text

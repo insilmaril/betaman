@@ -35,6 +35,7 @@ class ListsController < ApplicationController
     respond_to do |format|
       if @list.save
         msg = "#{@list.logname} created"
+        Diary.list_created actor: @current_user, text: "List: #{@list.id} - #{@list.name}"
         flash[:success] = msg
         Blog.info msg, @current_user
         format.html { redirect_to @list }
@@ -63,6 +64,7 @@ class ListsController < ApplicationController
 
     respond_to do |format|
       if @list.update_attributes(params[:list])
+        Diary.list_updated actor: @current_user, text: "List: #{@list.id} - #{@list.name}"
         msg = "Updated list #{@list.logname}"
         flash[:success] = msg
         Blog.info msg, @current_user
@@ -82,6 +84,7 @@ class ListsController < ApplicationController
     if @current_user.admin?
       list = List.find(params[:id])
       list.destroy
+      Diary.list_deleted actor: @current_user, text: "List: #{list.id} - #{list.name}"
       msg = "Deleted #{list.logname}"
       flash[:success] = msg
       Blog.info msg, @current_user

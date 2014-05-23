@@ -10,7 +10,9 @@
   - @diary_entries.each do |d|
     %tr
       %td= d.created_at
-      %td= link_to d.user.logname, edit_user_path(d.user)
+      %td
+        - if d.user
+          = link_to d.user.logname, edit_user_path(d.user)
       %td= d.event
       %td
         - if !d.beta.nil?
