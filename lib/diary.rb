@@ -4,11 +4,11 @@ class Diary
   #
 
   def self.logged_in user
-    write 'logged in', user: user, event: 'logged_in'
+    write 'logged in', user: user, actor: user, event: 'logged_in'
   end
 
   def self.logged_out user
-    write 'logged out', user: user, event: 'logged_out'
+    write 'logged out', user: user, actor: user, event: 'logged_out'
   end
 
   def self.joined_beta param = {}
