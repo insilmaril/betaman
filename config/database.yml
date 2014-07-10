@@ -2,6 +2,7 @@ production:
   adapter: postgresql
   database: betaman
   username: betaman
+  host: localhost
   pool: 5
   timeout: 5000
 
