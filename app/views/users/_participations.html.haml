@@ -39,11 +39,11 @@
                 .warning-red
                   = p.download_status
                   - if @current_user.admin?
-                    = link_to "Add", 'https://www.novell.com/beta/admin/GetAddCustomer.do?id=' + p.beta.novell_id, class: 'btn-small btn-success' 
+                    = link_to "Add", 'https://www.novell.com/beta/admin/GetAddCustomer.do?id=' + p.beta.novell_id, target: '_blank', class: 'btn-small btn-success' 
               - else
                 = p.download_status
                 - if @current_user.admin?
-                  = link_to "Add", 'https://www.novell.com/beta/admin/GetAddCustomer.do?id=' + p.beta.novell_id, class: 'btn-small btn-success'
+                  = link_to "Add", 'https://www.novell.com/beta/admin/GetAddCustomer.do?id=' + p.beta.novell_id, target: '_blank', class: 'btn-small btn-success'
             - else
               available
           %td.center
