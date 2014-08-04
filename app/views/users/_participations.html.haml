@@ -20,16 +20,18 @@
             - if p.beta.list
               - if p.beta.list.users.include?(@user)
                 subscribed
+                =link_to(list_unsubscribe_user_path(p.beta.list, user_id: @user) ) do
+                  %i.icon-trash
               - else
-                -if p.active
-                  missing subscription
-                  - if @current_user.admin?
-                    = link_to "Subscribe", list_subscribe_user_path(p.beta.list, user_id: @user.id), class: 'btn-small btn-warning'
-                -else
+                -if p.active?
                   .warning-red
                     missing subscription
                     - if @current_user.admin?
                       = link_to "Subscribe", list_subscribe_user_path(p.beta.list, user_id: @user.id), class: 'btn-small btn-warning'
+                -else
+                  missing subscription
+                  - if @current_user.admin?
+                    = link_to "Subscribe", list_subscribe_user_path(p.beta.list, user_id: @user.id), class: 'btn-small btn-warning'
             - else
               n.a. 
           %td.center
@@ -56,7 +58,15 @@
                 missing
             -else
               requested
-          %td.center= p.status_to_s
+          %td.center.nowrap
+            - if p.status_to_s.eql? 'active'
+              = link_to(user_toggle_participation_path(@user, participation_id: p)) do
+                = p.status_to_s
+                %i.icon-pause
+            - else
+              = link_to(user_toggle_participation_path(@user, participation_id: p)) do
+                = p.status_to_s
+                %i.icon-play
           %td.center
             - if p.participation_request
               = link_to p.participation_request.user.email, user_path(p.participation_request.user)
@@ -66,12 +76,6 @@
           %td
             = link_to(user_remove_beta_path(@user, beta_id: p.beta), remote: true, :data => { :confirm => 'Are you sure?' } ) do
               %i.icon-trash
-            - if p.status_to_s.eql? 'active'
-              = link_to(user_toggle_participation_path(@user, participation_id: p)) do
-                %i.icon-pause
-            - else
-              = link_to(user_toggle_participation_path(@user, participation_id: p)) do
-                %i.icon-play
             = link_to(user_edit_participation_path(@user, participation_id: p)) do
               %i.icon-pencil
 

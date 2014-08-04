@@ -1,5 +1,4 @@
 class Participation < ActiveRecord::Base
-  attr_accessible :status
   attr_accessible :beta_id, :user_id, :participation_request_id
 
   belongs_to :user
@@ -18,10 +17,17 @@ class Participation < ActiveRecord::Base
     end
   end
 
-  def status_to_s
-    return 'undefined' if active.nil?
-
+  def active?
+    return false if active.nil?
     if active
+      return true
+    else
+      return false
+    end
+  end
+
+  def status_to_s
+    if active?
       return 'active'
     else
       return 'inactive'
