@@ -19,11 +19,12 @@ class Participation < ActiveRecord::Base
   end
 
   def status_to_s
-    if active.nil?
-      return 'undefined'
-    elsif active
+    return 'undefined' if active.nil?
+
+    if active
       return 'active'
+    else
+      return 'inactive'
     end
-    return 'inactive'
   end
 end

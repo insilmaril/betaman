@@ -215,6 +215,31 @@ class UsersController < ApplicationController
     end
   end
 
+  def toggle_participation
+    user = User.find(params[:id])
+    participation = Participation.find(params[:participation_id] )
+
+    change = ''
+    if @current_user.admin? || user == @current_user
+      if participation.active 
+        participation.active = false
+        change = 'deactivated'
+      else
+        participation.active = true
+        change = 'activated'
+      end
+      participation.save
+      msg = "Beta participation #{change} for #{user.logname}: #{participation.beta.name}"
+      flash[:success] = msg
+      Blog.info "#{change} #{user.logname}", @current_user
+      #Diary.user_deleted user: user, actor: @current_user
+      redirect_to edit_user_path(user)
+    else
+      flash[:error] = "Access denied: Inactivating user participation"
+      redirect_to root_path
+    end
+  end
+
   def update_participation
     user = User.find(params[:id])
     note_new = params[:note_new]

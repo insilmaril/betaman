@@ -66,6 +66,12 @@
           %td
             = link_to(user_remove_beta_path(@user, beta_id: p.beta), remote: true, :data => { :confirm => 'Are you sure?' } ) do
               %i.icon-trash
+            - if p.status_to_s.eql? 'active'
+              = link_to(user_toggle_participation_path(@user, participation_id: p)) do
+                %i.icon-pause
+            - else
+              = link_to(user_toggle_participation_path(@user, participation_id: p)) do
+                %i.icon-play
             = link_to(user_edit_participation_path(@user, participation_id: p)) do
               %i.icon-pencil
 

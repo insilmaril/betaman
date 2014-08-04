@@ -12,6 +12,7 @@ Betaman::Application.routes.draw do
 
   get '/users/:id/edit_participation/:participation_id', to: 'users#edit_participation', as: 'user_edit_participation'
   post '/users/:id/edit_participation/:participation_id', to: 'users#update_participation', as: 'user_edit_participation'
+  get '/users/:id/toggle_participation/:participation_id', to: 'users#toggle_participation', as: 'user_toggle_participation'
 
   get '/betas/:id/add_select_users', to: 'betas#add_select_users', as: 'beta_add_select_users'
   post '/betas/:id/add_multiple_users', to: 'betas#add_multiple_users', as: 'beta_add_multiple_users'
