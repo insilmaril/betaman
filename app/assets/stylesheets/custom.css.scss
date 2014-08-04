@@ -29,12 +29,19 @@ select {
   width: 100%;
 }
 
-.center {
-  text-align: center;
-}
 
-.middle {
-  vertical-align: middle;
+td {
+  .center {
+    text-align: center;
+  }
+
+  .middle {
+    vertical-align: middle;
+  }
+
+  .nowrap {
+    white-space: nowrap;
+  }
 }
 
 .center h1 {
