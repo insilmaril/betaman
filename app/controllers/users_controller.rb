@@ -232,7 +232,7 @@ class UsersController < ApplicationController
       msg = "Beta participation #{change} for #{user.logname}: #{participation.beta.name}"
       flash[:success] = msg
       Blog.info "#{change} #{user.logname}", @current_user
-      #Diary.user_deleted user: user, actor: @current_user
+      Diary.participation_toggled user: user, actor: @current_user, text: "Participation #{change}"
       redirect_to edit_user_path(user)
     else
       flash[:error] = "Access denied: Inactivating user participation"

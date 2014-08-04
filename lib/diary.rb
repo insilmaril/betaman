@@ -75,6 +75,10 @@ class Diary
     write "Updated list", param.merge({event: 'list_updated'})
   end
 
+  def self.participation_toggled param = {}
+    write param[:text], param.merge({event: 'participation_toggled'})
+  end
+
   def self.write text, param = {}
     d = DiaryEntry.new
     d.text    = param[:text] || text
