@@ -144,6 +144,11 @@
             %tr
               %td=role.name
 
+    %tr 
+      %td.right.top.bold Betas
+      %td(colspan="3")
+        = render 'participations'
+
     %tr
       %td.right.top.bold Lists
       %td(colspan="3")
@@ -170,11 +175,6 @@
                   %ul.dropdown-menu
                     - @available_lists.each do |list|
                       %li= link_to list.name, list_subscribe_user_path(list, user_id: @user.id)
-
-    %tr 
-      %td.right.top.bold Betas
-      %td(colspan="3")
-        = render 'participations'
 
     %tr
       %td.right.top.bold Groups
