@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140519090715) do
+ActiveRecord::Schema.define(:version => 20140804123516) do
 
   create_table "accounts", :force => true do |t|
     t.string   "uid"
@@ -114,7 +114,6 @@ ActiveRecord::Schema.define(:version => 20140519090715) do
   end
 
   create_table "participations", :force => true do |t|
-    t.string   "status"
     t.integer  "user_id"
     t.integer  "beta_id"
     t.datetime "created_at",                      :null => false
