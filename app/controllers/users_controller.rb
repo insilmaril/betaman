@@ -221,18 +221,8 @@ class UsersController < ApplicationController
 
     change = ''
     if @current_user.admin? || user == @current_user
-      if participation.active 
-        participation.active = false
-        change = 'deactivated'
-      else
-        participation.active = true
-        change = 'activated'
-      end
-      participation.save
-      msg = "Beta participation #{change} for #{user.logname}: #{participation.beta.name}"
+      msg = participation.toggle_active(@current_user)
       flash[:success] = msg
-      Blog.info "#{change} #{user.logname}", @current_user
-      Diary.participation_toggled user: user, actor: @current_user, text: "Participation #{change}"
       redirect_to edit_user_path(user)
     else
       flash[:error] = "Access denied: Inactivating user participation"
@@ -248,7 +238,9 @@ class UsersController < ApplicationController
       if participation.note != note_new
         participation.note = note_new
       end
-      params[:active] ? participation.active = true : participation.active = false
+      if params[:active] != participation.active
+        participation.toggle_active
+      end
 
       if params[:user_requester]
         requester = User.find_by_email(params[:user_requester])        

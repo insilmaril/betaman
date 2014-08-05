@@ -26,6 +26,22 @@ class Participation < ActiveRecord::Base
     end
   end
 
+  def toggle_active( actor = nil )
+    change = ''
+    if active 
+      self.active = false
+      change = 'deactivated'
+    else
+      self.active = true
+      change = 'activated'
+    end
+    save!
+    msg = "Beta participation #{change} for #{user.logname}: #{self.beta.name}"
+    Blog.info msg, actor
+    Diary.participation_toggled beta: self.beta, user: self.user, actor: actor, text: "Participation #{change}"
+    return msg
+  end
+
   def status_to_s
     if active?
       return 'active'
