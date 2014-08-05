@@ -1,6 +1,6 @@
 class Admin::DiaryController < ApplicationController
   def index
-    @diary_entries = DiaryEntry.order('created_at DESC')
+    @diary_entries = DiaryEntry.order('created_at DESC').page(params[:page]).per_page(7)
   end
 
   def user
