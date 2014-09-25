@@ -39,8 +39,8 @@
         %td
           - if !beta.downloadLocationExt.blank?
             = link_to("external", beta.downloadLocationExt)
-          - if !beta.downloadLocationInt.blank? || !beta.downloadLocationExt.blank? 
+          - if !beta.downloadLocationInt.blank? && !beta.downloadLocationExt.blank? 
             = '/'
-          - if !beta.downloadLocationExt.blank?
-            = link_to("internal", beta.downloadLocationExt)
+          - if !beta.downloadLocationInt.blank?
+            = link_to("internal", beta.downloadLocationInt)
 
