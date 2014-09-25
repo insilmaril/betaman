@@ -14,6 +14,7 @@
       -if @current_user && defined?(show_actions) && show_actions
         %th Action
       %th{:align => "center"} Participants
+      %th Downloads
 
     - betas.each do |beta|
       %tr
@@ -34,4 +35,12 @@
         %td{:align => "center"}
           = link_to("#{beta.users.count} total / ",beta_users_path(beta) )
           = link_to("#{beta.users.external.count} ext",beta_users_external_path(beta) )
+
+        %td
+          - if !beta.downloadLocationExt.blank?
+            = link_to("external", beta.downloadLocationExt)
+          - if !beta.downloadLocationInt.blank? || !beta.downloadLocationExt.blank? 
+            = '/'
+          - if !beta.downloadLocationExt.blank?
+            = link_to("internal", beta.downloadLocationExt)
 

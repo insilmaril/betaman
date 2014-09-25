@@ -1,7 +1,10 @@
 require 'betaadmin'
 
 class Beta < ActiveRecord::Base
-  attr_accessible :begin, :end, :name, :alias, :novell_id, :novell_user, :novell_pass, :novell_iw_user, :novell_iw_pass
+  attr_accessible :begin, :end, 
+    :name, :alias, 
+    :novell_id, :novell_user, :novell_pass, :novell_iw_user, :novell_iw_pass, 
+    :downloadLocationInt, :downloadLocationExt
 
   has_many :participations, :dependent => :destroy
   has_many :users, :through => :participations

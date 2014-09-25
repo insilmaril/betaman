@@ -8,7 +8,7 @@
         - @beta.errors.full_messages.each do |msg|
           %li= msg
 
-  %h5 Beta data
+  %h5 Beta data:
   %table
     %tr
       %td
@@ -25,7 +25,7 @@
         = f.label :end
         = f.text_field :end
 
-  %h5 Mailinglist
+  %h5 Mailinglist:
   %table
     %td
       - if @beta.list
@@ -43,14 +43,24 @@
               - List.all.each do |list|
                 %li= link_to list.name, beta_add_list_path(@beta, list_id: list.id)
 
-  %h5 Beta ID for Novell Beta infrastructure
+  %h5 Download location:
+  %table
+    %tr
+      %td
+        = f.label :downloadLocationExt, 'external'
+        = f.text_field :downloadLocationExt
+      %td
+        = f.label :downloadLocationInt, 'internal'
+        = f.text_field :downloadLocationInt
+
+  %h5 Beta ID for Novell Beta infrastructure:
   %table
     %tr
       %td 
         = f.label :novell_id, "Novell Beta ID"
         = f.text_field :novell_id
 
-  %h5 Sync participant data on Novell beta admin pages (slow!)
+  %h5 Sync participant data on Novell beta admin pages (slow!):
   %table
     %tr
       %td 
@@ -60,7 +70,7 @@
         = f.label :novell_pass
         = f.password_field(:novell_pass,  class: "form_input", value: @beta.novell_pass)
 
-  %h5 Sync participant data on Novell Innerweb
+  %h5 Sync participant data on Novell Innerweb:
   %table
     %tr
       %td 

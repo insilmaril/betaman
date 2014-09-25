@@ -23,6 +23,19 @@
       = @beta.end
 
   %tr
+    %td.right.bold.top Downloads:
+    %td
+      %table
+        - if !@beta.downloadLocationExt.blank?
+          %tr
+            %td
+              = link_to("#{@beta.downloadLocationExt} (external)", @beta.downloadLocationExt)
+        - if !@beta.downloadLocationInt.blank?
+          %tr
+            %td
+              = link_to("#{@beta.downloadLocationInt} (internal)", @beta.downloadLocationInt)
+
+  %tr
     %td.right.bold.top Participants:
     %td
       %table
