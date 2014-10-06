@@ -8,6 +8,12 @@ class BetaAdmin
   def initialize
     @agent = Mechanize.new
     @agent_iw = Mechanize.new
+
+    #cert_store = OpenSSL::X509::Store.new '/etc/ssl/ca-bundle.pem'
+    #@agent_iw.cert_store = cert_store
+    @agent_iw.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+
     # Uncommment below to enable logging while extending Mailman
     #@agent.log = Logger.new $stdout
     #@agent.agent.http.debug_output = $stdout
