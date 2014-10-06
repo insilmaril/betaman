@@ -36,11 +36,14 @@
           = link_to("#{beta.users.count} total / ",beta_users_path(beta) )
           = link_to("#{beta.users.external.count} ext",beta_users_external_path(beta) )
 
-        %td
-          - if !beta.downloadLocationExt.blank?
-            = link_to("external", beta.downloadLocationExt)
-          - if !beta.downloadLocationInt.blank? && !beta.downloadLocationExt.blank? 
-            = '/'
-          - if !beta.downloadLocationInt.blank?
-            = link_to("internal", beta.downloadLocationInt)
+        %td.center
+          - if beta.downloadLocationInt.blank? && beta.downloadLocationExt.blank? 
+            = '-'
+          - else
+            - if !beta.downloadLocationExt.blank?
+              = link_to("external", beta.downloadLocationExt)
+            - if !beta.downloadLocationInt.blank? && !beta.downloadLocationExt.blank? 
+              = '/'
+            - if !beta.downloadLocationInt.blank?
+              = link_to("internal", beta.downloadLocationInt)
 
