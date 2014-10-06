@@ -32,6 +32,13 @@ class BetaAdmin
     form.Ecom_User_ID = user
     form.Ecom_Password = pass
     page = @agent_iw.submit(form, form.buttons.first)
+
+    if page.body =~ /Login failed/
+      Blog.info "Login as #{user} failed."
+      return false
+    else
+      return true
+    end
   end
 
   def login(user,pass)

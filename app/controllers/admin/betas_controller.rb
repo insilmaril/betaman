@@ -15,7 +15,15 @@ class Admin::BetasController < ApplicationController
 
   def sync_downloads
     ba = BetaAdmin.new
-    ba.login_innerweb(Beta.find(1).novell_iw_user, Beta.find(1).novell_iw_pass)
+    user =Beta.find(1).novell_iw_user #FIXME use ID of beta listed in Innerweb
+    pass =Beta.find(1).novell_iw_pass #FIXME use ID of beta listed in Innerweb
+    if !ba.login_innerweb(Beta.find(1).novell_iw_user, Beta.find(1).novell_iw_pass)
+      msg = "Could not login to Innerweb as user #{user}"
+      Blog.info msg, @current_user
+      flash[:error] = msg
+      redirect_to admin_path
+      return
+    end
 
     @betas_with_downloads = DownloadHelper.find_betas_with_downloads
     @betas_with_downloads.each do |b|
