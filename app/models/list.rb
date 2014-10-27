@@ -87,11 +87,13 @@ class List < ActiveRecord::Base
   def subscribe(user)
     mech = Mailmech.new(server,name,pass)
     mech.subscribe([user.email])
+    Diary.subscribed_user_to_list(user: user, beta: beta)
   end
 
   def unsubscribe(user)
     mech = Mailmech.new(server,name,pass)
     mech.delete([user.email])
+    Diary.unsubscribed_user_from_list(user: user, beta: beta)
   end
 
   def logname
