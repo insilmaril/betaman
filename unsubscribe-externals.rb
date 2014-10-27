@@ -10,15 +10,13 @@ begin
   betas_with_downloads.each do |b|
     puts "* #{b[:beta].name}"
 
-    users = b[:beta].list.users
+    users = b[:beta].list.users.external
 
     n = 1
     users.each do |u|
-      if ! u.employee?
-        puts "    Unsubscribing (#{n}/#{users.count}): #{u.logname}"
-        b[:beta].list.unsubscribe(u)
-        n += 1
-      end
+      puts "    Unsubscribing (#{n}/#{users.count}): #{u.logname}"
+      b[:beta].list.unsubscribe(u)
+      n += 1
     end
     
     #puts "    Sync external list to internal..."
