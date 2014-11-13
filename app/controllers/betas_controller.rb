@@ -63,6 +63,7 @@ class BetasController < ApplicationController
     @beta = Beta.find(params[:id])
     @users = @beta.users
     @milestones = @beta.milestones.order('date ASC')
+    @urls = @beta.urls
 
     respond_to do |format|
       format.html # show.html.erb

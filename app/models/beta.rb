@@ -12,6 +12,9 @@ class Beta < ActiveRecord::Base
   has_many :miles, :dependent => :destroy
   has_many :milestones, :through => :miles
 
+  has_many :urllinks, :dependent => :destroy
+  has_many :urls, :through => :urllinks
+
   has_one :list
 
   default_scope -> { order('begin DESC') }

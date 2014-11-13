@@ -36,6 +36,22 @@
               = link_to("#{@beta.downloadLocationInt} (internal)", @beta.downloadLocationInt)
 
   %tr
+    %td.right.bold.top Ressource URLs:
+    %td
+      - if @beta.urls.empty?
+        \-
+      - else
+        %table
+          - @beta.urls.each do |url|
+            %tr
+              %td
+                - if url.internal
+                  - hint = '(internal)'
+                - else
+                  - hint = '(external)'
+                = link_to( "#{url.comment} #{hint}", url.url )
+
+  %tr
     %td.right.bold.top Participants:
     %td
       %table

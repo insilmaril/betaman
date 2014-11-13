@@ -2,6 +2,7 @@
 #
 # $1 filenmae
 
-DATABASE=betaman
+#DATABASE=betaman
+DATABASE=betaman_dev
 
 pg_restore  -F c -v -c  -d $DATABASE $1
